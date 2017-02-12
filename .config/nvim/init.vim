@@ -111,6 +111,10 @@ set ignorecase            " ignore case on autocomplete command
 set smartcase             " If there uppercase in search term, case sensitive again
 set hidden                " hide error when opening file but current buffer has
                           " unsaved changes
+if !has('nvim')
+  set hlsearch
+endif
+
 au FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
 " TODO: add conditional here
 " set shell=zsh             " use zsh as shell, don't forget to ln -s ~/.zshrc ~/.zshenv
