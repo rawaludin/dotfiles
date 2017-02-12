@@ -1,0 +1,20 @@
+{
+    "require": {
+        "laravel/installer": "dev-master",
+        "beelab/bowerphp": "0.1.*@alpha",
+        "squizlabs/php_codesniffer": "*",
+        "laravel/envoy": "~1.0",
+        "laravel/homestead": "~3.0",
+        "qafoolabs/php-refactoring-browser": "0.0.4.*",
+        "psy/psysh": "@stable",
+        "phpspec/phpspec": "~2.2",
+        "behat/behat": "^3.1",
+        "codeception/codeception": "*",
+        "laravel/lumen-installer": "^1.0",
+        "friendsofphp/php-cs-fixer": "^1.11",
+        "hirak/prestissimo": "^0.3.4",
+        "phpmd/phpmd": "@stable"
+    },
+    "require-dev": {
+    }
+}

@@ -1,0 +1,162 @@
+global !p
+def snake_to_camel(snake_case):
+		if (len(snake_case) > 0):
+			snake_split = snake_case.split("_")
+			camel_map = map(str.capitalize, snake_split)
+			camel_case = "".join(camel_map)
+			return camel_case
+		else:
+		  return ""
+endglobal
+
+snippet sset "generate call setCamelCase method with snake_case field"
+->set`!p
+snip.rv = snake_to_camel(t[1])
+`(\$request->getAttribute('${1:my_field}'))
+$0
+endsnippet
+
+snippet geset "generate call setCamelCase method with snake_case field from selection of field"
+`!p
+def generate_setter(field):
+	field = field.strip()
+	return '->set' + snake_to_camel(field) + '($request->getAttribute(\'' + field + '\'))'
+
+field_list = snip.v.text.splitlines()
+mapped_field = map(generate_setter, field_list)
+snip.rv = "\n".join(mapped_field)
+`
+endsnippet
+
+
+snippet geupset "generate call setCamelCase method with snake_case field from selection of field for update"
+`!p
+def generate_setter_update(field):
+	field = field.strip()
+	return '->set' + snake_to_camel(field) + '($request->getUpdatedAttribute(\'' + field + '\'))'
+
+field_list = snip.v.text.splitlines()
+mapped_field = map(generate_setter_update, field_list)
+snip.rv = "\n".join(mapped_field)
+`
+endsnippet
+
+snippet gen_should_receive "generate call shouldReceive camel case method with snake_case field from selection of field"
+`!p
+def generate_should_receive(field):
+	field = field.strip()
+	return "->shouldReceive('get" + snake_to_camel(field) + "')->andReturn($data['" + field + "'])"
+
+field_list = snip.v.text.splitlines()
+mapped_field = map(generate_should_receive, field_list)
+snip.rv = "\n".join(mapped_field) + ";"
+`
+endsnippet
+
+snippet gen_interface_getter_setter "generate getter and setter for interface for selected field"
+`!p
+def generate_getter(field):
+  result = "/**\
+\n * Get "+field+" attribute.\
+\n */\
+\npublic function get"+snake_to_camel(field)+"();"
+  return result
+
+def generate_setter(field):
+  result = "/**\
+\n * Set "+field+" attribute.\
+\n */\
+\npublic function set"+snake_to_camel(field)+"($value);"
+  return result
+
+def generate_setter_getter(field):
+  return generate_setter(field) + "\n\n" + generate_getter(field) + "\n\n"
+
+field_list = snip.v.text.splitlines()
+mapped_field = map(generate_setter_getter, field_list)
+snip.rv = "".join(mapped_field)
+`
+endsnippet
+
+snippet gen_class_getter_setter "generate getter and setter for class for selected field"
+`!p
+def generate_getter(field):
+  result = "/**\
+\n * {@inheritDoc}\
+\n */\
+\npublic function get"+snake_to_camel(field)+"()\
+\n{\
+\n    return $this->"+field+";\
+\n}"
+  return result
+
+def generate_setter(field):
+  result = "/**\
+\n * {@inheritDoc}\
+\n */\
+\npublic function set"+snake_to_camel(field)+"($value)\
+\n{\
+\n    $this->"+field+" = $value;\
+\n    return $this;\
+\n}"
+  return result
+
+def generate_setter_getter(field):
+  return generate_setter(field) + "\n\n" + generate_getter(field) + "\n\n"
+
+field_list = snip.v.text.splitlines()
+mapped_field = map(generate_setter_getter, field_list)
+snip.rv = "".join(mapped_field)
+`
+endsnippet
+
+snippet met "Create new method"
+/**
+ * $1
+ *
+ * @return ${2:void}
+ */
+${3:public} function $4($5)
+{
+	$0
+}
+
+endsnippet
+
+snippet _c "Create constructor"
+public function __construct($1)
+{
+		$0
+}
+endsnippet
+
+
+snippet isg "Create getter and setter in interface"
+
+public function set$1(\$value);
+
+public function get$1();
+$0
+endsnippet
+
+
+snippet gensg "Generate getter and setter in interface from selected text"
+
+public function set${VISUAL:FieldName}(\$value);
+
+public function get${VISUAL:FieldName}();
+$0
+endsnippet
+
+
+global !p
+def insert_method_call(name):
+	vim.command('normal G')
+	snip.expand_anon(name + '($1)\n')
+endglobal
+
+post_jump "if snip.tabstop == 0: insert_method_call(snip.tabstops[1].current_text)"
+snippet d "method declaration" b
+def $1():
+	$2
+endsnippet
