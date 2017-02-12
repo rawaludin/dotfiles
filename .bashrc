@@ -127,7 +127,7 @@ alias ts="./vendor/bin/phpunit --no-coverage --stop-on-error --stop-on-fail"
 alias art="php artisan"
 
 # z - quick jump
-. ~/bin/z.sh
+. ~/dotfiles/bin/z.sh
 
 # vi mode
 set editing-mode vi
