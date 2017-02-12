@@ -15,8 +15,8 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
-Plug 'frankier/neovim-colors-solarized-truecolor-only'
-Plug 'mhartington/oceanic-next'
+" Plug 'frankier/neovim-colors-solarized-truecolor-only'
+" Plug 'mhartington/oceanic-next'
 " Plug 'trevordmiller/nova-vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
@@ -24,7 +24,8 @@ Plug 'chrisbra/Recover.vim' " Diff on recovery from swap file
 Plug 'diepm/vim-rest-console' " Similiar to Postman in vim
 " Plug 'easymotion/vim-easymotion' " faster jump to specific part in current view
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
+Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
 Plug 'mattn/emmet-vim' " faster html tag generation
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   } " Display undotree
@@ -64,7 +65,9 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 
 " ----- Other text editing features -----------------------------------
 " Plug 'SirVer/ultisnips' " text snippet
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
+endif
 " Auto generate ctags
 " Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
 Plug 'xolox/vim-misc', { 'on': ['UpdateTags'] }
@@ -109,16 +112,19 @@ set smartcase             " If there uppercase in search term, case sensitive ag
 set hidden                " hide error when opening file but current buffer has
                           " unsaved changes
 au FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
-set shell=zsh             " use zsh as shell, don't forget to ln -s ~/.zshrc ~/.zshenv
-set inccommand=split      " live replace feedback in neovim
+" TODO: add conditional here
+" set shell=zsh             " use zsh as shell, don't forget to ln -s ~/.zshrc ~/.zshenv
+if has('nvim')
+  set inccommand=split      " live replace feedback in neovim
+endif
 
 " Allow undo after closing file
 set undofile
-set undodir=~/.vim/undodir
+set undodir=~/.config/undodir
 
 " place swap files in one place
-set backupdir=~/.swp_files
-set directory=~/.swp_files
+set backupdir=~/.config/swp_files
+set directory=~/.config/swp_files
 
 " disable menus to save 50ms startup time
 let did_install_default_menus = 1
@@ -139,14 +145,6 @@ endif
 
 " different cursor on insert and normal mode (only work for iTerm2)
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-
-" setup python provider for neovim
-let g:loaded_python_provider = 1 " disable python2
-" let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
-
-" map ; to :
-nnoremap ; :
 
 " exit insert when pressing up/down in insert mode
 inoremap <silent> <Up> <ESC><Up>
@@ -390,7 +388,7 @@ let g:EasyMotion_smartcase = 1
 "
 " set theme
 " solarized, distinguished, tomorrow, powerlineish, papercolor, raven, silver, ubaryd, zenburn, oceanixtnext
-let g:airline_theme = 'oceanicnext'
+let g:airline_theme = 'tomorrow'
 " Always show statusbar
 set laststatus=2
 " Fancy arrow symbols, requires a patched font
@@ -586,8 +584,8 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 " UI: color scheme
 "
 set background=dark
-" colorscheme Tomorrow-Night " dark
+colorscheme Tomorrow-Night " dark
 " colorscheme solarized " dark
-colorscheme OceanicNext " dark
+" colorscheme OceanicNext " dark
 
 " -----------------------------------------------------------------------------
