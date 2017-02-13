@@ -19,7 +19,7 @@ sudo pip3 install --upgrade neovim
 nvim +PlugInstall +qall
 
 # php
-sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl
+sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl php-mysql
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # mysql
