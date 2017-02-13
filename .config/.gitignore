@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+*
+# Except this file
+!nvim/
+!undodir/
+!swp_files/
+!.gitignore

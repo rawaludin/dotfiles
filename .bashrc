@@ -134,3 +134,13 @@ set editing-mode vi
 
 # todotxt
 alias td="~/todotxt/todo.sh"
+
+# prompt
+miniprompt() {   
+  unset PROMPT_COMMAND   
+  PS1="\[\e[38;5;168m\]> \[\e[0m\]" 
+}
+
+source ~/dotfiles/git-prompt.sh
+PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+

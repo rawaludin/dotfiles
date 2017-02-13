@@ -15,7 +15,9 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
-" Plug 'frankier/neovim-colors-solarized-truecolor-only'
+if has('nvim')
+  Plug 'frankier/neovim-colors-solarized-truecolor-only'
+endif
 " Plug 'mhartington/oceanic-next'
 " Plug 'trevordmiller/nova-vim'
 
@@ -40,7 +42,7 @@ Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
-Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
+" Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
 " Plug 'w0rp/ale' " asynchronous lint engine
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 
@@ -112,8 +114,10 @@ set smartcase             " If there uppercase in search term, case sensitive ag
 set hidden                " hide error when opening file but current buffer has
                           " unsaved changes
 if !has('nvim')
-  set hlsearch
+  set hlsearch            " highlight search
 endif
+
+set vb                    " disable bell / beep
 
 au FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
 " TODO: add conditional here
@@ -144,7 +148,9 @@ set tags=tags;
 
 " support true color (enable this when tmux support true color)
 if (has("termguicolors"))
- set termguicolors
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
 endif
 
 " different cursor on insert and normal mode (only work for iTerm2)
@@ -588,8 +594,8 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 " UI: color scheme
 "
 set background=dark
-colorscheme Tomorrow-Night " dark
-" colorscheme solarized " dark
+" colorscheme Tomorrow-Night " dark
+colorscheme solarized " dark
 " colorscheme OceanicNext " dark
 
 " -----------------------------------------------------------------------------
