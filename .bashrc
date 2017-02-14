@@ -134,6 +134,7 @@ set editing-mode vi
 
 # todotxt
 alias td="~/todotxt/todo.sh"
+export TODOTXT_DEFAULT_ACTION=ls
 
 # prompt
 miniprompt() {   
@@ -144,3 +145,5 @@ miniprompt() {
 source ~/dotfiles/git-prompt.sh
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
+# editor
+alias e="nvim"

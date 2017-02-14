@@ -22,7 +22,7 @@ endif
 " Plug 'trevordmiller/nova-vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
-Plug 'chrisbra/Recover.vim' " Diff on recovery from swap file
+" Plug 'chrisbra/Recover.vim' " Diff on recovery from swap file
 Plug 'diepm/vim-rest-console' " Similiar to Postman in vim
 " Plug 'easymotion/vim-easymotion' " faster jump to specific part in current view
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -129,10 +129,6 @@ endif
 " Allow undo after closing file
 set undofile
 set undodir=~/.config/undodir
-
-" place swap files in one place
-set backupdir=~/.config/swp_files
-set directory=~/.config/swp_files
 
 " disable menus to save 50ms startup time
 let did_install_default_menus = 1
