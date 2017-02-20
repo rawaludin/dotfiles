@@ -38,5 +38,6 @@ mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'homestead'@'localhost';
 mysql -u homestead -psecret -e "create database homestead;"
 
 # zsh
-sudo apt-get install zsh
-sudo chsh -s `which zsh` $USER
+# sudo apt-get install -y zsh
+# sudo chsh -s `which zsh` $USER
+# curl -sL zplug.sh/installer | zsh

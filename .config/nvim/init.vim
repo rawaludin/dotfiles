@@ -24,7 +24,6 @@ endif
 " ----- Vim as a programmer's text editor -----------------------------
 " Plug 'chrisbra/Recover.vim' " Diff on recovery from swap file
 Plug 'diepm/vim-rest-console' " Similiar to Postman in vim
-" Plug 'easymotion/vim-easymotion' " faster jump to specific part in current view
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
 Plug 'junegunn/fzf.vim'
@@ -53,7 +52,7 @@ Plug 'craigemery/vim-autotag' " Automatic tag generation when file saved / modif
 
 
 " ----- Working with Clojure ------------------------------------------
-Plug 'tpope/vim-fireplace' " Connect to REPL
+" Plug 'tpope/vim-fireplace' " Connect to REPL
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
@@ -123,12 +122,8 @@ au FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
 " TODO: add conditional here
 " set shell=zsh             " use zsh as shell, don't forget to ln -s ~/.zshrc ~/.zshenv
 if has('nvim')
-  set inccommand=split      " live replace feedback in neovim
+  set inccommand=split      " live replace feedback in neovim :%s/foo/bar<CR>
 endif
-
-" Allow undo after closing file
-set undofile
-set undodir=~/.config/undodir
 
 " disable menus to save 50ms startup time
 let did_install_default_menus = 1
@@ -376,25 +371,11 @@ let g:vrc_allow_get_request_body = 1
 " -----------------------------------------------------------------------------
 
 
-" Plugin: easymotion/vim-easymotion ----
-"
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" Jump to anywhere you want with minimal keystrokes, with just one key
-" binding.
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-" s{char}{char} to move to {char}{char}
-" Turn on case insensitive feature
-let g:EasyMotion_smartcase = 1
-" -----------------------------------------------------------------------------
-
-
 " Plugin: vim-airline/vim-airline ----
 "
 " set theme
 " solarized, distinguished, tomorrow, powerlineish, papercolor, raven, silver, ubaryd, zenburn, oceanixtnext
-let g:airline_theme = 'tomorrow'
+let g:airline_theme = 'simple'
 " Always show statusbar
 set laststatus=2
 " Fancy arrow symbols, requires a patched font
@@ -415,7 +396,6 @@ let g:airline_left_sep=''
 let g:airline_left_alt_sep='|'
 let g:airline_right_sep=''
 let g:airline_right_alt_sep='|'
-
 " -----------------------------------------------------------------------------
 
 
@@ -545,12 +525,6 @@ augroup END
 let g:go_fmt_command = "goimports"
 " -----------------------------------------------------------------------------
 
-" Plugin: justinmk/vim-sneak ----
-"
-" next match by s
-let g:sneak#s_next = 1
-" -----------------------------------------------------------------------------
-
 
 " Plugin: edkolev/tmuxline ----
 "
@@ -583,6 +557,26 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 " -----------------------------------------------------------------------------
 
+
+" Plugin: justinmk/vim-sneak ----
+"
+let g:sneak#label = 1
+" let g:sneak#use_ic_scs = 1
+" let g:sneak#absolute_dir = 1
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_Tk
+" -----------------------------------------------------------------------------
+
 "******************************************************************************
 " Setting: UI
 "******************************************************************************
@@ -595,3 +589,18 @@ colorscheme solarized " dark
 " colorscheme OceanicNext " dark
 
 " -----------------------------------------------------------------------------
+" %< Where to truncate
+" %n buffer number
+" %F Full path
+" %m Modified flag: [+], [-]
+" %r Readonly flag: [RO]
+" %y Type:          [vim]
+" fugitive#statusline()
+" %= Separator
+" %-14.(...)
+" %l Line
+" %c Column
+" %V Virtual column
+" %P Percentage
+" %#HighlightGroup#
+set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
