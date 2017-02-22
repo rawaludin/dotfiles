@@ -2,6 +2,7 @@
 
 git clone https://github.com/rawaludin/dotfiles.git
 ln -sf dotfiles/.bashrc .
+source ~/.bashrc
 ln -sf dotfiles/.gitconfig .
 ln -sf dotfiles/.inputrc .
 ln -sf dotfiles/.tmux.conf .
@@ -37,7 +38,11 @@ mysql -u root -proot -e "CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secr
 mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'homestead'@'localhost';"
 mysql -u homestead -psecret -e "create database homestead;"
 
+# timezone
+sudo timedatectl set-timezone Asia/Jakarta
+
 # zsh
+
 # sudo apt-get install -y zsh
 # sudo chsh -s `which zsh` $USER
 # curl -sL zplug.sh/installer | zsh
