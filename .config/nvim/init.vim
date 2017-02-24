@@ -36,7 +36,7 @@ Plug 'sheerun/vim-polyglot' " Language packs collection, won't affect startup ti
 Plug 'terryma/vim-multiple-cursors'
 Plug 'thinca/vim-quickrun', { 'on' : 'QuickRun'} " Quick run current buffer in specified runner
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
-Plug 'tomtom/tcomment_vim' " faster add comment by <C-/>
+Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
