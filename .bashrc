@@ -147,3 +147,8 @@ PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
 # editor
 alias e="nvim"
+
+# TODO: move alias and and export to different files
+
+# composer bin
+PATH=$PATH:~/.composer/vendor/bin

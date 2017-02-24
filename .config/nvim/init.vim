@@ -36,18 +36,19 @@ Plug 'sheerun/vim-polyglot' " Language packs collection, won't affect startup ti
 Plug 'terryma/vim-multiple-cursors'
 Plug 'thinca/vim-quickrun', { 'on' : 'QuickRun'} " Quick run current buffer in specified runner
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
+Plug 'tpope/vim-unimpaired' " faster movement quicklist, loclist, etc with [  ]
 Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
 " Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
-" Plug 'w0rp/ale' " asynchronous lint engine
+Plug 'w0rp/ale' " asynchronous lint engine
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
-Plug 'craigemery/vim-autotag' " Automatic tag generation when file saved / modified
+Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
 " Plug 'shawncplus/phpcomplete.vim' " improve php omnicompletion
 
 
