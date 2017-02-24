@@ -117,6 +117,8 @@ fi
 # use ag
 export FZF_DEFAULT_COMMAND='ag --hidden -U --ignore .git -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# use tmux pane whenever possible
+export FZF_TMUX=1
 
 # phpunit
 alias tc="./vendor/bin/phpunit"
