@@ -66,7 +66,7 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 " Plug 'reedes/vim-colors-pencil' " ia writer inspired theme, good for writing
 
 " ----- Other text editing features -----------------------------------
-" Plug 'SirVer/ultisnips' " text snippet
+Plug 'tomtom/tlib_vim' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'garbas/vim-snipmate' " text snippet 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
 endif
@@ -334,18 +334,6 @@ nnoremap <Down> :resize +2<CR>
 "******************************************************************************
 " Setting: Plugin
 "******************************************************************************
-
-
-" Plugin: SirVer/ultisnips ----
-"
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-" let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<c-j>"
-" let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
-let g:UltiSnipsUsePythonVersion = 3
-" -----------------------------------------------------------------------------
 
 
 " Plugin: junegunn/goyo ----
