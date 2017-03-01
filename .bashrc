@@ -148,6 +148,8 @@ source ~/dotfiles/git-prompt.sh
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
 # editor
+export VISUAL=nvim
+export EDITOR="$VISUAL"
 alias e="nvim"
 
 # TODO: move alias and and export to different files
