@@ -4,4 +4,4 @@
 	name = Rahmat Awaludin
 	email = rahmat.awaludin@gmail.com
 [core]
-	excludesfile = /root/.gitignore
+	excludesfile = ~/.gitignore
