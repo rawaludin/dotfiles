@@ -40,6 +40,7 @@ Plug 'tpope/vim-unimpaired' " faster movement quicklist, loclist, etc with [  ]
 Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
+Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands 
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
 " Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
@@ -58,8 +59,7 @@ Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved /
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
 Plug 'tpope/vim-fugitive' " git inside vim
-Plug 'lambdalisue/vim-gita', {'on': ['Gita']} " [Beta] An awesome git handling plugin for Vim
-
+Plug 'lambdalisue/gina.vim', {'on': ['Gina']} " Asynchronously control git repositories in Neovim/Vim 8
 " ----- Working with Markdown ----------------------------------------------
 Plug 'plasticboy/vim-markdown' | Plug  'godlygeek/tabular', { 'for': 'markdown' } " better markdown highlight
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
@@ -321,8 +321,6 @@ nnoremap <leader>q :b#<cr>
 nnoremap <leader>l :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr>:Strip<cr>:w<cr><c-l>
 " select last pasted block by gp
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
-" sudo when save with :w!!
-cmap w!! w !sudo tee > /dev/null %<CR>
 " Use arrow to resize pane
 nnoremap <Left> :vertical resize +2<CR>
 nnoremap <Right> :vertical resize -2<CR>
