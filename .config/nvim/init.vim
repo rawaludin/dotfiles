@@ -41,6 +41,7 @@ Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands 
+Plug 'tpope/vim-abolish' " easily search for, substitute, and abbreviate multiple variants of a word
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
 " Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
@@ -548,8 +549,8 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 " Plugin: justinmk/vim-sneak ----
 "
 let g:sneak#label = 1
-" let g:sneak#use_ic_scs = 1
-" let g:sneak#absolute_dir = 1
+let g:sneak#use_ic_scs = 1
+let g:sneak#absolute_dir = 1
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 xmap f <Plug>Sneak_f
@@ -562,6 +563,7 @@ xmap t <Plug>Sneak_t
 xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_Tk
+let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 " -----------------------------------------------------------------------------
 
 "******************************************************************************
