@@ -2,6 +2,5 @@
 *
 # Except this file
 !nvim/
-!undodir/
-!swp_files/
+!nvim/snippets
 !.gitignore
