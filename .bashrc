@@ -156,6 +156,3 @@ alias e="nvim"
 
 # composer bin
 PATH=$PATH:~/.composer/vendor/bin
-
-# thefuck
-eval "$(thefuck --alias y)"
