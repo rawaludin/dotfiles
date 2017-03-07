@@ -67,7 +67,14 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 " Plug 'reedes/vim-colors-pencil' " ia writer inspired theme, good for writing
 
 " ----- Other text editing features -----------------------------------
-Plug 'tomtom/tlib_vim' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'garbas/vim-snipmate' " text snippet 
+
+"  text snippet
+" Plug 'Shougo/neosnippet'
+" Plug 'Shougo/neosnippet-snippets'
+" Plug 'tomtom/tlib_vim' 
+" Plug 'MarcWeber/vim-addon-mw-utils' 
+" Plug 'garbas/vim-snipmate' 
+
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
 endif
@@ -342,6 +349,13 @@ nnoremap <Down> :resize +2<CR>
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown " set syntax as markdown when opening md
 " -----------------------------------------------------------------------------
 
+" Plugin: terrryma/vim-multiple-cursor ----
+"
+" When press ESC from insert mode on multiple cursor, back to multiple cursor,
+" not regular vim
+let g:multi_cursor_exit_from_insert_mode = 0
+" -----------------------------------------------------------------------------
+
 
 " Plugin: junegunn/vim-easy-align ----
 "
@@ -550,7 +564,7 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 "
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
-let g:sneak#absolute_dir = 1
+" let g:sneak#absolute_dir = 1
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 xmap f <Plug>Sneak_f
@@ -593,3 +607,4 @@ colorscheme solarized " dark
 " %P Percentage
 " %#HighlightGroup#
 set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
+
