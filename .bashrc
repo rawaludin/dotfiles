@@ -156,3 +156,6 @@ alias e="nvim"
 
 # composer bin
 PATH=$PATH:~/.composer/vendor/bin
+
+# set english language
+export LANG=C
