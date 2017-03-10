@@ -4,3 +4,4 @@ set editing-mode vi
 set keymap vi-insert
 "\C-n": next-history 
 "\C-p": previous-history
+"\C-l": clear-screen
