@@ -5,6 +5,7 @@ ln -sf dotfiles/.bashrc .
 source ~/.bashrc
 ln -sf dotfiles/.gitconfig .
 ln -sf dotfiles/.inputrc .
+ln -sf dotfiles/.editrc .
 ln -sf dotfiles/.tmux.conf .
 ln -sf dotfiles/.config .
 
