@@ -5,3 +5,6 @@
 	email = rahmat.awaludin@gmail.com
 [core]
 	excludesfile = ~/.gitignore
+[alias]
+  lg = log --graph --pretty=format:'%Cred%h%Creset %ad %s %C(yellow)%d%Creset %C(bold blue)<%an>%Creset' --date=short
+  hist = log --graph --full-history --all --pretty=format:'%Cred%h%Creset %ad %s %C(yellow)%d%Creset %C(bold blue)<%an>%Creset' --date=short
