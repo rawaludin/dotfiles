@@ -155,4 +155,7 @@ alias e="nvim"
 # TODO: move alias and and export to different files
 
 # composer bin
-PATH=$PATH:~/.composer/vendor/bin
+PATH=$PATH:~/.composer/vendor/bino
+
+export LANG=en_US.UTF-8  
+export LC_ALL=en_US.UTF-8
