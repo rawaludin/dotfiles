@@ -18,7 +18,7 @@ Plug 'vim-airline/vim-airline-themes'
 if has('nvim')
   Plug 'frankier/neovim-colors-solarized-truecolor-only'
 endif
-" Plug 'mhartington/oceanic-next'
+Plug 'mhartington/oceanic-next'
 " Plug 'trevordmiller/nova-vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
@@ -377,7 +377,7 @@ let g:vrc_allow_get_request_body = 1
 "
 " set theme
 " solarized, distinguished, tomorrow, powerlineish, papercolor, raven, silver, ubaryd, zenburn, oceanixtnext
-let g:airline_theme = 'simple'
+let g:airline_theme = 'oceanicnext'
 " Always show statusbar
 set laststatus=2
 " Fancy arrow symbols, requires a patched font
@@ -559,6 +559,14 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 " -----------------------------------------------------------------------------
 
+" Plugin: w0rp/ale ----
+"
+" only use php -l for php
+let g:ale_linters = {
+\   'php': ['php -l'],
+\}
+" -----------------------------------------------------------------------------
+
 
 " Plugin: justinmk/vim-sneak ----
 "
@@ -588,8 +596,8 @@ let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 "
 set background=dark
 " colorscheme Tomorrow-Night " dark
-colorscheme solarized " dark
-" colorscheme OceanicNext " dark
+" colorscheme solarized " dark
+colorscheme OceanicNext " dark
 
 " -----------------------------------------------------------------------------
 " %< Where to truncate
