@@ -426,7 +426,8 @@ let g:nerdtree_tabs_open_on_console_startup = 0
 " Plugin: junegunn/fzf ----
 "
 " fuzzy open file in current project with <space>p
-nmap <silent> <leader>p :Files<CR>
+nnoremap <silent> <expr> <leader>p (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+" nmap <silent> <leader>p :Files<CR>
 " List recent opened file <space>h
 nmap <silent> <leader>h :History<CR>
 " Jump to opened file (buffer) with <space><Enter>
@@ -444,6 +445,9 @@ let g:fzf_action = {
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+endif
 " -----------------------------------------------------------------------------
 
 
