@@ -40,7 +40,7 @@ Plug 'tpope/vim-unimpaired' " faster movement quicklist, loclist, etc with [  ]
 Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
-Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands 
+Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-abolish' " easily search for, substitute, and abbreviate multiple variants of a word
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
@@ -71,9 +71,9 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 "  text snippet
 " Plug 'Shougo/neosnippet'
 " Plug 'Shougo/neosnippet-snippets'
-" Plug 'tomtom/tlib_vim' 
-" Plug 'MarcWeber/vim-addon-mw-utils' 
-" Plug 'garbas/vim-snipmate' 
+" Plug 'tomtom/tlib_vim'
+" Plug 'MarcWeber/vim-addon-mw-utils'
+" Plug 'garbas/vim-snipmate'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
@@ -347,6 +347,16 @@ nnoremap <Down> :resize +2<CR>
 " activate goyo when opening markdown
 " au BufNewFile,BufRead *.{md,mdown,mkd,mkdn,markdown,mdwn} Goyo
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown " set syntax as markdown when opening md
+" hide tmux bar
+function! s:goyo_enter()
+  silent !tmux set status off
+endfunction
+function! s:goyo_leave()
+  silent !tmux set status on
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
 " -----------------------------------------------------------------------------
 
 " Plugin: terrryma/vim-multiple-cursor ----
@@ -416,7 +426,7 @@ let g:nerdtree_tabs_open_on_console_startup = 0
 " Plugin: junegunn/fzf ----
 "
 " fuzzy open file in current project with <space>p
-nmap <silent> <leader>p :FZF<CR>
+nmap <silent> <leader>p :Files<CR>
 " List recent opened file <space>h
 nmap <silent> <leader>h :History<CR>
 " Jump to opened file (buffer) with <space><Enter>
@@ -432,6 +442,8 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 " -----------------------------------------------------------------------------
 
 
