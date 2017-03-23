@@ -27,6 +27,7 @@ Plug 'diepm/vim-rest-console' " Similiar to Postman in vim
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
 Plug 'mattn/emmet-vim' " faster html tag generation
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   } " Display undotree
@@ -41,8 +42,6 @@ Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
-Plug 'tpope/vim-abolish' " easily search for, substitute, and abbreviate multiple variants of a word
-" Plud 'tpope/vim-vinegar' " combine with netrw
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
 " Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
@@ -433,8 +432,6 @@ nmap <silent> <leader>t :NERDTreeToggle<CR>
 map <silent> <leader>st :NERDTreeFind<CR>
 " To have NERDTree always open on startup set this to 2
 let g:nerdtree_tabs_open_on_console_startup = 0
-" use split explorer mode
-let NERDTreeHijackNetrw=1
 " -----------------------------------------------------------------------------
 
 
@@ -460,6 +457,11 @@ let g:fzf_action = {
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
@@ -646,4 +648,3 @@ colorscheme OceanicNext " dark
 " %P Percentage
 " %#HighlightGroup#
 set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
-
