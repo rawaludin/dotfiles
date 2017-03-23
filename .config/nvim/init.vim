@@ -42,6 +42,7 @@ Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-abolish' " easily search for, substitute, and abbreviate multiple variants of a word
+" Plud 'tpope/vim-vinegar' " combine with netrw
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
 " Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
@@ -280,6 +281,18 @@ au! CursorMoved * call SnipperSetCursor()
 au! CursorMovedI * call SnipperUnSetCursor()
 " -----------------------------------------------------------------------------
 
+" Autocmd: Zoom ----
+" 
+function! s:zoom()
+  if winnr('$') > 1
+    tab split
+  elseif len(filter(map(range(tabpagenr('$')), 'tabpagebuflist(v:val + 1)'),
+                  \ 'index(v:val, '.bufnr('').') >= 0')) > 1
+    tabclose
+  endif
+endfunction
+nnoremap <silent> <leader>z :call <sid>zoom()<cr>
+" -----------------------------------------------------------------------------
 
 "******************************************************************************
 " Setting: Keys Combination
@@ -420,6 +433,8 @@ nmap <silent> <leader>t :NERDTreeToggle<CR>
 map <silent> <leader>st :NERDTreeFind<CR>
 " To have NERDTree always open on startup set this to 2
 let g:nerdtree_tabs_open_on_console_startup = 0
+" use split explorer mode
+let NERDTreeHijackNetrw=1
 " -----------------------------------------------------------------------------
 
 
