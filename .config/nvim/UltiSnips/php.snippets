@@ -28,6 +28,17 @@ snip.rv = "\n".join(mapped_field)
 `
 endsnippet
 
+snippet gget "generate call getCamelCase method with snake_case field from selection of field"
+`!p
+def generate_setter(field):
+	field = field.strip()
+	return '->get' + snake_to_camel(field) + '($request->getAttribute(\'' + field + '\'))'
+
+field_list = snip.v.text.splitlines()
+mapped_field = map(generate_setter, field_list)
+snip.rv = "\n".join(mapped_field)
+`
+endsnippet
 
 snippet geupset "generate call setCamelCase method with snake_case field from selection of field for update"
 `!p
