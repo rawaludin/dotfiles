@@ -15,27 +15,19 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
-if has('nvim')
-  Plug 'frankier/neovim-colors-solarized-truecolor-only'
-endif
 Plug 'mhartington/oceanic-next'
-" Plug 'trevordmiller/nova-vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
-" Plug 'chrisbra/Recover.vim' " Diff on recovery from swap file
-Plug 'diepm/vim-rest-console' " Similiar to Postman in vim
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
 Plug 'mattn/emmet-vim' " faster html tag generation
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   } " Display undotree
 Plug 'qpkorr/vim-bufkill' " Delete buffer without closing split :BD :BW :BUN
 Plug 'scrooloose/nerdtree' " tree view of current project
 Plug 'sheerun/vim-polyglot' " Language packs collection, won't affect startup time
 Plug 'terryma/vim-multiple-cursors'
-Plug 'thinca/vim-quickrun', { 'on' : 'QuickRun'} " Quick run current buffer in specified runner
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
 Plug 'tpope/vim-unimpaired' " faster movement quicklist, loclist, etc with [  ]
 Plug 'tpope/vim-commentary' " comment by gc
@@ -43,50 +35,31 @@ Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
-Plug 'vimwiki/vimwiki' " activate wiki with <leader>ww
-" Plug 'yuttie/comfortable-motion.vim' " inertia scrooling
-Plug 'w0rp/ale' " asynchronous lint engine
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
-Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
-" Plug 'shawncplus/phpcomplete.vim' " improve php omnicompletion
-
-
-" ----- Working with Clojure ------------------------------------------
-" Plug 'tpope/vim-fireplace' " Connect to REPL
+" Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
 Plug 'tpope/vim-fugitive' " git inside vim
-Plug 'lambdalisue/gina.vim', {'on': ['Gina']} " Asynchronously control git repositories in Neovim/Vim 8
+Plug 'tpope/vim-rhubarb' " github extension for fugitive
+
 " ----- Working with Markdown ----------------------------------------------
 Plug 'plasticboy/vim-markdown' | Plug  'godlygeek/tabular', { 'for': 'markdown' } " better markdown highlight
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
-" Plug 'reedes/vim-colors-pencil' " ia writer inspired theme, good for writing
 
 " ----- Other text editing features -----------------------------------
 
 "  text snippet
-" Plug 'Shougo/neosnippet'
-" Plug 'Shougo/neosnippet-snippets'
-" Plug 'tomtom/tlib_vim'
-" Plug 'MarcWeber/vim-addon-mw-utils'
-" Plug 'garbas/vim-snipmate'
+" Plug 'SirVer/ultisnips'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
 endif
 " Auto generate ctags
-" Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
-Plug 'xolox/vim-misc', { 'on': ['UpdateTags'] }
-Plug 'xolox/vim-easytags', { 'on': ['UpdateTags'] }
 Plug 'majutsushi/tagbar' " view ctags on sidebar
-
-" ----- Vim for Go Developer -------------------------------------------
-"  Loaded when opening Go files
-" Plug 'fatih/vim-go', {'for': 'go'}
 
 call plug#end()
 
@@ -354,23 +327,6 @@ nnoremap <Down> :resize +2<CR>
 "******************************************************************************
 
 
-" Plugin: junegunn/goyo ----
-"
-" activate goyo when opening markdown
-" au BufNewFile,BufRead *.{md,mdown,mkd,mkdn,markdown,mdwn} Goyo
-au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown " set syntax as markdown when opening md
-" hide tmux bar
-function! s:goyo_enter()
-  silent !tmux set status off
-endfunction
-function! s:goyo_leave()
-  silent !tmux set status on
-endfunction
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-" -----------------------------------------------------------------------------
-
 " Plugin: terrryma/vim-multiple-cursor ----
 "
 " When press ESC from insert mode on multiple cursor, back to multiple cursor,
@@ -385,13 +341,6 @@ let g:multi_cursor_exit_from_insert_mode = 0
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-" -----------------------------------------------------------------------------
-
-
-" Plugin: diepm/vim-rest-console ----
-"
-" Allow request body in get (will result in XGET in curl)
-let g:vrc_allow_get_request_body = 1
 " -----------------------------------------------------------------------------
 
 
@@ -486,30 +435,6 @@ nnoremap <expr><enter> &ft=="qf" ? "<cr>:lcl<cr>" : (getpos(".")[2]==1 ? "i<cr><
 " -----------------------------------------------------------------------------
 
 
-" Plugin: xolox/vim-easytags ----
-"
-" use project local tags ./tags (see up) and auto create it
-let g:easytags_dynamic_files = 2
-" Generate tags only when files is saved
-let g:easytags_events = []
-" asynchronous tag generate
-let g:easytags_async = 1
-" resolve symbolic links in pathname (useful for unix)
-let g:easytags_resolve_links = 1
-" suppress the warning on startup if ctags is not found or not recent enough
-" let g:easytags_suppress_ctags_warning = 1
-" faster syntax highlighting using pyhon
-" let g:easytags_python_enabled = 1
-" use old regex engine to make it faster
-" https://github.com/xolox/vim-easytags/issues/88#issuecomment-69474765
-set regexpengine=1
-" disable auto highlight
-let g:easytags_auto_highlight = 0
-" always sacrifice accuracy to improve performance
-" let g:easytags_syntax_keyword = 'always'
-" -----------------------------------------------------------------------------
-
-
 " Plugin: mattn/emmet-vim ----
 "
 let g:user_emmet_install_global = 0
@@ -538,26 +463,6 @@ autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 
 " Plugin: craigemery/vim-autotag ----
 "
-" -----------------------------------------------------------------------------
-
-" Plugin: StanAngeloff/php.vim ----
-"
-function! PhpSyntaxOverride()
-  hi! def link phpDocTags  phpDefine
-  hi! def link phpDocParam phpType
-endfunction
-
-augroup phpSyntaxOverride
-  autocmd!
-  autocmd FileType php call PhpSyntaxOverride()
-augroup END
-" -----------------------------------------------------------------------------
-
-
-" Plugin: fatih/vim-go ----
-"
-" format with goimports and gofmt when saving go file
-let g:go_fmt_command = "goimports"
 " -----------------------------------------------------------------------------
 
 
@@ -590,14 +495,6 @@ let g:tmuxline_separators = {
 nmap <silent> <leader>b :TagbarToggle<CR>
 " Uncomment to open tagbar automatically whenever possible
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
-" -----------------------------------------------------------------------------
-
-" Plugin: w0rp/ale ----
-"
-" only use php -l for php
-let g:ale_linters = {
-\   'php': ['php -l'],
-\}
 " -----------------------------------------------------------------------------
 
 
