@@ -39,7 +39,7 @@ Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
-" Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
+Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
@@ -51,12 +51,15 @@ Plug 'plasticboy/vim-markdown' | Plug  'godlygeek/tabular', { 'for': 'markdown' 
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 
 " ----- Other text editing features -----------------------------------
+" Plug 'w0rp/ale' " linter
+
+" ----- Cosmetics ---------------
 
 "  text snippet
 " Plug 'SirVer/ultisnips'
 
 if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
 endif
 " Auto generate ctags
 Plug 'majutsushi/tagbar' " view ctags on sidebar
@@ -115,10 +118,6 @@ let did_install_syntax_menu = 1
 " my palm touch trackpad
 set mouse=n
 
-" Use project based tags beside global tags on ~/.vimtags / ~/tags
-" check current tags file in use with `:set tags?`
-set tags=tags;
-
 " support true color (enable this when tmux support true color)
 if (has("termguicolors"))
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -126,8 +125,12 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
-" different cursor on insert and normal mode (only work for iTerm2)
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+" Annoying temporary files
+set backupdir=/tmp//,.
+set directory=/tmp//,.
+if v:version >= 703
+  set undodir=/tmp//,.
+endif
 
 " exit insert when pressing up/down in insert mode
 inoremap <silent> <Up> <ESC><Up>
@@ -461,10 +464,6 @@ autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
 autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 " -----------------------------------------------------------------------------
 
-" Plugin: craigemery/vim-autotag ----
-"
-" -----------------------------------------------------------------------------
-
 
 " Plugin: edkolev/tmuxline ----
 "
@@ -497,24 +496,25 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 " -----------------------------------------------------------------------------
 
+" Plugin: w0rp/ale ----
+"
+let g:ale_linters = {
+\   'php': ['php -l', 'phpcs', 'phpmd'],
+\}
+let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml' 
+let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml' 
+let g:ale_set_loclist=1
+" -----------------------------------------------------------------------------
 
 " Plugin: justinmk/vim-sneak ----
 "
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
 " let g:sneak#absolute_dir = 1
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_Tk
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 " -----------------------------------------------------------------------------
 
