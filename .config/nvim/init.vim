@@ -14,8 +14,9 @@ call plug#begin('~/.config/nvim/plugged')
 " This one will work with neovim
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
-Plug 'mhartington/oceanic-next'
+Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
+" Plug 'mhartington/oceanic-next'
+Plug 'lifepillar/vim-solarized8'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -26,7 +27,6 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " f
 Plug 'mattn/emmet-vim' " faster html tag generation
 Plug 'qpkorr/vim-bufkill' " Delete buffer without closing split :BD :BW :BUN
 Plug 'scrooloose/nerdtree' " tree view of current project
-Plug 'sheerun/vim-polyglot' " Language packs collection, won't affect startup time
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
 Plug 'tpope/vim-unimpaired' " faster movement quicklist, loclist, etc with [  ]
@@ -34,33 +34,35 @@ Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
+Plug 'tpope/vim-abolish' " easily search for, substitute, and abbreviate multiple variants of a word
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
-Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
+" Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
+Plug 'joonty/vdebug'
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
 Plug 'tpope/vim-fugitive' " git inside vim
 Plug 'tpope/vim-rhubarb' " github extension for fugitive
+Plug 'jreybert/vimagit' " Like emacs's magit
+Plug 'lambdalisue/gina.vim' " Another git
 
 " ----- Working with Markdown ----------------------------------------------
 Plug 'plasticboy/vim-markdown' | Plug  'godlygeek/tabular', { 'for': 'markdown' } " better markdown highlight
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 
 " ----- Other text editing features -----------------------------------
-" Plug 'w0rp/ale' " linter
+Plug 'w0rp/ale' " linter
+" Plug 'SirVer/ultisnips' " text snippet
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
+" endif
+Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
+Plug 'vimwiki/vimwiki' " personal note taker
 
-" ----- Cosmetics ---------------
-
-"  text snippet
-" Plug 'SirVer/ultisnips'
-
-if has('nvim')
-  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
-endif
 " Auto generate ctags
 Plug 'majutsushi/tagbar' " view ctags on sidebar
 
@@ -97,6 +99,7 @@ set ignorecase            " ignore case on autocomplete command
 set smartcase             " If there uppercase in search term, case sensitive again
 set hidden                " hide error when opening file but current buffer has
                           " unsaved changes
+set lazyredraw            " for faster scrolling
 if !has('nvim')
   set hlsearch            " highlight search
 endif
@@ -109,6 +112,9 @@ au FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
 if has('nvim')
   set inccommand=split      " live replace feedback in neovim :%s/foo/bar<CR>
 endif
+
+" make . work with visually selected lines
+vnoremap . :norm.<CR>
 
 " disable menus to save 50ms startup time
 let did_install_default_menus = 1
@@ -142,6 +148,9 @@ inoremap <silent> <ScrollWheelDown> <ESC><ScrollWheelDown>
 
 " qq to record macor, Q to replay
 nmap Q @q
+" make c-n and c-p mimic up and down behaviour on command mode
+cnoremap <c-n>  <down>
+cnoremap <c-p>  <up>
 
 " More text-object
 for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%', '`' ]
@@ -257,7 +266,7 @@ au! CursorMovedI * call SnipperUnSetCursor()
 " -----------------------------------------------------------------------------
 
 " Autocmd: Zoom ----
-" 
+"
 function! s:zoom()
   if winnr('$') > 1
     tab split
@@ -308,6 +317,10 @@ map <silent> <leader>d :bd<cr>
 map <silent> <leader>D :bufdo bd<CR>
 " Switch between two buffer back and forth by <space>q
 nnoremap <leader>q :b#<cr>
+" jump to last tab <space>Tab
+let g:lasttab = 1
+nmap <Leader><Tab> :exe "tabn ".g:lasttab<CR>
+au TabLeave * let g:lasttab = tabpagenr()
 " -----------------------------------------------------------------------------
 
 
@@ -351,7 +364,7 @@ nmap ga <Plug>(EasyAlign)
 "
 " set theme
 " solarized, distinguished, tomorrow, powerlineish, papercolor, raven, silver, ubaryd, zenburn, oceanixtnext
-let g:airline_theme = 'oceanicnext'
+let g:airline_theme = 'solarized'
 " Always show statusbar
 set laststatus=2
 " Fancy arrow symbols, requires a patched font
@@ -366,12 +379,30 @@ let g:airline_detect_paste=1
 " Automatically displays all buffers when there's only one tab open
 let g:airline#extensions#tabline#enabled = 1
 " Remove ugly orange triangle on the bottom right
-" let g:airline_skip_empty_sections = 1
+let g:airline_skip_empty_sections = 1
 " simple, without powerline
 let g:airline_left_sep=''
 let g:airline_left_alt_sep='|'
 let g:airline_right_sep=''
 let g:airline_right_alt_sep='|'
+let g:airline_section_y=''
+" Disable percentage, line number, column number
+let g:airline_section_z=''
+
+" Short form to view display mode
+let g:airline_mode_map = {
+      \ '__' : '-',
+      \ 'n'  : 'N',
+      \ 'i'  : 'I',
+      \ 'R'  : 'R',
+      \ 'c'  : 'C',
+      \ 'v'  : 'V',
+      \ 'V'  : 'V',
+      \ '' : 'V',
+      \ 's'  : 'S',
+      \ 'S'  : 'S',
+      \ '' : 'S',
+      \ }
 " -----------------------------------------------------------------------------
 
 
@@ -398,6 +429,8 @@ nmap <silent> <leader>h :History<CR>
 nnoremap <silent> <leader><Enter> :Buffers<CR>
 " Jump to method or variable/attribute in current file <space>r
 nmap <silent> <leader>r :BTags<CR>
+" Jumt to lines in current buffer and search for string <space>/
+nmap <silent> <leader>/ :BLines<CR>
 " Jumt to lines in current buffer and search for string <space>/
 nmap <silent> <leader>/ :BLines<CR>
 " Change binding for split
@@ -441,7 +474,7 @@ nnoremap <expr><enter> &ft=="qf" ? "<cr>:lcl<cr>" : (getpos(".")[2]==1 ? "i<cr><
 " Plugin: mattn/emmet-vim ----
 "
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,php EmmetInstall
+autocmd FileType html,css,php,js,jsx EmmetInstall
 let g:user_emmet_leader_key='<Tab>'  " autocomplete emmet by <Tab><comma>
 " -----------------------------------------------------------------------------
 
@@ -467,11 +500,12 @@ autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 
 " Plugin: edkolev/tmuxline ----
 "
+"\'a'               : '#{?client_prefix,#[reverse][P]#[noreverse] ,}#{?window_zoomed_flag,#[reverse][F]#[noreverse] ,}#S',
 " show [P] when prefix active, [F] when zoomed
 let g:tmuxline_preset = {
-      \'a'               : '#{?client_prefix,#[reverse][P]#[noreverse] ,}#{?window_zoomed_flag,#[reverse][F]#[noreverse] ,}#S',
+      \'a'               : '#S',
       \'win'             : ['#I', '#W'],
-      \'cwin'            : ['#I', '#W'],
+      \'cwin'            : ['#I', '#W#{?window_zoomed_flag, *Z,}'],
       \'x'               : '#(focus)',
       \'y'               : ['%a, %b %d'],
       \'z'               : '%R #(bat)',
@@ -501,8 +535,8 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 let g:ale_linters = {
 \   'php': ['php -l', 'phpcs', 'phpmd'],
 \}
-let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml' 
-let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml' 
+let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
+let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
 let g:ale_set_loclist=1
 " -----------------------------------------------------------------------------
 
@@ -527,7 +561,8 @@ let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 set background=dark
 " colorscheme Tomorrow-Night " dark
 " colorscheme solarized " dark
-colorscheme OceanicNext " dark
+" colorscheme OceanicNext " dark
+colorscheme solarized8_dark
 
 " -----------------------------------------------------------------------------
 " %< Where to truncate
