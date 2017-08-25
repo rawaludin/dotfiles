@@ -14,9 +14,10 @@ call plug#begin('~/.config/nvim/plugged')
 " This one will work with neovim
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
+" Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
 " Plug 'mhartington/oceanic-next'
 Plug 'lifepillar/vim-solarized8'
+Plug 'morhetz/gruvbox'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -64,7 +65,7 @@ Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 Plug 'vimwiki/vimwiki' " personal note taker
 
 " Auto generate ctags
-Plug 'majutsushi/tagbar' " view ctags on sidebar
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } " view ctags on sidebar
 
 call plug#end()
 
@@ -364,7 +365,7 @@ nmap ga <Plug>(EasyAlign)
 "
 " set theme
 " solarized, distinguished, tomorrow, powerlineish, papercolor, raven, silver, ubaryd, zenburn, oceanixtnext
-let g:airline_theme = 'solarized'
+let g:airline_theme = 'gruvbox'
 " Always show statusbar
 set laststatus=2
 " Fancy arrow symbols, requires a patched font
@@ -385,6 +386,7 @@ let g:airline_left_sep=''
 let g:airline_left_alt_sep='|'
 let g:airline_right_sep=''
 let g:airline_right_alt_sep='|'
+" Disable fileencoding, fileformat
 let g:airline_section_y=''
 " Disable percentage, line number, column number
 let g:airline_section_z=''
@@ -519,6 +521,7 @@ let g:tmuxline_separators = {
     \ 'right' : '',
     \ 'right_alt' : '|',
     \ 'space' : ' '}
+
 " -----------------------------------------------------------------------------
 
 
@@ -538,6 +541,18 @@ let g:ale_linters = {
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
 let g:ale_set_loclist=1
+" -----------------------------------------------------------------------------
+
+" Plugin: junegunn/vim-slash ----
+"
+if has('timers') && !has('nvim')
+   noremap <expr> <plug>(slash-after) slash#blink(2, 50)
+ endif
+" -----------------------------------------------------------------------------
+
+" Plugin: morhetz/gruvbox ----
+"
+" let g:gruvbox_contrast_dark = 'soft'
 " -----------------------------------------------------------------------------
 
 " Plugin: justinmk/vim-sneak ----
@@ -562,7 +577,7 @@ set background=dark
 " colorscheme Tomorrow-Night " dark
 " colorscheme solarized " dark
 " colorscheme OceanicNext " dark
-colorscheme solarized8_dark
+colorscheme gruvbox
 
 " -----------------------------------------------------------------------------
 " %< Where to truncate
