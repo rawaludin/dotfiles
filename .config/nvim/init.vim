@@ -63,6 +63,7 @@ Plug 'w0rp/ale' " linter
 " endif
 Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 Plug 'vimwiki/vimwiki' " personal note taker
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " Visualize undotree
 
 " Auto generate ctags
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } " view ctags on sidebar
@@ -462,6 +463,13 @@ let g:airline#extensions#hunks#non_zero_only = 1
 " -----------------------------------------------------------------------------
 
 
+" Plugin: mbbill/undotree  ----
+"
+let g:undotree_WindowLayout = 2
+nnoremap U :UndotreeToggle<CR>
+" -----------------------------------------------------------------------------
+
+
 " Plugin: plasticboy/vim-markdown ----
 "
 let g:vim_markdown_folding_disabled=1 " disable folding because performance,
@@ -541,6 +549,7 @@ let g:ale_linters = {
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
 let g:ale_set_loclist=1
+let g:ale_lint_delay = 1000
 " -----------------------------------------------------------------------------
 
 " Plugin: junegunn/vim-slash ----
