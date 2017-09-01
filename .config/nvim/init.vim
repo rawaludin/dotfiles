@@ -66,7 +66,7 @@ Plug 'vimwiki/vimwiki' " personal note taker
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " Visualize undotree
 
 " Auto generate ctags
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } " view ctags on sidebar
+Plug 'majutsushi/tagbar' " view ctags on sidebar
 
 call plug#end()
 
@@ -118,6 +118,12 @@ endif
 " make . work with visually selected lines
 vnoremap . :norm.<CR>
 
+" use rg for grep
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 " disable menus to save 50ms startup time
 let did_install_default_menus = 1
 let did_install_syntax_menu = 1
@@ -161,6 +167,7 @@ for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%', 
     execute 'xnoremap a' . char . ' :<C-u>normal! F' . char . 'vf' . char . '<CR>'
     execute 'onoremap a' . char . ' :normal va' . char . '<CR>'
 endfor
+
 
 "******************************************************************************
 " Setting: Custom Command
@@ -453,6 +460,13 @@ command! -bang -nargs=* Ag
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
+" :Rg similiar to :Ag
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 " -----------------------------------------------------------------------------
 
 
@@ -535,8 +549,9 @@ let g:tmuxline_separators = {
 
 " Plugin: majutsushi/tagbar ----
 "
-" Open/close tagbar with \b
-nmap <silent> <leader>b :TagbarToggle<CR>
+" Open/close tagbar with <space>g
+nmap <silent> <leader>g :TagbarToggle<CR>
+
 " Uncomment to open tagbar automatically whenever possible
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 " -----------------------------------------------------------------------------
@@ -544,7 +559,7 @@ nmap <silent> <leader>b :TagbarToggle<CR>
 " Plugin: w0rp/ale ----
 "
 let g:ale_linters = {
-\   'php': ['php -l', 'phpcs', 'phpmd'],
+\   'php': ['php -l', 'phpcs', 'phpmd', 'phpstan'],
 \}
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
@@ -604,3 +619,5 @@ colorscheme gruvbox
 " %P Percentage
 " %#HighlightGroup#
 set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
+
+
