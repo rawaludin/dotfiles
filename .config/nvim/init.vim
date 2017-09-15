@@ -38,6 +38,7 @@ Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-abolish' " easily search for, substitute, and abbreviate multiple variants of a word
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
+Plug 'gorkunov/smartpairs.vim' " easy expand selection
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
