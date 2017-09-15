@@ -43,6 +43,7 @@ Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
 " Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
 Plug 'joonty/vdebug'
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
@@ -58,9 +59,9 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " no distraction mode
 " ----- Other text editing features -----------------------------------
 Plug 'w0rp/ale' " linter
 " Plug 'SirVer/ultisnips' " text snippet
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
-" endif
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
+endif
 Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 Plug 'vimwiki/vimwiki' " personal note taker
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " Visualize undotree
@@ -77,7 +78,6 @@ call plug#end()
 "
 " allow backspacing over everything in insert mode
 set ruler                 " show the cursor position all the time
-set number                " line numbers
 set showcmd               " display incomplete commands
 set autowriteall          " save buffer when switch to other buffer
 set clipboard+=unnamedplus " share clipboard with OSX
@@ -231,6 +231,18 @@ nnoremap <leader>ycn let @* = GetClass(1)<CR>:echo "Copied namespaced class name
 "******************************************************************************
 " Setting: Autocmd Rules
 "******************************************************************************
+"
+" Autocmd: relative line number on active buffer, absolute line number on
+" inactive bufferr
+"
+set number relativenumber
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+" -----------------------------------------------------------------------------
 
 " Automcd: Simple php formatter using php-cs-fixer ----
 "
@@ -508,6 +520,9 @@ let g:user_emmet_leader_key='<Tab>'  " autocomplete emmet by <Tab><comma>
 " Always enable (to manual enable :DeopleteEnable / :DeopleteDisable)
 " Make sure you have setup ctags for this to work
 let g:deoplete#enable_at_startup = 1
+" use phpcd for php completion
+let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+let g:deoplete#ignore_sources.php = ['omni']
 " -----------------------------------------------------------------------------
 
 
@@ -559,7 +574,7 @@ nmap <silent> <leader>g :TagbarToggle<CR>
 " Plugin: w0rp/ale ----
 "
 let g:ale_linters = {
-\   'php': ['php -l', 'phpcs', 'phpmd', 'phpstan'],
+\   'php': ['php -l', 'phpcs', 'phpmd'],
 \}
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
