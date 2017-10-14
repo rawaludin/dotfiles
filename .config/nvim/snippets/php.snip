@@ -1,0 +1,79 @@
+# method
+snippet m
+	${1:public} function ${2:foo}()
+	{
+	    ${0:${VISUAL}}
+	}
+
+snippet function
+abbr public function () {}
+	${1:public }function ${2:#:FunctionName}(${3})
+	{
+		${4:TARGET}
+}
+
+snippet controller_setter
+  ->set${1:MyField}($request->getAttribute(
+      'structure.${2:my_field}',
+      $structure->get$1()
+  ))
+
+snippet lookup_table
+  // ${1:field}
+  Schema::create('prop_${2:table}', function (Blueprint $table) {
+      $table->increments('id');
+      $table->string('name');
+      $table->softDeletes();
+      $table->timestamps();
+  });
+  
+  Schema::create('prop_$2_pivot', function (Blueprint $table) {
+      $table->integer('structure_id')->unsigned();
+      $table->integer('${3:$1}_id')->unsigned();
+  });
+
+  Schema::dropIfExists('prop_$2_pivot');
+  Schema::dropIfExists('prop_$2');
+
+snippet lookup_key
+  Schema::table('prop_${1:tables}_pivot', function (Blueprint $table) {
+      $table->foreign('structure_id')->references('id')->on('prop_structures')
+          ->onUpdate('RESTRICT')->onDelete('CASCADE');
+      $table->foreign('${2:$1}_id')->references('id')->on('prop_$1')
+          ->onUpdate('RESTRICT')->onDelete('CASCADE');
+  });
+
+  Schema::table('prop_$1_pivot', function (Blueprint $table) {
+    $table->dropForeign('prop_$1_pivot_structure_id_foreign');
+    $table->dropForeign('prop_$1_pivot_$2_id_foreign');
+  });
+
+snippet lookup_relation
+    public function ${1:relation}()
+    {
+        return $this->belongsToMany(${2:Model}Eloquent::class,
+            'prop_${3:tables}_pivot', 'structure_id', '${4:$3}_id');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function set${5:Field}(array $value = null)
+    {
+        $this->_${6:field} = $value;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get$5()
+    {
+        // this will allow nullify $6 without triggering relationship query
+        if ($this->isKeyExists('_$6')) {
+            return $this->_$6;
+        }
+
+        return $this->_$6 = $this->_$6
+            ?: $this->$1()->pluck('name')->all();
+    }
