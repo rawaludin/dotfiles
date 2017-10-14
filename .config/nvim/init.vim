@@ -30,6 +30,7 @@ Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
+Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 Plug 'gorkunov/smartpairs.vim' " easy expand selection
@@ -38,7 +39,17 @@ Plug 'gorkunov/smartpairs.vim' " easy expand selection
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
 " Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
 " Plug 'joonty/vdebug'
-" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install -vvv' }
+
+" Try LanguageServer-Protocol like vscode
+" make sure disable xdebug to use this
+Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install -vvv && composer run-script parse-stubs'}
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'roxma/nvim-completion-manager'
+" requires phpactor for completion
+Plug 'phpactor/phpactor' ,  {'do': 'composer install --prefer-dist -vvv'}
+Plug 'roxma/ncm-phpactor'
+Plug 'Shougo/echodoc.vim'
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
@@ -50,12 +61,14 @@ Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
 " ----- Other text editing features -----------------------------------
 Plug 'w0rp/ale' " linter
-Plug 'SirVer/ultisnips' " text snippet
+Plug 'Shougo/neosnippet'
+" Plug 'SirVer/ultisnips' " text snippet
 " if has('nvim')
 "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
 " endif
 Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 " Plug 'vimwiki/vimwiki' " personal note taker
+" Plug 'vim-scripts/DrawIt' " draw diagram
 
 " Auto generate ctags
 Plug 'majutsushi/tagbar' " view ctags on sidebar
@@ -140,6 +153,12 @@ augroup SnipperCursor
   au! CursorMoved * call SnipperSetCursor()
   au! CursorMovedI * call SnipperUnSetCursor()
 augroup END
+augroup PHPStuff
+  " reindex php tags async, doen't run if last command hasn't done
+  autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
+  " start LanguageServer-php-neovim
+  autocmd FileType php LanguageClientStart
+augroup END
 " }}}
 
 " Mapping {{{
@@ -164,7 +183,7 @@ inoremap <silent> <ScrollWheelDown> <ESC><ScrollWheelDown>
 nmap Q @q
 
 " redraw syntax by <space>l
-nnoremap <leader>l :diffupdate<cr>:syntax sync fromstart<cr>:Strip<cr>:w<cr><c-l>
+nnoremap <leader>l :diffupdate<cr>:syntax sync fromstart<cr>:Strip<cr>:w<cr>
 
 " select last pasted block by gp
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -240,30 +259,23 @@ function! <SID>StripTrailingWhitespaces()
     let @/=l:_s
     call cursor(l:l, l:c)
 endfunction
-command! Strip call <SID>StripTrailingWhitespaces()<CR>
+command! Strip call <SID>StripTrailingWhitespaces()
 " }}}
 
-" Plugin Settings {{{
-" 
-" =============================================================================
-" vim-multiple-cursor
-" =============================================================================
+" vim-multiple-cursor {{{
 " When press ESC from insert mode on multiple cursor, back to multiple cursor,
 " not regular vim
 let g:multi_cursor_exit_from_insert_mode = 0
+" }}}
 
-
-" =============================================================================
-" vim-easy-align
-" =============================================================================
+" vim-easy-align {{{
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+" }}}
 
-" =============================================================================
-" vim-airline
-" =============================================================================
+" vim-airline {{{
 " set theme
 let g:airline_theme = 'gruvbox'
 " Always show statusbar
@@ -300,10 +312,9 @@ let g:airline_mode_map = {
       \ 'S'  : 'S',
       \ '' : 'S',
       \ }
+" }}}
 
-" =============================================================================
-" Nerdtree
-" =============================================================================
+" Nerdtree {{{
 " Open/close NERDTree Tabs with <space>t
 " nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 nmap <silent> <leader>t :NERDTreeToggle<CR>
@@ -311,10 +322,9 @@ nmap <silent> <leader>t :NERDTreeToggle<CR>
 map <silent> <leader>st :NERDTreeFind<CR>
 " To have NERDTree always open on startup set this to 2
 let g:nerdtree_tabs_open_on_console_startup = 0
+" }}}
 
-" =============================================================================
-" fzf
-" =============================================================================
+" fzf {{{
 " fuzzy open file in current project with <space>p
 nnoremap <silent> <expr> <leader>p (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 " nmap <silent> <leader>p :Files<CR>
@@ -352,52 +362,46 @@ command! -bang -nargs=* Rg
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
+" }}}
 
-" =============================================================================
-" vim-gitgutter
-" =============================================================================
+" vim-gitgutter {{{
 " In vim-airline, only display "hunks" if the diff is non-zero
 let g:airline#extensions#hunks#non_zero_only = 1
+" }}}
 
-" =============================================================================
-" vim-markdown 
-" =============================================================================
-let g:vim_markdown_folding_disabled=1 " disable folding because performance,
-                " see https://github.com/plasticboy/vim-markdown/issues/162
+" vim-markdown {{{
+" disable folding because performance, see https://github.com/plasticboy/vim-markdown/issues/162
+let g:vim_markdown_folding_disabled=1
 " disable indent when new paragraph with `o` from list
 au BufNewFile,BufRead *.{md,mdown,mkd,mkdn,markdown,mdwn} setlocal indentexpr=''
 " Close TOC after click enter on heading link
 nnoremap <expr><enter> &ft=="qf" ? "<cr>:lcl<cr>" : (getpos(".")[2]==1 ? "i<cr><esc>": "i<cr><esc>l")
+" }}}
 
-" =============================================================================
-" emmet-vim
-" =============================================================================
+" emmet-vim {{{
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,php,js,jsx EmmetInstall
 let g:user_emmet_leader_key='<Tab>'  " autocomplete emmet by <Tab><comma>
+" }}}
 
-" =============================================================================
-" deoplete.nvim
-" =============================================================================
+" deoplete.nvim {{{
 " Always enable (to manual enable :DeopleteEnable / :DeopleteDisable)
 " Make sure you have setup ctags for this to work
 let g:deoplete#enable_at_startup = 1
 " use phpcd for php completion
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
 let g:deoplete#ignore_sources.php = ['omni']
+" }}}
 
-" =============================================================================
-" vim-php-namespace
-" =============================================================================
+" vim-php-namespace {{{
 " Press `<space>u` while on the class being used in normal mode to insert `use`
 " statement
 autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
 " Press `<space>e` to expand to fully quailified class name
 autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
+" }}}
 
-" =============================================================================
-" tmuxline
-" =============================================================================
+" tmuxline {{{
 "\'a'               : '#{?client_prefix,#[reverse][P]#[noreverse] ,}#{?window_zoomed_flag,#[reverse][F]#[noreverse] ,}#S',
 " show [P] when prefix active, [F] when zoomed
 let g:tmuxline_preset = {
@@ -417,18 +421,16 @@ let g:tmuxline_separators = {
     \ 'right' : '',
     \ 'right_alt' : '|',
     \ 'space' : ' '}
+" }}}
 
-" =============================================================================
-" tagbar
-" =============================================================================
+" tagbar {{{
 " Open/close tagbar with <space>g
 nmap <silent> <leader>g :TagbarToggle<CR>
 " Uncomment to open tagbar automatically whenever possible
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
+" }}}
 
-" =============================================================================
-" ale
-" =============================================================================
+" ale {{{
 let g:ale_linters = {
 \   'php': ['php -l', 'phpcs', 'phpmd'],
 \}
@@ -436,10 +438,9 @@ let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
 let g:ale_set_loclist=1
 let g:ale_lint_delay = 1000
+" }}}
 
-" =============================================================================
-" vim-sneak
-" =============================================================================
+" vim-sneak {{{
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
 " let g:sneak#absolute_dir = 1
@@ -449,3 +450,164 @@ map t <Plug>Sneak_t
 map T <Plug>Sneak_T
 let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 " }}}
+
+" neosnippet {{{
+let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
+let g:neosnippet#disable_runtime_snippets = {
+\   '_' : 1,
+\ }
+
+imap <c-k> <Plug>(neosnippet_expand_or_jump)
+smap <c-k> <Plug>(neosnippet_expand_or_jump)
+xmap <c-k> <Plug>(neosnippet_expand_target)
+
+inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
+vmap <c-u> <Plug>(neosnippet_expand_target)
+" expand parameters
+let g:neosnippet#enable_completed_snippet=1
+" }}}
+
+function! GenerateDomain(domain, table, relationship, config, const, payload_field, foreign)
+  " contracts
+  execute '!cp -rf ./app/Contracts/Basement app/Contracts/'.a:domain
+  execute "!find ./app/Contracts/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
+  execute "!find ./app/Contracts/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
+
+  " domain
+  execute '!cp -rf app/Domains/Basement app/Domains/'.a:domain
+  execute "!find ./app/Domains/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
+  execute "!find ./app/Domains/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
+  execute "!find ./app/Domains/".a:domain." -type f | xargs sed -i '' -e 's/basements/".a:table."/g'"
+
+  " Infrastructures
+  execute '!cp -rf app/Infrastructures/Basement app/Infrastructures/'.a:domain
+  execute "!find ./app/Infrastructures/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
+  execute "!find ./app/Infrastructures/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
+  execute "!find ./app/Infrastructures/".a:domain." -type f | xargs sed -i '' -e 's/basements/".a:relationship."/g'"
+
+  " config
+  execute '!cp -rf ./config/packages/basement.php config/packages/'.a:config.'.php'
+  execute "!sed -i '' -e 's/Basement/".a:domain."/g' config/packages/".a:config.'.php'
+
+  " test
+  execute '!cp -rf ./tests/Domains/Basement ./tests/Domains/'.a:domain
+  execute "!find ./tests/Domains/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
+  execute "!find ./tests/Domains/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
+  execute '!cp -rf ./tests/Infrastructures/Basement ./tests/Infrastructures/'.a:domain
+  execute "!find ./tests/Infrastructures/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
+  execute "!find ./tests/Infrastructures/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
+
+  " factory
+  execute "!echo '$factory->define(\\App\\Domains\\".a:domain."\\".a:domain."Eloquent::class, function (Faker\\Generator $faker) {' >> database/factories/StructureFactory.php"
+  execute "!echo '   return [' >> database/factories/StructureFactory.php"
+  if a:const != '0'
+    execute "!echo \"        'name' => \\$faker->randomElement(\\App\\Contracts\\Structure\\StructureInterface::".a:const.")\" >> database/factories/StructureFactory.php"
+  else
+    execute "!echo \"        'name' => \\$faker->text\" >> database/factories/StructureFactory.php"
+  endif
+  execute "!echo '    ];' >> database/factories/StructureFactory.php"
+  execute "!echo '});' >> database/factories/StructureFactory.php"
+
+  " Controller Assertion
+  execute '!cp -rf ./tests/Controllers/Concerns/StructureAssertion/Basement.php ./tests/Controllers/Concerns/StructureAssertion/'.a:domain.'.php'
+  execute "!sed -i '' -e 's/Basement/".a:domain."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
+  execute "!sed -i '' -e 's/prop_basements/prop_".a:table."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
+  execute "!sed -i '' -e 's/basement_id/".a:foreign."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
+  execute "!sed -i '' -e 's/basement/".a:payload_field."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
+
+  " run test
+  execute "!ts ./tests/Domains/".a:domain.' && ts ./tests/Infrastructures/'.a:domain
+endfunction
+
+function! ControllerConcern(Domain, field_name)
+  " trait
+  call setreg('/',';')
+  execute 'normal! ggnnnn'
+  call setreg('0',a:Domain)
+  execute "normal! i,\<CR>\<C-R>0\<ESC>"
+  " payload
+  call setreg('/','appendStructureGroupPayload')
+  execute 'normal! ggnj%2k'
+  let l:payloadAssert = "$this->savedPayload['structure.".a:field_name."'] = $this->append".a:Domain."Payload($data);"
+  execute "normal! i".l:payloadAssert."\<ESC>==o\<ESC>"
+  " structure
+  call setreg('/','appendStructureGroupStructure')
+  execute 'normal! ggnj%2k'
+  let l:structureAssert = '$jsonStructure = $this->append'.a:Domain.'Structure($jsonStructure);'
+  execute "normal! i".l:structureAssert."\<ESC>==o\<ESC>"
+  " response
+  call setreg('/','seeStructureGroupResponse')
+  execute 'normal! ggnj%k$xo'
+  let l:responseAssert = "->see".a:Domain."Response($this->savedPayload['structure.".a:field_name."']);"
+  execute "normal! i".l:responseAssert."\<ESC>=="
+  " record
+  call setreg('/','seeStructureGroupRecords')
+  execute 'normal! ggnj%k$xo'
+  let l:recordAssert = "->see".a:Domain."Record($propertyId, $structureId, $this->savedPayload['structure.".a:field_name."']);"
+  execute "normal! i".l:recordAssert."\<ESC>==f,;a\<CR>\<ESC>Vk<"
+  " run test
+  execute "!ts tests/Controllers/PropertyControllerTest.php"
+endfunction
+
+function! RepositorySync(Domain, Method)
+  let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
+  " use
+  execute "normal! gg]]"
+  call setreg('/', 'use')
+  execute "normal! N"
+  let l:use = 'use App\Contracts\'.a:Domain.'\'.a:Domain.'RepositoryInterface;'
+  execute "normal! o".l:use."\<ESC>"
+  " construct
+  call setreg('/', '__construct')
+  let l:construct = a:Domain.'RepositoryInterface $'.l:repo
+  let l:setRepo = '$this->'.l:repo.' = $'.l:repo.';'
+  execute "normal! nf(%kA,\<ESC>o".l:construct."\<ESC>jj%O".l:setRepo."\<ESC>"
+  " sync
+  call setreg('/', 'syncRelated')
+  let l:sync = '$this->'.l:repo.'->sync($result, $entity->get'.a:Method.'());'
+  execute "normal! ggnj%O".l:sync."\<ESC>"
+endfunction
+
+function! RepoInterfaceSync(Domain)
+  let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
+  " use
+  execute "normal! gg]]"
+  call setreg('/', 'use')
+  execute "normal! N"
+  let l:use = 'use App\Contracts\'.a:Domain.'\'.a:Domain.'RepositoryInterface;'
+  execute "normal! o".l:use."\<ESC>"
+  " construct
+  call setreg('/', '__construct')
+  let l:construct = a:Domain.'RepositoryInterface $'.l:repo
+  let l:setRepo = '$this->'.l:repo.' = $'.l:repo.';'
+  execute "normal! nf(%kA,\<ESC>o".l:construct."\<ESC>jj%O".l:setRepo."\<ESC>"
+endfunction
+
+function! RepoSyncTest(Domain, FieldMethod, field_name, const)
+  " use
+  execute "normal! gg]]"
+  call setreg('/', 'use')
+  execute "normal! N"
+  let l:use = 'use App\Contracts\'.a:Domain.'\'.a:Domain.'RepositoryInterface;'
+  execute "normal! o".l:use."\<ESC>"
+  " setup
+  let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
+  call setreg('/', 'persistenceRepository')
+  let l:repoSet = '$this->'.l:repo.' = m::mock('.a:Domain.'RepositoryInterface::class);'
+  let l:repoConstruct = '$this->'.l:repo
+  execute "normal! ggnO".l:repoSet."\<ESC>0"
+  call setreg('/', 'new StructureRepository')
+  execute "normal! nf(%kA,\<CR>".l:repoConstruct."\<ESC>=="
+  " mockSync
+  call setreg('/', 'mockSync')
+  if (a:const == 0)
+    let l:mock1 = "$data['".a:field_name."'] = $faker->words(2, false);"
+  else
+    let l:mock1 = "$data['".a:field_name."'] = $faker->randomElements(StructureInterface::".a:const.");"
+  endif
+  let l:mock2 = "$this->".l:repo."->shouldReceive('sync')->with($model, $data['".a:field_name."'])->once();"
+  let l:mock3 = "$model->shouldReceive('get".a:FieldMethod."')->andReturn($data['".a:field_name."']);"
+  execute "normal! ggnj%ko".l:mock1."\<ESC>o".l:mock2."\<ESC>o".l:mock3."\<ESC>"
+  " run test
+  execute "!ts %"
+endfunction
