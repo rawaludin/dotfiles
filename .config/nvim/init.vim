@@ -61,7 +61,7 @@ Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
 " ----- Other text editing features -----------------------------------
 Plug 'w0rp/ale' " linter
-" Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet'
 " Plug 'SirVer/ultisnips' " text snippet
 " if has('nvim')
 "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
@@ -454,21 +454,22 @@ let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 " }}}
 
 " neosnippet {{{
-" let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
-" let g:neosnippet#disable_runtime_snippets = {
-" \   '_' : 1,
-" \ }
+let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
+let g:neosnippet#disable_runtime_snippets = {
+\   '_' : 1,
+\ }
 
-" imap <c-k> <Plug>(neosnippet_expand_or_jump)
-" smap <c-k> <Plug>(neosnippet_expand_or_jump)
-" xmap <c-k> <Plug>(neosnippet_expand_target)
+imap <c-k> <Plug>(neosnippet_expand_or_jump)
+smap <c-k> <Plug>(neosnippet_expand_or_jump)
+xmap <c-k> <Plug>(neosnippet_expand_target)
 
-" inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
-" vmap <c-u> <Plug>(neosnippet_expand_target)
-" " expand parameters
-" let g:neosnippet#enable_completed_snippet=1
+inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
+vmap <c-u> <Plug>(neosnippet_expand_target)
+" expand parameters
+let g:neosnippet#enable_completed_snippet=1
 " }}}
 
+" run from property micros project
 function! GenerateDomain(domain, table, relationship, config, const, payload_field, foreign)
   " contracts
   execute '!cp -rf ./app/Contracts/Basement app/Contracts/'.a:domain
@@ -503,7 +504,7 @@ function! GenerateDomain(domain, table, relationship, config, const, payload_fie
   execute "!echo '$factory->define(\\App\\Domains\\".a:domain."\\".a:domain."Eloquent::class, function (Faker\\Generator $faker) {' >> database/factories/StructureFactory.php"
   execute "!echo '   return [' >> database/factories/StructureFactory.php"
   if a:const != '0'
-    execute "!echo \"        'name' => \\$faker->randomElement(\\App\\Contracts\\Structure\\StructureInterface::".a:const.")\" >> database/factories/StructureFactory.php"
+    execute "!echo \"        'name' => \\$faker->randomElement(\\App\\Contracts\\GreenMarketing\\GreenMarketingInterface::".a:const.")\" >> database/factories/StructureFactory.php"
   else
     execute "!echo \"        'name' => \\$faker->text\" >> database/factories/StructureFactory.php"
   endif
@@ -521,6 +522,7 @@ function! GenerateDomain(domain, table, relationship, config, const, payload_fie
   execute "!ts ./tests/Domains/".a:domain.' && ts ./tests/Infrastructures/'.a:domain
 endfunction
 
+" run on tests/Controllers/Concerns/StructureAssertion/Structure.php
 function! ControllerConcern(Domain, field_name)
   " trait
   call setreg('/',';')
@@ -551,6 +553,7 @@ function! ControllerConcern(Domain, field_name)
   execute "!ts tests/Controllers/PropertyControllerTest.php"
 endfunction
 
+" run from parent repository
 function! RepositorySync(Domain, Method)
   let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
   " use
@@ -566,6 +569,7 @@ function! RepositorySync(Domain, Method)
   execute "normal! nf(%kA,\<ESC>o".l:construct."\<ESC>jj%O".l:setRepo."\<ESC>"
   " sync
   call setreg('/', 'syncRelated')
+  let l:sync = '$this->'.l:repo.'->sync($result, $entity->get'.a:Method.'());'
   execute "normal! ggnj%O".l:sync."\<ESC>"
 endfunction
 
