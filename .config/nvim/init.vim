@@ -26,7 +26,6 @@ Plug 'qpkorr/vim-bufkill' " Delete buffer without closing split :BD :BW :BUN
 Plug 'scrooloose/nerdtree' " tree view of current project
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
-Plug 'tpope/vim-unimpaired' " faster movement quicklist, loclist, etc with [  ]
 Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
@@ -188,6 +187,7 @@ let &statusline = s:statusline_expr()
 " day
 set background=light
 colorscheme gruvbox
+let g:gruvbox_contrast_light="medium"
 " Tmuxline vim_statusline_3
 " night
 " set background=light
@@ -316,7 +316,7 @@ map <silent> <leader>d :bd<cr>
 " close all buffer <space>D
 map <silent> <leader>D :bufdo bd<CR>
 " close all buffer except active buffer
-command! Bonly :%bd|e#
+command! BO :%bd|e#
 " Switch between two buffer back and forth by <space>q
 nnoremap <leader>q :b#<cr>
 " jump to last tab <space>Tab
