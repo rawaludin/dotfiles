@@ -94,6 +94,9 @@ export EDITOR="nvim"
 alias s="subl"
 alias e="nvim"
 
+# hub
+alias git="hub"
+
 # Larger bash history (allow 32³ entries; default is 500)
 export HISTSIZE=32768
 export HISTFILESIZE=$HISTSIZE
@@ -253,8 +256,7 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 
 # todotxt
-alias td="~/Projects/todo.txt_cli/todo.sh"
-
+alias td="todo.sh"
 # Laravel
 export LARAVEL_ENV="local"
 
@@ -292,7 +294,7 @@ alias tt="doo ./vendor/bin/phpunit --no-coverage"
 alias r="rails"
 
 # Mamp alias
-alias mysql="/Applications/MAMP/Library/bin/mysql"
+# alias mysql="/Applications/MAMP/Library/bin/mysql"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -332,15 +334,19 @@ fi
 
 # Configure FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# use ag
-# export FZF_DEFAULT_COMMAND='ag --hidden -U --ignore .git -g ""'
-# use rg
-# --files: List files that would be searched but do not search
-# --no-ignore: Do not respect .gitignore, etc...
-# --hidden: Search hidden files and folders
-# --follow: Follow symlinks
-# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+# Use fd for fzf
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --no-ignore-vcs'
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # preview
