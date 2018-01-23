@@ -32,7 +32,6 @@ Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-abolish'
-Plug 'vim-scripts/BufOnly.vim' " used to close other buffer except the active one with :BufOnly
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 Plug 'gorkunov/smartpairs.vim' " easy expand selection
 
@@ -316,6 +315,8 @@ nnoremap <silent> }w :blast<CR>
 map <silent> <leader>d :bd<cr>
 " close all buffer <space>D
 map <silent> <leader>D :bufdo bd<CR>
+" close all buffer except active buffer
+command! Bonly :%bd|e#
 " Switch between two buffer back and forth by <space>q
 nnoremap <leader>q :b#<cr>
 " jump to last tab <space>Tab
