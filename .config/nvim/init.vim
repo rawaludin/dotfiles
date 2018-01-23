@@ -7,12 +7,13 @@ call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
 " This one will work with neovim
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-" Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
+Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
 " Plug 'mhartington/oceanic-next'
 " Plug 'lifepillar/vim-solarized8'
 Plug 'morhetz/gruvbox'
+" those colors work well with f.lux
+Plug 'jonathanfilip/vim-lucius'
+Plug 'robertmeta/nofrils'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -55,13 +56,16 @@ Plug 'Shougo/echodoc.vim'
 Plug 'airblade/vim-gitgutter' " display each line git status
 Plug 'tpope/vim-fugitive' " git inside vim
 Plug 'tpope/vim-rhubarb' " github extension for fugitive
+"
+" ----- Working with Go ----------------------------------------------
+Plug 'fatih/vim-go'
 
 " ----- Working with Markdown ----------------------------------------------
 " Plug 'plasticboy/vim-markdown' | Plug  'godlygeek/tabular', { 'for': 'markdown' } " better markdown highlight
 
 " ----- Other text editing features -----------------------------------
 Plug 'w0rp/ale' " linter
-Plug 'Shougo/neosnippet'
+" Plug 'Shougo/neosnippet'
 " Plug 'SirVer/ultisnips' " text snippet
 " if has('nvim')
 "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
@@ -106,7 +110,6 @@ let g:did_install_syntax_menu = 1 " save 50ms startup time
 " }}}
 
 " UI {{{
-set background=dark
 set colorcolumn=81,121 " column guide at 81 and 121 char
 set number relativenumber " for easier execute macro
 " support true color (enable this when tmux support true color)
@@ -115,7 +118,83 @@ if (has('termguicolors'))
   let &t_8b = '\<Esc>[48;2;%lu;%lu;%lum'
   set termguicolors
 endif
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? '' : printf(
+    \   ' [%dW %dE]',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+" recalculate the tab warning flag when idle and after writing
+autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+
+" return '[&et]' if &et is set wrong
+" return '[mixed-indenting]' if spaces and tabs are used to indent
+" return an empty string if everything is fine
+function! StatuslineTabWarning()
+    if !exists("b:statusline_tab_warning")
+        let tabs = search('^\t', 'nw') != 0
+        let spaces = search('^ ', 'nw') != 0
+
+        if tabs && spaces
+            let b:statusline_tab_warning =  '[mixed-indenting]'
+        elseif (spaces && !&et) || (tabs && &et)
+            let b:statusline_tab_warning = '[&et]'
+        else
+            let b:statusline_tab_warning = ''
+        endif
+    endif
+    return b:statusline_tab_warning
+endfunction
+
+" recalculate the trailing whitespace warning when idle, and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
+
+" return '[\s]' if trailing white space is detected
+" return '' otherwise
+function! StatuslineTrailingSpaceWarning()
+    if !exists("b:statusline_trailing_space_warning")
+        if search('\s\+$', 'nw') != 0
+            let b:statusline_trailing_space_warning = '[\s]'
+        else
+            let b:statusline_trailing_space_warning = ''
+        endif
+    endif
+    return b:statusline_trailing_space_warning
+endfunction
+
+function! s:statusline_expr()
+  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+  let ro  = "%{&readonly ? '[RO] ' : ''}"
+  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  let fug = "%{exists('g:loaded_fugitive') ? fugitive#head() : ''}"
+  let sep = ' %= '
+  let pos = ' %-12(%l : %c%V%) '
+  let pct = ' %P'
+  let ale = '%{LinterStatus()}'
+  let whitespace_tab_warning = '%{StatuslineTabWarning()}'
+  let whitespace_trailing = '%{StatuslineTrailingSpaceWarning()}'
+
+  return '%F %<'.mod.ro.ft.'('.fug.')'.ale.whitespace_tab_warning.whitespace_trailing.sep.pos.'%*'.pct
+endfunction
+let &statusline = s:statusline_expr()
+
+" day
+set background=light
 colorscheme gruvbox
+" Tmuxline vim_statusline_3
+" night
+" set background=light
+" colorscheme lucius
+" LuciusWhiteHighContrast
+
 " }}}
 
 " Autocommand {{{
@@ -157,7 +236,7 @@ augroup PHPStuff
   " reindex php tags async, doen't run if last command hasn't done
   autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
   " start LanguageServer-php-neovim
-  autocmd FileType php LanguageClientStart
+  " autocmd FileType php LanguageClientStart
 augroup END
 " }}}
 
@@ -262,6 +341,20 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l:l, l:c)
 endfunction
 command! Strip call <SID>StripTrailingWhitespaces()
+
+" Z - cd to recent / frequent directories
+command! -nargs=* Z :call Z(<f-args>)
+function! Z(...)
+  let cmd = 'fasd -d -e printf'
+  for arg in a:000
+    let cmd = cmd . ' ' . arg
+  endfor
+  let path = system(cmd)
+  if isdirectory(path)
+    echo path
+    exec 'cd' fnameescape(path)
+  endif
+endfunction
 " }}}
 
 " vim-multiple-cursor {{{
@@ -275,45 +368,6 @@ let g:multi_cursor_exit_from_insert_mode = 0
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-" }}}
-
-" vim-airline {{{
-" set theme
-let g:airline_theme = 'gruvbox'
-" Always show statusbar
-set laststatus=2
-" Fancy arrow symbols, requires a patched font https://github.com/abertsch/Menlo-for-Powerline
-let g:airline_powerline_fonts = 1
-" Show PASTE if in paste mode
-let g:airline_detect_paste=1
-" Automatically displays all buffers when there's only one tab open
-let g:airline#extensions#tabline#enabled = 1
-" Remove ugly orange triangle on the bottom right
-let g:airline_skip_empty_sections = 1
-" simple, without powerline
-let g:airline_left_sep=''
-let g:airline_left_alt_sep='|'
-let g:airline_right_sep=''
-let g:airline_right_alt_sep='|'
-" Disable fileencoding, fileformat
-let g:airline_section_y=''
-" Disable percentage, line number, column number
-let g:airline_section_z=''
-
-" Short form to view display mode
-let g:airline_mode_map = {
-      \ '__' : '-',
-      \ 'n'  : 'N',
-      \ 'i'  : 'I',
-      \ 'R'  : 'R',
-      \ 'c'  : 'C',
-      \ 'v'  : 'V',
-      \ 'V'  : 'V',
-      \ '' : 'V',
-      \ 's'  : 'S',
-      \ 'S'  : 'S',
-      \ '' : 'S',
-      \ }
 " }}}
 
 " Nerdtree {{{
@@ -366,11 +420,6 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 " }}}
 
-" vim-gitgutter {{{
-" In vim-airline, only display "hunks" if the diff is non-zero
-let g:airline#extensions#hunks#non_zero_only = 1
-" }}}
-
 " vim-markdown {{{
 " disable folding because performance, see https://github.com/plasticboy/vim-markdown/issues/162
 let g:vim_markdown_folding_disabled=1
@@ -404,12 +453,10 @@ autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 " }}}
 
 " tmuxline {{{
-"\'a'               : '#{?client_prefix,#[reverse][P]#[noreverse] ,}#{?window_zoomed_flag,#[reverse][F]#[noreverse] ,}#S',
-" show [P] when prefix active, [F] when zoomed
 let g:tmuxline_preset = {
       \'a'               : '#S',
-      \'win'             : ['#I', '#W'],
-      \'cwin'            : ['#I', '#W#{?window_zoomed_flag, *Z,}'],
+      \'win'             : ['#W'],
+      \'cwin'            : ['#W#{?window_zoomed_flag, *Z,}'],
       \'x'               : '#(focus)',
       \'y'               : ['%a, %b %d'],
       \'z'               : '%R #(bat)',
@@ -463,156 +510,9 @@ imap <c-k> <Plug>(neosnippet_expand_or_jump)
 smap <c-k> <Plug>(neosnippet_expand_or_jump)
 xmap <c-k> <Plug>(neosnippet_expand_target)
 
-inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
-vmap <c-u> <Plug>(neosnippet_expand_target)
+" inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
+" vmap <c-u> <Plug>(neosnippet_expand_target)
 " expand parameters
 let g:neosnippet#enable_completed_snippet=1
 " }}}
 
-" run from property micros project
-function! GenerateDomain(domain, table, relationship, config, const, payload_field, foreign)
-  " contracts
-  execute '!cp -rf ./app/Contracts/Basement app/Contracts/'.a:domain
-  execute "!find ./app/Contracts/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
-  execute "!find ./app/Contracts/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
-
-  " domain
-  execute '!cp -rf app/Domains/Basement app/Domains/'.a:domain
-  execute "!find ./app/Domains/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
-  execute "!find ./app/Domains/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
-  execute "!find ./app/Domains/".a:domain." -type f | xargs sed -i '' -e 's/basements/".a:table."/g'"
-
-  " Infrastructures
-  execute '!cp -rf app/Infrastructures/Basement app/Infrastructures/'.a:domain
-  execute "!find ./app/Infrastructures/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
-  execute "!find ./app/Infrastructures/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
-  execute "!find ./app/Infrastructures/".a:domain." -type f | xargs sed -i '' -e 's/basements/".a:relationship."/g'"
-
-  " config
-  execute '!cp -rf ./config/packages/basement.php config/packages/'.a:config.'.php'
-  execute "!sed -i '' -e 's/Basement/".a:domain."/g' config/packages/".a:config.'.php'
-
-  " test
-  execute '!cp -rf ./tests/Domains/Basement ./tests/Domains/'.a:domain
-  execute "!find ./tests/Domains/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
-  execute "!find ./tests/Domains/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
-  execute '!cp -rf ./tests/Infrastructures/Basement ./tests/Infrastructures/'.a:domain
-  execute "!find ./tests/Infrastructures/".a:domain." -type f | sed 'p;s/Basement/".a:domain."/g' | xargs -n2 mv"
-  execute "!find ./tests/Infrastructures/".a:domain." -type f | xargs sed -i '' -e 's/Basement/".a:domain."/g'"
-
-  " factory
-  execute "!echo '$factory->define(\\App\\Domains\\".a:domain."\\".a:domain."Eloquent::class, function (Faker\\Generator $faker) {' >> database/factories/StructureFactory.php"
-  execute "!echo '   return [' >> database/factories/StructureFactory.php"
-  if a:const != '0'
-    execute "!echo \"        'name' => \\$faker->randomElement(\\App\\Contracts\\GreenMarketing\\GreenMarketingInterface::".a:const.")\" >> database/factories/StructureFactory.php"
-  else
-    execute "!echo \"        'name' => \\$faker->text\" >> database/factories/StructureFactory.php"
-  endif
-  execute "!echo '    ];' >> database/factories/StructureFactory.php"
-  execute "!echo '});' >> database/factories/StructureFactory.php"
-
-  " Controller Assertion
-  execute '!cp -rf ./tests/Controllers/Concerns/StructureAssertion/Basement.php ./tests/Controllers/Concerns/StructureAssertion/'.a:domain.'.php'
-  execute "!sed -i '' -e 's/Basement/".a:domain."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
-  execute "!sed -i '' -e 's/prop_basements/prop_".a:table."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
-  execute "!sed -i '' -e 's/basement_id/".a:foreign."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
-  execute "!sed -i '' -e 's/basement/".a:payload_field."/g' ./tests/Controllers/Concerns/StructureAssertion/".a:domain.".php"
-
-  " run test
-  execute "!ts ./tests/Domains/".a:domain.' && ts ./tests/Infrastructures/'.a:domain
-endfunction
-
-" run on tests/Controllers/Concerns/StructureAssertion/Structure.php
-function! ControllerConcern(Domain, field_name)
-  " trait
-  call setreg('/',';')
-  execute 'normal! ggnnnn'
-  call setreg('0',a:Domain)
-  execute "normal! i,\<CR>\<C-R>0\<ESC>"
-  " payload
-  call setreg('/','appendStructureGroupPayload')
-  execute 'normal! ggnj%2k'
-  let l:payloadAssert = "$this->savedPayload['structure.".a:field_name."'] = $this->append".a:Domain."Payload($data);"
-  execute "normal! i".l:payloadAssert."\<ESC>==o\<ESC>"
-  " structure
-  call setreg('/','appendStructureGroupStructure')
-  execute 'normal! ggnj%2k'
-  let l:structureAssert = '$jsonStructure = $this->append'.a:Domain.'Structure($jsonStructure);'
-  execute "normal! i".l:structureAssert."\<ESC>==o\<ESC>"
-  " response
-  call setreg('/','seeStructureGroupResponse')
-  execute 'normal! ggnj%k$xo'
-  let l:responseAssert = "->see".a:Domain."Response($this->savedPayload['structure.".a:field_name."']);"
-  execute "normal! i".l:responseAssert."\<ESC>=="
-  " record
-  call setreg('/','seeStructureGroupRecords')
-  execute 'normal! ggnj%k$xo'
-  let l:recordAssert = "->see".a:Domain."Record($propertyId, $structureId, $this->savedPayload['structure.".a:field_name."']);"
-  execute "normal! i".l:recordAssert."\<ESC>==f,;a\<CR>\<ESC>Vk<"
-  " run test
-  execute "!ts tests/Controllers/PropertyControllerTest.php"
-endfunction
-
-" run from parent repository
-function! RepositorySync(Domain, Method)
-  let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
-  " use
-  execute "normal! gg]]"
-  call setreg('/', 'use')
-  execute "normal! N"
-  let l:use = 'use App\Contracts\'.a:Domain.'\'.a:Domain.'RepositoryInterface;'
-  execute "normal! o".l:use."\<ESC>"
-  " construct
-  call setreg('/', '__construct')
-  let l:construct = a:Domain.'RepositoryInterface $'.l:repo
-  let l:setRepo = '$this->'.l:repo.' = $'.l:repo.';'
-  execute "normal! nf(%kA,\<ESC>o".l:construct."\<ESC>jj%O".l:setRepo."\<ESC>"
-  " sync
-  call setreg('/', 'syncRelated')
-  let l:sync = '$this->'.l:repo.'->sync($result, $entity->get'.a:Method.'());'
-  execute "normal! ggnj%O".l:sync."\<ESC>"
-endfunction
-
-function! RepoInterfaceSync(Domain)
-  let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
-  " use
-  execute "normal! gg]]"
-  call setreg('/', 'use')
-  execute "normal! N"
-  let l:use = 'use App\Contracts\'.a:Domain.'\'.a:Domain.'RepositoryInterface;'
-  execute "normal! o".l:use."\<ESC>"
-  " construct
-  call setreg('/', '__construct')
-  let l:construct = a:Domain.'RepositoryInterface $'.l:repo
-  let l:setRepo = '$this->'.l:repo.' = $'.l:repo.';'
-  execute "normal! nf(%kA,\<ESC>o".l:construct."\<ESC>jj%O".l:setRepo."\<ESC>"
-endfunction
-
-function! RepoSyncTest(Domain, FieldMethod, field_name, const)
-  " use
-  execute "normal! gg]]"
-  call setreg('/', 'use')
-  execute "normal! N"
-  let l:use = 'use App\Contracts\'.a:Domain.'\'.a:Domain.'RepositoryInterface;'
-  execute "normal! o".l:use."\<ESC>"
-  " setup
-  let l:repo = g:Abolish.camelcase(a:Domain).'Repository'
-  call setreg('/', 'persistenceRepository')
-  let l:repoSet = '$this->'.l:repo.' = m::mock('.a:Domain.'RepositoryInterface::class);'
-  let l:repoConstruct = '$this->'.l:repo
-  execute "normal! ggnO".l:repoSet."\<ESC>0"
-  call setreg('/', 'new StructureRepository')
-  execute "normal! nf(%kA,\<CR>".l:repoConstruct."\<ESC>=="
-  " mockSync
-  call setreg('/', 'mockSync')
-  if (a:const == 0)
-    let l:mock1 = "$data['".a:field_name."'] = $faker->words(2, false);"
-  else
-    let l:mock1 = "$data['".a:field_name."'] = $faker->randomElements(StructureInterface::".a:const.");"
-  endif
-  let l:mock2 = "$this->".l:repo."->shouldReceive('sync')->with($model, $data['".a:field_name."'])->once();"
-  let l:mock3 = "$model->shouldReceive('get".a:FieldMethod."')->andReturn($data['".a:field_name."']);"
-  execute "normal! ggnj%ko".l:mock1."\<ESC>o".l:mock2."\<ESC>o".l:mock3."\<ESC>"
-  " run test
-  execute "!ts %"
-endfunction
