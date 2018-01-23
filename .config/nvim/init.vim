@@ -314,7 +314,7 @@ nnoremap <silent> {w :bfirst<CR>
 nnoremap <silent> }w :blast<CR>
 " delete buffer <space>d
 map <silent> <leader>d :bd<cr>
-" close all buffer <space>bufdo BD
+" close all buffer <space>D
 map <silent> <leader>D :bufdo bd<CR>
 " Switch between two buffer back and forth by <space>q
 nnoremap <leader>q :b#<cr>
@@ -487,6 +487,8 @@ let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
 let g:ale_set_loclist=1
 let g:ale_lint_delay = 1000
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
 " }}}
 
 " vim-sneak {{{
