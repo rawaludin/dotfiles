@@ -543,7 +543,7 @@ let g:lightline = {
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ], 
       \   'right': [ [ 'lineinfo' ],
       \              [ 'percent' ],
-      \              [ 'fileformat', 'filetype', 'ale', 'whitespace_tab_warning', 'whitespace_trailing' ] ]
+      \              [ 'filetype', 'ale', 'whitespace_tab_warning', 'whitespace_trailing' ] ]
       \ },
       \ 'component_function': {
       \   'gitbranch': 'fugitive#head',  
