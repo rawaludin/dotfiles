@@ -319,7 +319,13 @@ map <silent> <leader>d :bd<cr>
 " close all buffer <space>D
 map <silent> <leader>D :bufdo bd<CR>
 " close all buffer except active buffer
-command! BO :%bd|e#
+function! CloseAllBuffersButCurrent()
+  let curr = bufnr("%")
+  let last = bufnr("$")
+  if curr > 1    | silent! execute "1,".(curr-1)."bd"     | endif
+  if curr < last | silent! execute (curr+1).",".last."bd" | endif
+endfunction
+command! BO :call CloseAllBuffersButCurrent()<CR>
 " Switch between two buffer back and forth by <space>q
 nnoremap <leader>q :b#<cr>
 " jump to last tab <space>Tab
