@@ -11,9 +11,11 @@ Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
 " Plug 'mhartington/oceanic-next'
 " Plug 'lifepillar/vim-solarized8'
 Plug 'morhetz/gruvbox'
+Plug 'cocopon/iceberg.vim'
 " those colors work well with f.lux
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
+Plug 'ap/vim-buftabline'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -172,7 +174,7 @@ function! s:statusline_expr()
   let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
   let ro  = "%{&readonly ? '[RO] ' : ''}"
   let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
-  let fug = "%{exists('g:loaded_fugitive') ? fugitive#head() : ''}"
+  let fug = "%{exists('g:loaded_fugitive') ? '('.fugitive#head().')' : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
@@ -180,14 +182,14 @@ function! s:statusline_expr()
   let whitespace_tab_warning = '%{StatuslineTabWarning()}'
   let whitespace_trailing = '%{StatuslineTrailingSpaceWarning()}'
 
-  return '%F %<'.mod.ro.ft.'('.fug.')'.ale.whitespace_tab_warning.whitespace_trailing.sep.pos.'%*'.pct
+  return '%F %<'.mod.ro.ft.fug.ale.whitespace_tab_warning.whitespace_trailing.sep.pos.'%*'.pct
 endfunction
 let &statusline = s:statusline_expr()
 
 " day
-set background=light
-colorscheme gruvbox
-let g:gruvbox_contrast_light="medium"
+set background=dark
+colorscheme iceberg
+" let g:gruvbox_contrast_light="medium"
 " Tmuxline vim_statusline_3
 " night
 " set background=light
@@ -217,20 +219,20 @@ augroup VimrcRememberCursorPosition
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
-function! SnipperSetCursor()
-  set cursorline
-  set cursorcolumn
-endfunction
-function! SnipperUnSetCursor()
-  set nocursorline
-  set nocursorcolumn
-endfunction
+" function! SnipperSetCursor()
+"   set cursorline
+"   set cursorcolumn
+" endfunction
+" function! SnipperUnSetCursor()
+"   set nocursorline
+"   set nocursorcolumn
+" endfunction
 
-augroup SnipperCursor
-  au! CursorHold * call SnipperUnSetCursor()
-  au! CursorMoved * call SnipperSetCursor()
-  au! CursorMovedI * call SnipperUnSetCursor()
-augroup END
+" augroup SnipperCursor
+"   au! CursorHold * call SnipperUnSetCursor()
+"   au! CursorMoved * call SnipperSetCursor()
+"   au! CursorMovedI * call SnipperUnSetCursor()
+" augroup END
 augroup PHPStuff
   " reindex php tags async, doen't run if last command hasn't done
   autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
