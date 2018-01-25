@@ -16,6 +16,7 @@ Plug 'cocopon/iceberg.vim'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
 Plug 'ap/vim-buftabline'
+Plug 'itchyny/lightline.vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -187,14 +188,14 @@ endfunction
 let &statusline = s:statusline_expr()
 
 " day
-set background=dark
-colorscheme iceberg
+" set background=dark
+" colorscheme iceberg
 " let g:gruvbox_contrast_light="medium"
 " Tmuxline vim_statusline_3
 " night
-" set background=light
-" colorscheme lucius
-" LuciusWhiteHighContrast
+set background=light
+colorscheme lucius
+LuciusWhiteHighContrast
 
 " }}}
 
@@ -521,3 +522,37 @@ xmap <c-k> <Plug>(neosnippet_expand_target)
 let g:neosnippet#enable_completed_snippet=1
 " }}}
 
+" lightline {{{
+function! AleLightline() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? '' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ], 
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'fileformat', 'filetype', 'ale', 'whitespace_tab_warning', 'whitespace_trailing' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head',  
+      \ },
+      \ 'component_expand': {
+      \   'whitespace_tab_warning': 'StatuslineTabWarning',
+      \   'whitespace_trailing': 'StatuslineTrailingSpaceWarning',
+      \   'ale': 'AleLightline',
+      \ },
+      \ }
+autocmd User ALELint call lightline#update()
+" }}}
