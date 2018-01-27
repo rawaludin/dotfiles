@@ -16,7 +16,7 @@ Plug 'cocopon/iceberg.vim'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
 Plug 'ap/vim-buftabline'
-Plug 'itchyny/lightline.vim'
+" Plug 'itchyny/lightline.vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -188,14 +188,16 @@ endfunction
 let &statusline = s:statusline_expr()
 
 " day
-" set background=dark
-" colorscheme iceberg
+set background=light
+colorscheme gruvbox
+" lightline solarized
 " let g:gruvbox_contrast_light="medium"
 " Tmuxline vim_statusline_3
 " night
-set background=light
-colorscheme lucius
-LuciusWhiteHighContrast
+" set background=light
+" colorscheme lucius
+" LuciusWhiteHighContrast
+" lightline solarized
 
 " }}}
 
@@ -220,20 +222,6 @@ augroup VimrcRememberCursorPosition
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
-" function! SnipperSetCursor()
-"   set cursorline
-"   set cursorcolumn
-" endfunction
-" function! SnipperUnSetCursor()
-"   set nocursorline
-"   set nocursorcolumn
-" endfunction
-
-" augroup SnipperCursor
-"   au! CursorHold * call SnipperUnSetCursor()
-"   au! CursorMoved * call SnipperSetCursor()
-"   au! CursorMovedI * call SnipperUnSetCursor()
-" augroup END
 augroup PHPStuff
   " reindex php tags async, doen't run if last command hasn't done
   autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
@@ -543,7 +531,7 @@ function! AleLightline() abort
 endfunction
 set noshowmode
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'gruvbox',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ], 
@@ -560,5 +548,5 @@ let g:lightline = {
       \   'ale': 'AleLightline',
       \ },
       \ }
-autocmd User ALELint call lightline#update()
+" autocmd User ALELint call lightline#update()
 " }}}
