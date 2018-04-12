@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 # Get osx battery level
 
-command_exists() {
-	local command="$1"
-	type "$command" >/dev/null 2>&1
-}
-
 print_battery_percentage() {
   # percentage displayed in the 3rd field of the 2nd row
   percent=`pmset -g batt | awk 'NR==2 { gsub(/;/,""); print $3 }'`
@@ -19,6 +14,7 @@ print_battery_percentage() {
 }
 
 main() {
-	print_battery_percentage
+  print_battery_percentage
 }
+
 main
