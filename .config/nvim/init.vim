@@ -188,7 +188,7 @@ endfunction
 let &statusline = s:statusline_expr()
 
 " day
-set background=light
+set background=dark
 colorscheme gruvbox
 " lightline solarized
 " let g:gruvbox_contrast_light="medium"
