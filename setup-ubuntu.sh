@@ -12,6 +12,9 @@ ln -sf dotfiles/.config .
 # directory structure
 mkdir ~/code
 
+# php
+sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl php-mysql php-xdebug
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # neovim
 sudo apt-get install -y software-properties-common
@@ -23,10 +26,8 @@ nvim +PlugInstall +qall
 
 # important utility
 sudo apt-get install silversearcher-ag
-
-# php
-sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl php-mysql php-xdebug
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all
 
 # example: open port
 # sudo ufw allow 8080/tcp
