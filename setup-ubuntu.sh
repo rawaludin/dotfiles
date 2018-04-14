@@ -45,8 +45,10 @@ mysql -u homestead -psecret -e "create database homestead;"
 # timezone
 sudo timedatectl set-timezone Asia/Jakarta
 
-# zsh
+# turnoff default apache2
+sudo service apache2 stop
 
+# zsh
 # sudo apt-get install -y zsh
 # sudo chsh -s `which zsh` $USER
 # curl -sL zplug.sh/installer | zsh
