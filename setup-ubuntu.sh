@@ -28,6 +28,8 @@ nvim +PlugInstall +qall
 sudo apt-get install silversearcher-ag
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
+curl -LO https://github.com/BurntSushi/ripgrep/releases/download/0.8.1/ripgrep_0.8.1_amd64.deb
+sudo dpkg -i ripgrep_0.8.1_amd64.deb
 
 # example: open port
 # sudo ufw allow 8080/tcp
