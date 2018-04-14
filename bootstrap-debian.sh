@@ -5,18 +5,17 @@ DEBIAN_FRONTEND=noninteractive
 TERM=xterm-256color
 
 sudo apt-get update -q && \
-    sudo apt-get install --no-install-recommends -qy \
+sudo apt-get install --no-install-recommends -qy \
         apt-transport-https \
         ca-certificates \
         gnupg2 \
         wget && \
 
-    # PHP7.1 Sury repository
-    sudo sh -c 'echo deb https://packages.sury.org/php/ stretch main | tee /etc/apt/sources.list.d/sury.list' && \
-    sudo wget -q -O- https://packages.sury.org/php/apt.gpg | sudo apt-key add - && \
-
-    sudo apt-get update -q && \
-    sudo apt-get install --no-install-recommends -qy \
+# PHP7.1 Sury repository
+sudo sh -c 'echo deb https://packages.sury.org/php/ stretch main | tee /etc/apt/sources.list.d/sury.list' && \
+sudo wget -q -O- https://packages.sury.org/php/apt.gpg | sudo apt-key add - && \
+sudo apt-get update -q && \
+sudo apt-get install --no-install-recommends -qy \
         cron \
         curl \
         git \
