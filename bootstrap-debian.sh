@@ -13,7 +13,7 @@ sudo apt-get update -q && \
 
     # PHP7.1 Sury repository
     sudo sh -c 'echo deb https://packages.sury.org/php/ stretch main | tee /etc/apt/sources.list.d/sury.list' && \
-    sudo wget -q -O- https://packages.sury.org/php/apt.gpg | apt-key add - && \
+    sudo wget -q -O- https://packages.sury.org/php/apt.gpg | sudo apt-key add - && \
 
     sudo apt-get update -q && \
     sudo apt-get install --no-install-recommends -qy \
@@ -59,4 +59,8 @@ sudo apt-get update -q && \
         supervisor \
         vim-nox \
         unzip \
-        zip
+        zip \
+        silversearcher-ag && \
+        
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all && \
+
