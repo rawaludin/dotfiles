@@ -47,6 +47,8 @@ sudo timedatectl set-timezone Asia/Jakarta
 
 # turnoff default apache2
 sudo service apache2 stop
+sudo apt-get remove -y apache2
+sudo apt-get autoremove -y
 
 # zsh
 # sudo apt-get install -y zsh
