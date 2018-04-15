@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# copy ssh public key
+# ssh-copy-id -i ~/.ssh/mykey user@host
+
 git clone https://github.com/rawaludin/dotfiles.git
 ln -sf dotfiles/.bashrc .
 source ~/.bashrc
