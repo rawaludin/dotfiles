@@ -100,3 +100,6 @@ sudo apt-get autoremove -y
 
 # reload bash
 source ~/.bashrc
+
+# run mosh
+mosh
