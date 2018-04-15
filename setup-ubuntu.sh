@@ -102,4 +102,5 @@ sudo apt-get autoremove -y
 source ~/.bashrc
 
 # run mosh
+sudo ufw allow 60000:61000/udp
 mosh
