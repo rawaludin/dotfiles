@@ -16,9 +16,9 @@ ln -sf dotfiles/.editrc .
 ln -sf dotfiles/.tmux.conf .
 ln -sf dotfiles/.config .
 
-# php
+# php, mosh, etc
 sudo apt-get update
-sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl php-mysql php-xdebug
+sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl php-mysql php-xdebug mosh
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # neovim
