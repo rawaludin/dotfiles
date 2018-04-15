@@ -9,7 +9,6 @@
 
 git clone https://github.com/rawaludin/dotfiles.git
 ln -sf dotfiles/.bashrc .
-source ~/.bashrc
 ln -sf dotfiles/.gitconfig .
 ln -sf dotfiles/.inputrc .
 ln -sf dotfiles/.editrc .
@@ -97,3 +96,6 @@ sudo apt-get autoremove -y
 # sudo apt-get install -y zsh
 # sudo chsh -s `which zsh` $USER
 # curl -sL zplug.sh/installer | zsh
+
+# reload bash
+source ~/.bashrc
