@@ -51,7 +51,7 @@ echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee 
 # Import the Google Cloud Platform public key
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 # Update the package list and install the Cloud SDK
-sudo apt-get update && sudo apt-get install google-cloud-sdk
+sudo apt-get update && sudo apt-get install -y google-cloud-sdk
 
 # kubernetes client (kubectl)
 export KUBERNETES_REPO="kubernetes-$(lsb_release -c -s)"
