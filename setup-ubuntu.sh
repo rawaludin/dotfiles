@@ -2,8 +2,9 @@
 
 # copy ssh public key
 # ssh-copy-id -i ~/.ssh/mykey user@host
-# copy id_rsa, fix permission
-# chmod 400 ~/.ssh/id_rsa
+# copy id_rsa
+# scp ~/.ssh/id_rsa root@host:/root/.ssh/id_rsa 
+# scp ~/.ssh/id_rsa user@host:/home/user/.ssh/id_rsa 
 # run script
 # /bin/bash <(curl -s https://raw.githubusercontent.com/rawaludin/dotfiles/master/setup-ubuntu.sh)
 
