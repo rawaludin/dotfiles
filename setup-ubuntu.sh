@@ -2,6 +2,8 @@
 
 # copy ssh public key
 # ssh-copy-id -i ~/.ssh/mykey user@host
+# run script
+# /bin/bash <(curl -s https://raw.githubusercontent.com/rawaludin/dotfiles/master/setup-ubuntu.sh)
 
 git clone https://github.com/rawaludin/dotfiles.git
 ln -sf dotfiles/.bashrc .
