@@ -76,12 +76,12 @@ sudo dpkg -i ripgrep_0.8.1_amd64.deb
 # sudo ufw allow 8080/tcp
 
 # mysql
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get install -y mysql-server
-mysql -u root -proot -e "CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret'"
-mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'homestead'@'localhost';"
-mysql -u homestead -psecret -e "create database homestead;"
+# sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+# sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+# sudo apt-get install -y mysql-server
+# mysql -u root -proot -e "CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret'"
+# mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'homestead'@'localhost';"
+# mysql -u homestead -psecret -e "create database homestead;"
 
 # timezone
 sudo timedatectl set-timezone Asia/Jakarta
