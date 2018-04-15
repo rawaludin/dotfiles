@@ -15,6 +15,7 @@ ln -sf dotfiles/.tmux.conf .
 ln -sf dotfiles/.config .
 
 # php
+sudo apt-get update
 sudo apt-get install -y php php-mbstring php-xml php-zip curl php-cli git php-curl php-mysql php-xdebug
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
