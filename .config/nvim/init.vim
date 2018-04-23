@@ -455,7 +455,6 @@ let g:tmuxline_preset = {
       \'a'               : '#S',
       \'win'             : ['#W'],
       \'cwin'            : ['#W#{?window_zoomed_flag, *Z,}'],
-      \'x'               : '#(focus)',
       \'y'               : ['%a, %b %d'],
       \'z'               : '%R #(bat)',
       \'options'         : {
@@ -549,4 +548,8 @@ let g:lightline = {
       \ },
       \ }
 " autocmd User ALELint call lightline#update()
+" }}}
+"
+" {{{ vimwiki
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 " }}}
