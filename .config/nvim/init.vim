@@ -3,78 +3,53 @@
 " nvim configuration
 "
 " Load Plugin {{{
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
 " This one will work with neovim
 Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
-" Plug 'mhartington/oceanic-next'
-" Plug 'lifepillar/vim-solarized8'
 Plug 'morhetz/gruvbox'
-Plug 'cocopon/iceberg.vim'
 " those colors work well with f.lux
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
 Plug 'ap/vim-buftabline'
-" Plug 'itchyny/lightline.vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
+Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
+Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
+Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 Plug 'mattn/emmet-vim' " faster html tag generation
 Plug 'qpkorr/vim-bufkill' " Delete buffer without closing split :BD :BW :BUN
-Plug 'scrooloose/nerdtree' " tree view of current project
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary' " comment by gc
+Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
-Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
-Plug 'tpope/vim-abolish'
-Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
-Plug 'gorkunov/smartpairs.vim' " easy expand selection
+Plug 'tpope/vim-vinegar'
+Plug 'vimwiki/vimwiki' " personal note taker
+Plug 'w0rp/ale' " linter
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
-" Plug 'ludovicchabant/vim-gutentags' " Automatic tag generation when file saved / modified
-" Plug 'joonty/vdebug'
-" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install -vvv' }
-
-" Try LanguageServer-Protocol like vscode
-" make sure disable xdebug to use this
-Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install -vvv && composer run-script parse-stubs'}
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-Plug 'roxma/nvim-completion-manager'
-" requires phpactor for completion
-Plug 'phpactor/phpactor' ,  {'do': 'composer install --prefer-dist -vvv'}
-Plug 'roxma/ncm-phpactor'
-Plug 'Shougo/echodoc.vim'
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
 Plug 'tpope/vim-fugitive' " git inside vim
 Plug 'tpope/vim-rhubarb' " github extension for fugitive
-"
-" ----- Working with Go ----------------------------------------------
-Plug 'fatih/vim-go'
-
-" ----- Working with Markdown ----------------------------------------------
-" Plug 'plasticboy/vim-markdown' | Plug  'godlygeek/tabular', { 'for': 'markdown' } " better markdown highlight
 
 " ----- Other text editing features -----------------------------------
-Plug 'w0rp/ale' " linter
-" Plug 'Shougo/neosnippet'
-" Plug 'SirVer/ultisnips' " text snippet
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocomplete. this one support neovim natively
-" endif
-Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
-Plug 'vimwiki/vimwiki' " personal note taker
-
-" Auto generate ctags
 Plug 'majutsushi/tagbar' " view ctags on sidebar
 
 call plug#end()
@@ -190,15 +165,6 @@ let &statusline = s:statusline_expr()
 " day
 set background=dark
 colorscheme gruvbox
-" lightline solarized
-" let g:gruvbox_contrast_light="medium"
-" Tmuxline vim_statusline_3
-" night
-" set background=light
-" colorscheme lucius
-" LuciusWhiteHighContrast
-" lightline solarized
-
 " }}}
 
 " Autocommand {{{
@@ -220,13 +186,6 @@ augroup END
 augroup VimrcRememberCursorPosition
   " Remember cursor position
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-augroup END
-
-augroup PHPStuff
-  " reindex php tags async, doen't run if last command hasn't done
-  autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
-  " start LanguageServer-php-neovim
-  " autocmd FileType php LanguageClientStart
 augroup END
 " }}}
 
@@ -277,9 +236,11 @@ for g:char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%'
     execute 'onoremap a' . g:char . ' :normal va' . g:char . '<CR>'
 endfor
 
-augroup PhpFormatter
-  " Simple php formatter using php-cs-fixer
-  autocmd FileType php noremap <leader>wf :!php-cs-fixer fix "%" <cr><cr>
+augroup filetype_php
+  " formatter, folding, reindex ctags
+  autocmd FileType php noremap <leader>wf :!php-cs-fixer fix "%" --rules=@PSR1,@PSR2,no_unused_imports<cr><cr>
+  autocmd FileType php set foldmethod=indent foldlevel=20
+  autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
 augroup END
 " }}}
 
@@ -340,21 +301,6 @@ function! <SID>StripTrailingWhitespaces()
 endfunction
 command! Strip call <SID>StripTrailingWhitespaces()
 
-" Z - cd to recent / frequent directories
-command! -nargs=* Z :call Z(<f-args>)
-function! Z(...)
-  let cmd = 'fasd -d -e printf'
-  for arg in a:000
-    let cmd = cmd . ' ' . arg
-  endfor
-  let path = system(cmd)
-  if isdirectory(path)
-    echo path
-    exec 'cd' fnameescape(path)
-  endif
-endfunction
-" }}}
-
 " vim-multiple-cursor {{{
 " When press ESC from insert mode on multiple cursor, back to multiple cursor,
 " not regular vim
@@ -368,28 +314,15 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " }}}
 
-" Nerdtree {{{
-" Open/close NERDTree Tabs with <space>t
-" nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-nmap <silent> <leader>t :NERDTreeToggle<CR>
-" Open synced tree with <space>st
-map <silent> <leader>st :NERDTreeFind<CR>
-" To have NERDTree always open on startup set this to 2
-let g:nerdtree_tabs_open_on_console_startup = 0
-" }}}
-
 " fzf {{{
 " fuzzy open file in current project with <space>p
-nnoremap <silent> <expr> <leader>p (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
-" nmap <silent> <leader>p :Files<CR>
+nmap <silent> <leader>p :Files<CR>
 " List recent opened file <space>h
 nmap <silent> <leader>h :History<CR>
 " Jump to opened file (buffer) with <space><Enter>
 nnoremap <silent> <leader><Enter> :Buffers<CR>
 " Jump to method or variable/attribute in current file <space>r
 nmap <silent> <leader>r :BTags<CR>
-" Jumt to lines in current buffer and search for string <space>/
-nmap <silent> <leader>/ :BLines<CR>
 " Jumt to lines in current buffer and search for string <space>/
 nmap <silent> <leader>/ :BLines<CR>
 " Change binding for split
@@ -418,28 +351,10 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 " }}}
 
-" vim-markdown {{{
-" disable folding because performance, see https://github.com/plasticboy/vim-markdown/issues/162
-let g:vim_markdown_folding_disabled=1
-" disable indent when new paragraph with `o` from list
-au BufNewFile,BufRead *.{md,mdown,mkd,mkdn,markdown,mdwn} setlocal indentexpr=''
-" Close TOC after click enter on heading link
-nnoremap <expr><enter> &ft=="qf" ? "<cr>:lcl<cr>" : (getpos(".")[2]==1 ? "i<cr><esc>": "i<cr><esc>l")
-" }}}
-
 " emmet-vim {{{
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,php,js,jsx EmmetInstall
 let g:user_emmet_leader_key='<Tab>'  " autocomplete emmet by <Tab><comma>
-" }}}
-
-" deoplete.nvim {{{
-" Always enable (to manual enable :DeopleteEnable / :DeopleteDisable)
-" Make sure you have setup ctags for this to work
-let g:deoplete#enable_at_startup = 1
-" use phpcd for php completion
-let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-let g:deoplete#ignore_sources.php = ['omni']
 " }}}
 
 " vim-php-namespace {{{
@@ -472,9 +387,6 @@ let g:tmuxline_separators = {
 " tagbar {{{
 " Open/close tagbar with <space>g
 nmap <silent> <leader>g :TagbarToggle<CR>
-" Uncomment to open tagbar automatically whenever possible
-"autocmd BufEnter * nested :call tagbar#autoopen(0)
-" }}}
 
 " ale {{{
 let g:ale_linters = {
@@ -504,52 +416,12 @@ let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
 let g:neosnippet#disable_runtime_snippets = {
 \   '_' : 1,
 \ }
-
 imap <c-k> <Plug>(neosnippet_expand_or_jump)
 smap <c-k> <Plug>(neosnippet_expand_or_jump)
 xmap <c-k> <Plug>(neosnippet_expand_target)
-
-" inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
-" vmap <c-u> <Plug>(neosnippet_expand_target)
-" expand parameters
 let g:neosnippet#enable_completed_snippet=1
 " }}}
 
-" lightline {{{
-function! AleLightline() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-
-    return l:counts.total == 0 ? '' : printf(
-    \   '%dW %dE',
-    \   all_non_errors,
-    \   all_errors
-    \)
-endfunction
-set noshowmode
-let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ], 
-      \   'right': [ [ 'lineinfo' ],
-      \              [ 'percent' ],
-      \              [ 'filetype', 'ale', 'whitespace_tab_warning', 'whitespace_trailing' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head',  
-      \ },
-      \ 'component_expand': {
-      \   'whitespace_tab_warning': 'StatuslineTabWarning',
-      \   'whitespace_trailing': 'StatuslineTrailingSpaceWarning',
-      \   'ale': 'AleLightline',
-      \ },
-      \ }
-" autocmd User ALELint call lightline#update()
-" }}}
-"
 " {{{ vimwiki
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 " }}}
