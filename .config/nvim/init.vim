@@ -352,9 +352,9 @@ command! -bang -nargs=* Rg
 " }}}
 
 " emmet-vim {{{
+" Auto complete by c-y, (control y comma)
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,php,js,jsx EmmetInstall
-let g:user_emmet_leader_key='<Tab>'  " autocomplete emmet by <Tab><comma>
 " }}}
 
 " vim-php-namespace {{{
