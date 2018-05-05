@@ -86,6 +86,7 @@ let g:did_install_syntax_menu = 1 " save 50ms startup time
 " }}}
 
 " UI {{{
+set guicursor= " disable change cursor shape
 set colorcolumn=81,121 " column guide at 81 and 121 char
 set number relativenumber " for easier execute macro
 " support true color (enable this when tmux support true color)
