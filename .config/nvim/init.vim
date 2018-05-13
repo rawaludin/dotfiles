@@ -15,6 +15,7 @@ call plug#begin('~/.config/nvim/plugged')
 " This one will work with neovim
 Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
 Plug 'morhetz/gruvbox'
+Plug 'icymind/NeoSolarized'
 " those colors work well with f.lux
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
@@ -43,6 +44,15 @@ Plug 'w0rp/ale' " linter
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
+" ----- autocompletion ----
+" manual trigger complete with ^x^o (omnifunc)
+" run :LanguageClientStart / Stop to index project
+Plug 'autozimu/LanguageClient-neovim', { 
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install -vvv && composer run-script parse-stubs'}
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " need pip3 install neovim
 
 " ----- Working with Git ----------------------------------------------
 Plug 'airblade/vim-gitgutter' " display each line git status
@@ -58,7 +68,6 @@ call plug#end()
 " General {{{
 set autoread " detect latest change outside vim
 set autowriteall " save buffer when switch to other buffer
-set clipboard+=unnamedplus " share clipboard with OSX
 set clipboard+=unnamedplus " share clipboard with OSX
 set expandtab " Expand tabs into spaces
 set hidden " hide error when opening file but current buffer has unsaved changes
@@ -425,4 +434,8 @@ let g:neosnippet#enable_completed_snippet=1
 
 " {{{ vimwiki
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
+" }}}
+
+" {{{ deoplete
+let g:deoplete#enable_at_startup = 1
 " }}}
