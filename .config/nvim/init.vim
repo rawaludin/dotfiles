@@ -13,9 +13,10 @@ call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
 " This one will work with neovim
-Plug 'edkolev/tmuxline.vim' " theme has been generated. No need to sync now.
+Plug 'edkolev/tmuxline.vim'
 Plug 'morhetz/gruvbox'
 Plug 'icymind/NeoSolarized'
+Plug 'arcticicestudio/nord-vim'
 " those colors work well with f.lux
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
@@ -38,16 +39,21 @@ Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
-Plug 'tpope/vim-vinegar'
 Plug 'vimwiki/vimwiki' " personal note taker
 Plug 'w0rp/ale' " linter
+" Disable netrw, let's try dirvish
+Plug 'justinmk/vim-dirvish'
+let g:loaded_netrwPlugin = 0
+command! -nargs=? -complete=dir Explore Dirvish <args>
+command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
 " ----- autocompletion ----
 " manual trigger complete with ^x^o (omnifunc)
 " run :LanguageClientStart / Stop to index project
-Plug 'autozimu/LanguageClient-neovim', { 
+Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
@@ -95,7 +101,6 @@ let g:did_install_syntax_menu = 1 " save 50ms startup time
 " }}}
 
 " UI {{{
-set guicursor= " disable change cursor shape
 set colorcolumn=81,121 " column guide at 81 and 121 char
 set number relativenumber " for easier execute macro
 " support true color (enable this when tmux support true color)
@@ -163,7 +168,7 @@ function! s:statusline_expr()
   let fug = "%{exists('g:loaded_fugitive') ? '('.fugitive#head().')' : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
-  let pct = ' %P'
+  let pct = ' %P '
   let ale = '%{LinterStatus()}'
   let whitespace_tab_warning = '%{StatuslineTabWarning()}'
   let whitespace_trailing = '%{StatuslineTrailingSpaceWarning()}'
@@ -400,7 +405,7 @@ nmap <silent> <leader>g :TagbarToggle<CR>
 
 " ale {{{
 let g:ale_linters = {
-\   'php': ['php -l', 'phpcs', 'phpmd'],
+\   'php': ['php', 'phpcs', 'phpmd'],
 \}
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
