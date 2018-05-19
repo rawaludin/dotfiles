@@ -12,44 +12,151 @@ endif
 call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
-" This one will work with neovim
 Plug 'edkolev/tmuxline.vim'
+" Tmuxline {{{
+let g:tmuxline_preset = {
+      \'a'               : '#S',
+      \'win'             : ['#W'],
+      \'cwin'            : ['#W#{?window_zoomed_flag, *Z,}'],
+      \'y'               : ['%a, %b %d'],
+      \'z'               : '%R #(bat)',
+      \'options'         : {
+        \'status-justify'  : 'left'}
+      \}
+" simple
+let g:tmuxline_separators = {
+    \ 'left' : '',
+    \ 'left_alt': '|',
+    \ 'right' : '',
+    \ 'right_alt' : '|',
+    \ 'space' : ' '}
+" }}}
 Plug 'morhetz/gruvbox'
+let g:gruvbox_contrast_dark='hard'
+Plug 'chriskempson/vim-tomorrow-theme'
+Plug 'w0ng/vim-hybrid'
+Plug 'twerth/ir_black'
+Plug 'jdsimcoe/hyper.vim'
 Plug 'icymind/NeoSolarized'
-Plug 'arcticicestudio/nord-vim'
-" those colors work well with f.lux
+let g:neosolarized_contrast = "normal"
+Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'robertmeta/nofrils'
 Plug 'ap/vim-buftabline'
+Plug 'justinmk/vim-highlightedyank' " Make the yanked region apparent
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
 Plug 'junegunn/fzf.vim'
+" FZF {{{
+" fuzzy open file in current project with <space>p
+nmap <silent> <leader>p :Files<CR>
+" List recent opened file <space>h
+nmap <silent> <leader>h :History<CR>
+" Jump to opened file (buffer) with <space><Enter>
+nnoremap <silent> <leader><Enter> :Buffers<CR>
+" Jump to method or variable/attribute in current file <space>r
+nmap <silent> <leader>r :BTags<CR>
+" Jumt to lines in current buffer and search for string <space>/
+nmap <silent> <leader>/ :BLines<CR>
+" Change binding for split
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+endif
+" :Rg similiar to :Ag
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+" }}}
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
+" EasyAlign {{{
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
+" Sneak {{{
+let g:sneak#label = 1
+let g:sneak#use_ic_scs = 1
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
+" }}}
 Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 Plug 'mattn/emmet-vim' " faster html tag generation
+" Emmet {{{
+" Auto complete by c-y, (control y comma)
+let g:user_emmet_install_global = 0
+autocmd FileType html,css,php,js,jsx EmmetInstall
+" }}}
+
 Plug 'qpkorr/vim-bufkill' " Delete buffer without closing split :BD :BW :BUN
 Plug 'terryma/vim-multiple-cursors'
-Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
+" Multiple cursor {{{
+" When press ESC from insert mode on multiple cursor, back to multiple cursor, not regular vim
+let g:multi_cursor_exit_from_insert_mode = 0
+" }}}
+" make FocusGained and FocusLost work again in Tmux, this event used for autosave
+Plug 'tmux-plugins/vim-tmux-focus-events' 
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'vimwiki/vimwiki' " personal note taker
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
-" Disable netrw, let's try dirvish
+" Ale {{{
+let g:ale_linters = {
+\   'php': ['php', 'phpcs', 'phpmd'],
+\}
+let g:ale_fixers = {
+\   'php': ['php_cs_fixer'],
+\}
+let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
+let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
+let g:ale_lint_delay = 1000
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
+" }}}
+" Disable netrw, use dirvish instead
 Plug 'justinmk/vim-dirvish'
+" dirvish {{{
 let g:loaded_netrwPlugin = 0
 command! -nargs=? -complete=dir Explore Dirvish <args>
 command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
 command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
+" }}}
+Plug 'tommcdo/vim-exchange' " text exchange operator with cx
 
 " ----- Working with PHP ----------------------------------------------
-Plug 'arnaud-lb/vim-php-namespace' " insert php `use` statement automatically  by <Leader>u in normal mode
+Plug 'arnaud-lb/vim-php-namespace'
+" Press `<space>u` while on the class being used in normal mode to insert `use` statement
+autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
+" Press `<space>e` to expand to fully quailified class name
+autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
+
 " ----- autocompletion ----
 " manual trigger complete with ^x^o (omnifunc)
 " run :LanguageClientStart / Stop to index project
@@ -59,14 +166,18 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install -vvv && composer run-script parse-stubs'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " need pip3 install neovim
+let g:deoplete#enable_at_startup = 1
 
 " ----- Working with Git ----------------------------------------------
-Plug 'airblade/vim-gitgutter' " display each line git status
+Plug 'mhinz/vim-signify' 
+let g:signify_vcs_list = ['git']
 Plug 'tpope/vim-fugitive' " git inside vim
 Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
 " ----- Other text editing features -----------------------------------
 Plug 'majutsushi/tagbar' " view ctags on sidebar
+" Open/close tagbar with <space>g
+nmap <silent> <leader>g :TagbarToggle<CR>
 
 call plug#end()
 " }}}
@@ -315,115 +426,9 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l:l, l:c)
 endfunction
 command! Strip call <SID>StripTrailingWhitespaces()
-
-" vim-multiple-cursor {{{
-" When press ESC from insert mode on multiple cursor, back to multiple cursor,
-" not regular vim
-let g:multi_cursor_exit_from_insert_mode = 0
-" }}}
-
-" vim-easy-align {{{
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
 " }}}
 
 " fzf {{{
-" fuzzy open file in current project with <space>p
-nmap <silent> <leader>p :Files<CR>
-" List recent opened file <space>h
-nmap <silent> <leader>h :History<CR>
-" Jump to opened file (buffer) with <space><Enter>
-nnoremap <silent> <leader><Enter> :Buffers<CR>
-" Jump to method or variable/attribute in current file <space>r
-nmap <silent> <leader>r :BTags<CR>
-" Jumt to lines in current buffer and search for string <space>/
-nmap <silent> <leader>/ :BLines<CR>
-" Change binding for split
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-if has('nvim')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
-endif
-" :Rg similiar to :Ag
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-" }}}
-
-" emmet-vim {{{
-" Auto complete by c-y, (control y comma)
-let g:user_emmet_install_global = 0
-autocmd FileType html,css,php,js,jsx EmmetInstall
-" }}}
-
-" vim-php-namespace {{{
-" Press `<space>u` while on the class being used in normal mode to insert `use`
-" statement
-autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
-" Press `<space>e` to expand to fully quailified class name
-autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
-" }}}
-
-" tmuxline {{{
-let g:tmuxline_preset = {
-      \'a'               : '#S',
-      \'win'             : ['#W'],
-      \'cwin'            : ['#W#{?window_zoomed_flag, *Z,}'],
-      \'y'               : ['%a, %b %d'],
-      \'z'               : '%R #(bat)',
-      \'options'         : {
-        \'status-justify'  : 'left'}
-      \}
-" simple
-let g:tmuxline_separators = {
-    \ 'left' : '',
-    \ 'left_alt': '|',
-    \ 'right' : '',
-    \ 'right_alt' : '|',
-    \ 'space' : ' '}
-" }}}
-
-" tagbar {{{
-" Open/close tagbar with <space>g
-nmap <silent> <leader>g :TagbarToggle<CR>
-
-" ale {{{
-let g:ale_linters = {
-\   'php': ['php', 'phpcs', 'phpmd'],
-\}
-let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
-let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
-let g:ale_set_loclist=1
-let g:ale_lint_delay = 1000
-nmap ]a <Plug>(ale_next_wrap)
-nmap [a <Plug>(ale_previous_wrap)
-" }}}
-
-" vim-sneak {{{
-let g:sneak#label = 1
-let g:sneak#use_ic_scs = 1
-" let g:sneak#absolute_dir = 1
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
 " }}}
 
 " neosnippet {{{
@@ -437,10 +442,3 @@ xmap <c-k> <Plug>(neosnippet_expand_target)
 let g:neosnippet#enable_completed_snippet=1
 " }}}
 
-" {{{ vimwiki
-let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
-" }}}
-
-" {{{ deoplete
-let g:deoplete#enable_at_startup = 1
-" }}}
