@@ -25,7 +25,7 @@ window:
   # (change requires restart)
   padding:
     x: 0
-    y: 2
+    y: 0
 
   # Window decorations
   # Setting this to false will result in window without borders and title bar.
@@ -85,57 +85,13 @@ render_timer: false
 # and cursor.background colors, otherwise invert the colors of the cursor.
 custom_cursor_colors: false
 
-# # Colors (Tomorrow Night Bright)
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x000000'
-#     foreground: '0xeaeaea'
-
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   cursor:
-#     text: '0x000000'
-#     cursor: '0xffffff'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x000000'
-#     red:     '0xd54e53'
-#     green:   '0xb9ca4a'
-#     yellow:  '0xe6c547'
-#     blue:    '0x7aa6da'
-#     magenta: '0xc397d8'
-#     cyan:    '0x70c0ba'
-#     white:   '0xffffff'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x666666'
-#     red:     '0xff3334'
-#     green:   '0x9ec400'
-#     yellow:  '0xe7c547'
-#     blue:    '0x7aa6da'
-#     magenta: '0xb77ee0'
-#     cyan:    '0x54ced6'
-#     white:   '0xffffff'
-
-#   # Dim colors (Optional)
-#   dim:
-#     black:   '0x333333'
-#     red:     '0xf2777a'
-#     green:   '0x99cc99'
-#     yellow:  '0xffcc66'
-#     blue:    '0x6699cc'
-#     magenta: '0xcc99cc'
-#     cyan:    '0x66cccc'
-#     white:   '0xdddddd'
-
 # Colors (Gruvbox dark)
 colors:
   # Default colors
   primary:
     # hard contrast: background = '0x1d2021'
-    background: '0x282828'
+    # background: '0x282828'
+    background: '0x1d2021'
     # soft contrast: background = '0x32302f'
     foreground: '0xebdbb2'
 
@@ -161,6 +117,36 @@ colors:
     cyan:    '0x8ec07c'
     white:   '0xebdbb2'
 
+# Colors (Gruvbox light)
+# colors:
+#   # Default colors
+#   primary:
+#     # hard contrast: background = '0xf9f5d7'
+#     background: '0xfbf1c7'
+#     # soft contrast: background = '0xf2e5bc'
+#     foreground: '0x3c3836'
+
+#   # Normal colors
+#   normal:
+#     black:   '0xfbf1c7'
+#     red:     '0xcc241d'
+#     green:   '0x98971a'
+#     yellow:  '0xd79921'
+#     blue:    '0x458588'
+#     magenta: '0xb16286'
+#     cyan:    '0x689d6a'
+#     white:   '0x7c6f64'
+
+#   # Bright colors
+#   bright:
+#     black:   '0x928374'
+#     red:     '0x9d0006'
+#     green:   '0x79740e'
+#     yellow:  '0xb57614'
+#     blue:    '0x076678'
+#     magenta: '0x8f3f71'
+#     cyan:    '0x427b58'
+#     white:   '0x3c3836'
 
 # Visual Bell
 #
@@ -394,3 +380,4 @@ key_bindings:
   - { key: F10,      mods: Command, chars: "\x1b[21;3~"                  }
   - { key: F11,      mods: Command, chars: "\x1b[23;3~"                  }
   - { key: F12,      mods: Command, chars: "\x1b[24;3~"                  }
+  - { key: Space,    mods: Control, chars: "\x00"                        }
