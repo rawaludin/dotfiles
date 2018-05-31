@@ -1,0 +1,72 @@
+#!/bin/sh
+# setup my mac app
+
+if ! command -v brew >/dev/null; then
+  echo "Installing Homebrew ..."
+  curl -fsS \
+    'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
+fi
+
+brew tap "homebrew/cask"
+brew tap "universal-ctags/universal-ctags"
+
+brew install \
+  composer \
+  fd \
+  highlight \
+  icdiff \
+  kubernetes-cli \
+  mariadb \
+  mycli \
+  neovim \
+  nginx \
+  node \
+  ntfs-3g \
+  php \
+  php-code-sniffer \
+  python \
+  ranger \
+  reattach-to-user-namespace \
+  redis \
+  ripgrep \
+  shellcheck \
+  shfmt \
+  speedtest-cli \
+  sqlite \
+  task \
+  the_silver_searcher \
+  tig \
+  tldr \
+  tmux \
+  tree \
+  universal-ctags \
+  urlview \
+  watch \
+  wget
+
+brew cask install \ 
+  appcleaner \
+  bartender \
+  bettertouchtool \
+  dash \
+  docker \
+  dropbox \
+  fantastical \
+  firefox \
+  gpg-suite \
+  iterm2 \
+  karabiner-elements \
+  mounty \
+  mtmr \
+  osxfuse \
+  postman \
+  sequel-pro \
+  sourcetree \
+  spotifree \
+  spotify \
+  steam \
+  sublime-text \
+  transmission \
+  upwork \
+  vimr \
+  vlc
