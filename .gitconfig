@@ -3,6 +3,7 @@
 [user]
 	name = Rahmat Awaludin
 	email = rahmat.awaludin@gmail.com
+	signingkey = 9412E5F1B8E908DB
 [core]
 	excludesfile = /Users/rahmatawaludin/.gitignore
 [alias]
@@ -14,3 +15,7 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+[commit]
+	template = /Users/rahmatawaludin/.stCommitMsg
+[url "git@github.com:"]
+	insteadOf = https://github.com/
