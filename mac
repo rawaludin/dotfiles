@@ -1,6 +1,11 @@
 #!/bin/sh
 # setup my mac app
 
+# GITHUB_TOKEN=xxx
+# touch ~/.git-credentials
+# git config --global credential.helper store
+# echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
+
 if ! command -v brew >/dev/null; then
   echo "Installing Homebrew ..."
   curl -fsS \
@@ -42,7 +47,8 @@ brew install \
   universal-ctags \
   urlview \
   watch \
-  wget
+  wget \
+  gnu-sed --with-default-names
 
 brew cask install \ 
   appcleaner \
