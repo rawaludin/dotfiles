@@ -17,5 +17,7 @@
 	trustExitCode = true
 [commit]
 	template = /Users/rahmatawaludin/.stCommitMsg
-[url "git@github.com:"]
-	insteadOf = https://github.com/
+[credential]
+	helper = store
+[url "https://github.com"]
+	insteadOf = git://github.com
