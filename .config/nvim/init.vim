@@ -1,17 +1,21 @@
 " vim: set foldmethod=marker foldlevel=0 nomodeline:
 "
 " nvim configuration
+" Rahmat Awaludin <rahmat.awaludin@gmail.com>
 "
-" Load Plugin {{{
+" Auto install plugin {{{
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  augroup InstallPlugin
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  augroup END
 endif
 
 call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
+Plug 'ap/vim-buftabline'
 Plug 'edkolev/tmuxline.vim'
 " Tmuxline {{{
 let g:tmuxline_preset = {
@@ -33,93 +37,32 @@ let g:tmuxline_separators = {
 " }}}
 Plug 'morhetz/gruvbox'
 let g:gruvbox_contrast_dark='hard'
-Plug 'chriskempson/vim-tomorrow-theme'
-Plug 'w0ng/vim-hybrid'
-Plug 'twerth/ir_black'
-Plug 'jdsimcoe/hyper.vim'
-Plug 'icymind/NeoSolarized'
-let g:neosolarized_contrast = "normal"
-Plug 'kristijanhusak/vim-hybrid-material'
-Plug 'jonathanfilip/vim-lucius'
-Plug 'robertmeta/nofrils'
-Plug 'ap/vim-buftabline'
-Plug 'justinmk/vim-highlightedyank' " Make the yanked region apparent
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
 Plug 'junegunn/fzf.vim'
-" FZF {{{
-" fuzzy open file in current project with <space>p
-nmap <silent> <leader>p :Files<CR>
-" List recent opened file <space>h
-nmap <silent> <leader>h :History<CR>
-" Jump to opened file (buffer) with <space><Enter>
-nnoremap <silent> <leader><Enter> :Buffers<CR>
-" Jump to method or variable/attribute in current file <space>r
-nmap <silent> <leader>r :BTags<CR>
-" Jumt to lines in current buffer and search for string <space>/
-nmap <silent> <leader>/ :BLines<CR>
-" Change binding for split
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-if has('nvim')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
-endif
-" :Rg similiar to :Ag
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-" }}}
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
-" EasyAlign {{{
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-" }}}
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
-" Sneak {{{
-let g:sneak#label = 1
-let g:sneak#use_ic_scs = 1
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-let g:sneak#target_labels = ";sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789"
-" }}}
+Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
 Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
 Plug 'mattn/emmet-vim' " faster html tag generation
 " Emmet {{{
 " Auto complete by c-y, (control y comma)
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,php,js,jsx EmmetInstall
+augroup InstallEmmet
+  autocmd FileType html,css,php,js,jsx EmmetInstall
+augroup END
 " }}}
 
-Plug 'qpkorr/vim-bufkill' " Delete buffer without closing split :BD :BW :BUN
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 " Multiple cursor {{{
 " When press ESC from insert mode on multiple cursor, back to multiple cursor, not regular vim
 let g:multi_cursor_exit_from_insert_mode = 0
 " }}}
 " make FocusGained and FocusLost work again in Tmux, this event used for autosave
-Plug 'tmux-plugins/vim-tmux-focus-events' 
-Plug 'tpope/vim-abolish'
+Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
@@ -127,35 +70,20 @@ Plug 'tpope/vim-surround' " faster surround
 Plug 'vimwiki/vimwiki' " personal note taker
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
-" Ale {{{
-let g:ale_linters = {
-\   'php': ['php', 'phpcs', 'phpmd'],
-\}
-let g:ale_fixers = {
-\   'php': ['php_cs_fixer'],
-\}
-let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
-let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
-let g:ale_lint_delay = 1000
-nmap ]a <Plug>(ale_next_wrap)
-nmap [a <Plug>(ale_previous_wrap)
-" }}}
-" Disable netrw, use dirvish instead
-Plug 'justinmk/vim-dirvish'
-" dirvish {{{
-let g:loaded_netrwPlugin = 0
-command! -nargs=? -complete=dir Explore Dirvish <args>
-command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
-command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
-" }}}
 Plug 'tommcdo/vim-exchange' " text exchange operator with cx
+Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace'
-" Press `<space>u` while on the class being used in normal mode to insert `use` statement
-autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
-" Press `<space>e` to expand to fully quailified class name
-autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
+augroup PhpUseStatement
+  " Press `<space>u` while on the class being used in normal mode to insert `use` statement
+  autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
+  " Press `<space>e` to expand to fully quailified class name
+  autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
+augroup END
+
+" ----- Working with Go ----------------------------------------------
+Plug 'fatih/vim-go'
 
 " ----- autocompletion ----
 " manual trigger complete with ^x^o (omnifunc)
@@ -164,20 +92,19 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
+" format with gq
 Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install -vvv && composer run-script parse-stubs'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " need pip3 install neovim
 let g:deoplete#enable_at_startup = 1
 
 " ----- Working with Git ----------------------------------------------
-Plug 'mhinz/vim-signify' 
+Plug 'mhinz/vim-signify'
 let g:signify_vcs_list = ['git']
 Plug 'tpope/vim-fugitive' " git inside vim
 Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
 " ----- Other text editing features -----------------------------------
 Plug 'majutsushi/tagbar' " view ctags on sidebar
-" Open/close tagbar with <space>g
-nmap <silent> <leader>g :TagbarToggle<CR>
 
 call plug#end()
 " }}}
@@ -229,8 +156,8 @@ function! LinterStatus() abort
 
     return l:counts.total == 0 ? '' : printf(
     \   ' [%dW %dE]',
-    \   all_non_errors,
-    \   all_errors
+    \   l:all_non_errors,
+    \   l:all_errors
     \)
 endfunction
 
@@ -241,13 +168,13 @@ autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
 " return '[mixed-indenting]' if spaces and tabs are used to indent
 " return an empty string if everything is fine
 function! StatuslineTabWarning()
-    if !exists("b:statusline_tab_warning")
-        let tabs = search('^\t', 'nw') != 0
-        let spaces = search('^ ', 'nw') != 0
+    if !exists('b:statusline_tab_warning')
+        let l:tabs = search('^\t', 'nw') != 0
+        let l:spaces = search('^ ', 'nw') != 0
 
-        if tabs && spaces
+        if l:tabs && l:spaces
             let b:statusline_tab_warning =  '[mixed-indenting]'
-        elseif (spaces && !&et) || (tabs && &et)
+        elseif (l:spaces && !&expandtab) || (l:tabs && &expandtab)
             let b:statusline_tab_warning = '[&et]'
         else
             let b:statusline_tab_warning = ''
@@ -262,7 +189,7 @@ autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 " return '[\s]' if trailing white space is detected
 " return '' otherwise
 function! StatuslineTrailingSpaceWarning()
-    if !exists("b:statusline_trailing_space_warning")
+    if !exists('b:statusline_trailing_space_warning')
         if search('\s\+$', 'nw') != 0
             let b:statusline_trailing_space_warning = '[\s]'
         else
@@ -273,24 +200,21 @@ function! StatuslineTrailingSpaceWarning()
 endfunction
 
 function! s:statusline_expr()
-  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  let ro  = "%{&readonly ? '[RO] ' : ''}"
-  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
-  let fug = "%{exists('g:loaded_fugitive') ? '('.fugitive#head().')' : ''}"
-  let sep = ' %= '
-  let pos = ' %-12(%l : %c%V%) '
-  let pct = ' %P '
-  let ale = '%{LinterStatus()}'
-  let whitespace_tab_warning = '%{StatuslineTabWarning()}'
-  let whitespace_trailing = '%{StatuslineTrailingSpaceWarning()}'
+  let l:mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+  let l:ro  = "%{&readonly ? '[RO] ' : ''}"
+  let l:ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  let l:fug = "%{exists('g:loaded_fugitive') ? '('.fugitive#head().')' : ''}"
+  let l:sep = ' %= '
+  let l:pos = ' %-12(%l : %c%V%) '
+  let l:pct = ' %P '
+  let l:ale = '%{LinterStatus()}'
+  let l:whitespace_tab_warning = '%{StatuslineTabWarning()}'
+  let l:whitespace_trailing = '%{StatuslineTrailingSpaceWarning()}'
 
-  return '%F %<'.mod.ro.ft.fug.ale.whitespace_tab_warning.whitespace_trailing.sep.pos.'%*'.pct
+  return '%F %<'.l:mod.l:ro.l:ft.l:fug.l:ale.l:whitespace_tab_warning.l:whitespace_trailing.l:sep.l:pos.'%*'.l:pct
 endfunction
 let &statusline = s:statusline_expr()
 
-" day
-set background=dark
-colorscheme gruvbox
 " }}}
 
 " Autocommand {{{
@@ -318,42 +242,33 @@ augroup END
 " Mapping {{{
 
 " Set leader key to space
-let mapleader = " "
+let g:mapleader = ' '
 " edit vimrc file by <space>v
-nmap <leader>v :edit $MYVIMRC<CR>
+nnoremap <leader>v :edit $MYVIMRC<CR>
 " exit terminal mode
 tnoremap <C-a> <C-\><C-n>
-
 " make . work with visually selected lines
 vnoremap . :norm.<CR>
-
 " exit insert when pressing up/down in insert mode
 inoremap <silent> <Up> <ESC><Up>
 inoremap <silent> <Down> <ESC><Down>
-
 " exit insert when scroll up/down in insert mode
 inoremap <silent> <ScrollWheelUp> <ESC><ScrollWheelUp>
 inoremap <silent> <ScrollWheelDown> <ESC><ScrollWheelDown>
-
 " qq to record macor, Q to replay
-nmap Q @q
-
+nnoremap Q @q
 " redraw syntax by <space>l
 nnoremap <leader>l :diffupdate<cr>:syntax sync fromstart<cr>:Strip<cr>:w<cr>
-
 " select last pasted block by gp
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
-
 " Use arrow to resize pane
 nnoremap <Left> :vertical resize +2<CR>
 nnoremap <Right> :vertical resize -2<CR>
 nnoremap <Up> :resize -2<CR>
 nnoremap <Down> :resize +2<CR>
-
 " make c-n and c-p mimic up and down behaviour on command mode
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
-
 " More text-object
 for g:char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%', '`' ]
     execute 'xnoremap i' . g:char . ' :<C-u>normal! T' . g:char . 'vt' . g:char . '<CR>'
@@ -378,34 +293,39 @@ nnoremap <Leader>yf :let @*=expand("%:t")<cr>:echo "Copied file name to clipboar
 " Copy current buffer path without filename to system clipboard
 nnoremap <Leader>yd :let @*=expand("%:h")<cr>:echo "Copied file directory to clipboard"<cr>
 " undo close buffer by <Ctrl><shift>t
-map <silent> <C-T> :e #<CR>
+nnoremap <silent> <C-T> :e #<CR>
 " new empty buffer by space+n (useful for tinkering script)
 nnoremap <silent> <leader>n :enew<cr>
-" previous buffer
+" jump to buffer mapping
 nnoremap <silent> [w :bprevious<CR>
-" next buffer
 nnoremap <silent> ]w :bnext<CR>
-" first buffer
 nnoremap <silent> {w :bfirst<CR>
-" last buffer
 nnoremap <silent> }w :blast<CR>
+" jump to tab mapping
+nnoremap <silent> [t :tabprevious<CR>
+nnoremap <silent> ]t :tabnext<CR>
+nnoremap <silent> {t :tabfirst<CR>
+nnoremap <silent> }t :tablast<CR>
+" toggle background
+" @todo should toggle tmuxline as well, update config too
+nnoremap <silent> yob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
 " delete buffer <space>d
-map <silent> <leader>d :bd<cr>
+nnoremap <silent> <leader>d :bd<cr>
 " close all buffer <space>D
-map <silent> <leader>D :bufdo bd<CR>
+nnoremap <silent> <leader>D :bufdo bd<CR>
 " close all buffer except active buffer
 function! CloseAllBuffersButCurrent()
-  let curr = bufnr("%")
-  let last = bufnr("$")
-  if curr > 1    | silent! execute "1,".(curr-1)."bd"     | endif
-  if curr < last | silent! execute (curr+1).",".last."bd" | endif
+  let l:curr = bufnr('%')
+  let l:last = bufnr('$')
+  if l:curr > 1 | silent! execute '1,'.(l:curr-1).'bd' | endif
+  if l:curr < l:last | silent! execute (l:curr+1).','.l:last.'bd' | endif
 endfunction
-command! BO :call CloseAllBuffersButCurrent()<CR>
+command! BO :call CloseAllBuffersButCurrent()
 " Switch between two buffer back and forth by <space>q
 nnoremap <leader>q :b#<cr>
 " jump to last tab <space>Tab
 let g:lasttab = 1
-nmap <Leader><Tab> :exe "tabn ".g:lasttab<CR>
+nnoremap <Leader><Tab> :exe "tabn ".g:lasttab<CR>
 augroup SetLastTab
   autocmd TabLeave * let g:lasttab = tabpagenr()
 augroup END
@@ -428,17 +348,93 @@ endfunction
 command! Strip call <SID>StripTrailingWhitespaces()
 " }}}
 
-" fzf {{{
+" FZF {{{
+" fuzzy open file in current project with <space>p
+nnoremap <silent> <leader>p :Files<CR>
+" List recent opened file <space>h
+nnoremap <silent> <leader>h :History<CR>
+" Jump to opened file (buffer) with <space><Enter>
+nnoremap <silent> <leader><Enter> :Buffers<CR>
+" Jump to method or variable/attribute in current file <space>r
+nnoremap <silent> <leader>r :BTags<CR>
+" nmap <silent> <leader>r :call LanguageClient#textDocument_documentSymbol()<CR>
+" Jumt to lines in current buffer and search for string <space>/
+nnoremap <silent> <leader>/ :BLines<CR>
+" Change binding for split
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+endif
+" :Rg similiar to :Ag
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 " }}}
 
-" neosnippet {{{
-let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
-let g:neosnippet#disable_runtime_snippets = {
-\   '_' : 1,
-\ }
-imap <c-k> <Plug>(neosnippet_expand_or_jump)
-smap <c-k> <Plug>(neosnippet_expand_or_jump)
-xmap <c-k> <Plug>(neosnippet_expand_target)
-let g:neosnippet#enable_completed_snippet=1
+" EasyAlign {{{
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 " }}}
 
+" Sneak {{{
+let g:sneak#label = 1
+let g:sneak#use_ic_scs = 1
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
+" }}}
+
+" Ale {{{
+" Manually install those dependency first
+let g:ale_linters = {
+\   'php': ['php', 'phpcs', 'phpmd'],
+\   'vim': ['vint'],
+\   'sh': ['shellcheck'],
+\}
+let g:ale_fixers = {
+\   'php': ['php_cs_fixer'],
+\   'vim': ['remove_trailing_lines', 'trim_whitespace'],
+\   'sh': ['shfmt'],
+\}
+let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
+let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
+let g:ale_lint_delay = 1000
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
+" }}}
+
+" dirvish {{{
+let g:loaded_netrwPlugin = 0
+let g:dirvish_mode = ':sort ,^.*[\/],'
+command! -nargs=? -complete=dir Explore | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
+command! -nargs=? -complete=dir Sexplore belowright split | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
+command! -nargs=? -complete=dir Vexplore leftabove vsplit | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
+" }}}
+
+" Tagbar {{{
+" Open/close tagbar with <space>g
+nmap <silent> <leader>g :TagbarToggle<CR>
+" }}}
+
+set background=dark
+colorscheme gruvbox
+iabbrev @@ rahmat.awaludin@gmail.com
