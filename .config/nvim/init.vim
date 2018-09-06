@@ -100,6 +100,9 @@ let g:deoplete#enable_at_startup = 1
 " ----- Working with Git ----------------------------------------------
 Plug 'mhinz/vim-signify'
 let g:signify_vcs_list = ['git']
+let g:signify_sign_add          = '│'
+let g:signify_sign_change       = '│'
+let g:signify_sign_changedelete = '│'
 Plug 'tpope/vim-fugitive' " git inside vim
 Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
