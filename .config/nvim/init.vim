@@ -428,10 +428,13 @@ let g:ale_fixers = {
 \   'php': ['php_cs_fixer'],
 \   'vim': ['remove_trailing_lines', 'trim_whitespace'],
 \   'sh': ['shfmt'],
+\   'json': ['fixjson'],
 \}
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
 let g:ale_lint_delay = 1000
+let g:ale_sign_warning = '──'
+let g:ale_sign_error = '══'
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 " }}}
