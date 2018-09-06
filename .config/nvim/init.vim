@@ -292,6 +292,20 @@ nnoremap <Leader>yp :let @*=expand("%")<cr>:echo "Copied file path to clipboard"
 nnoremap <Leader>yf :let @*=expand("%:t")<cr>:echo "Copied file name to clipboard"<cr>
 " Copy current buffer path without filename to system clipboard
 nnoremap <Leader>yd :let @*=expand("%:h")<cr>:echo "Copied file directory to clipboard"<cr>
+" Copy current method name to system clipboard
+nnoremap <Leader>ym :CopyPhpMethodName<cr>
+function! <SID>CopyPhpMethodName()
+  " Preparation: save last cursor position.
+  let l:l = line('.')
+  let l:c = col('.')
+  " Do the business:
+  normal [[ww"*yiw
+  " Clean up: restore previous cursor position
+  call cursor(l:l, l:c)
+  echo "Copied method to clipboard"
+endfunction
+command! CopyPhpMethodName call <SID>CopyPhpMethodName()
+
 " undo close buffer by <Ctrl><shift>t
 nnoremap <silent> <C-T> :e #<CR>
 " new empty buffer by space+n (useful for tinkering script)
