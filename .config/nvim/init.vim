@@ -222,6 +222,10 @@ augroup AutoWriteOnLostFocus
   autocmd FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
 augroup END
 
+augroup AutoSpellCheckForGitCommitMessage
+  autocmd FileType gitcommit setlocal spell
+augroup END
+
 augroup NumberToggle
   " Relative line number on active buffer, absolute line number on inactive bufferr
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
