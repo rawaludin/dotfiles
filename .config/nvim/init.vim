@@ -288,7 +288,15 @@ augroup filetype_php
   " formatter, folding, reindex ctags
   autocmd FileType php noremap <leader>wf :!php-cs-fixer fix "%" --rules=@PSR1,@PSR2,no_unused_imports<cr><cr>
   autocmd FileType php set foldmethod=indent foldlevel=20
-  autocmd BufWritePost *.php :call jobstart('[ ! -f tags.lock ] && touch tags.lock && ctags -R --languages=php --php-kinds=cfit && rm -rf tags.lock')
+  " Regenerate ctags
+  " - when tags.lock is older than 2 min, start fresh
+  " - regenerate only if tags.lock not exist
+  " - when starting job to regenerate, create tags.lock file
+  let generate_ctags = 'find . -name tags.lock -mmin +2 -exec rm {} tags \; 
+        \ && [ ! -f tags.lock ] && touch tags.lock 
+        \ && ctags -R --languages=php --php-kinds=cfit 
+        \ && rm -rf tags.lock'
+  autocmd BufWritePost *.php :call jobstart(generate_ctags)
 augroup END
 " }}}
 
