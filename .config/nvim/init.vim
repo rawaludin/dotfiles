@@ -323,6 +323,12 @@ nnoremap <silent> [t :tabprevious<CR>
 nnoremap <silent> ]t :tabnext<CR>
 nnoremap <silent> {t :tabfirst<CR>
 nnoremap <silent> }t :tablast<CR>
+" jump to quickfix mapping
+nnoremap <silent> [q :cprevious<CR>
+nnoremap <silent> ]q :cnext<CR>
+" jump to location-list mapping
+nnoremap <silent> [l :lprevious<CR>
+nnoremap <silent> ]l :lnext<CR>
 " toggle background
 " @todo should toggle tmuxline as well, update config too
 nnoremap <silent> yob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
