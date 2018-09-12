@@ -85,18 +85,6 @@ augroup END
 " ----- Working with Go ----------------------------------------------
 Plug 'fatih/vim-go'
 
-" ----- autocompletion ----
-" manual trigger complete with ^x^o (omnifunc)
-" run :LanguageClientStart / Stop to index project
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-" format with gq
-Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install -vvv && composer run-script parse-stubs'}
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " need pip3 install neovim
-let g:deoplete#enable_at_startup = 1
-
 " ----- Working with Git ----------------------------------------------
 Plug 'mhinz/vim-signify'
 let g:signify_vcs_list = ['git']
@@ -435,19 +423,21 @@ let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
 " Ale {{{
 " Manually install those dependency first
 let g:ale_linters = {
-\   'php': ['php', 'phpcs', 'phpmd'],
+\   'php': ['phpcs', 'phpmd', 'langserver'],
 \   'vim': ['vint'],
 \   'sh': ['shellcheck'],
 \}
 let g:ale_fixers = {
-\   'php': ['php_cs_fixer'],
+\   'php': ['php_cs_fixer', 'phpcbf'],
 \   'vim': ['remove_trailing_lines', 'trim_whitespace'],
 \   'sh': ['shfmt'],
 \   'json': ['fixjson'],
 \}
+let g:ale_php_langserver_use_global = 1
+let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
 let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
-let g:ale_lint_delay = 1000
+" let g:ale_lint_delay = 1000
 let g:ale_sign_warning = '──'
 let g:ale_sign_error = '══'
 nmap ]a <Plug>(ale_next_wrap)
