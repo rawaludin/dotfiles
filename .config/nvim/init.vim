@@ -116,6 +116,7 @@ set softtabstop=2 " default to 2 spaces for the soft tab
 set tabstop=2 " default to 2 spaces for a hard tab
 set visualbell " disable bell / beep
 set wrap linebreak nolist " better word wrap
+set tags=tags " only use tags file on root
 " Annoying temporary files
 set backupdir=/tmp//,.
 set directory=/tmp//,.
