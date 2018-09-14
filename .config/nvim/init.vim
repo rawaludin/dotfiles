@@ -442,8 +442,10 @@ let g:ale_fixers = {
 \}
 let g:ale_php_langserver_use_global = 1
 let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
-let g:ale_php_phpcs_standard='~/.config/code-rules/phpcs.xml'
+let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
+let g:ale_php_cs_fixer_options='--rules=@PSR1,@PSR2,no_unused_imports'
 let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
+let g:ale_php_phpcbf_standard='psr2'
 " let g:ale_lint_delay = 1000
 let g:ale_sign_warning = '──'
 let g:ale_sign_error = '══'
