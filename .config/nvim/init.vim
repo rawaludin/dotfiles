@@ -80,6 +80,9 @@ augroup PhpUseStatement
   autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
   " Press `<space>e` to expand to fully quailified class name
   autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
+  " put end semicolon
+  autocmd FileType php inoremap <c-e> <esc>A;<esc>
+  autocmd FileType php noremap <c-e> A;<esc>
 augroup END
 
 " ----- Working with Go ----------------------------------------------
