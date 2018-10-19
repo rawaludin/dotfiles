@@ -265,6 +265,8 @@ nnoremap <Down> :resize +2<CR>
 " make c-n and c-p mimic up and down behaviour on command mode
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
+" double click jump to tag
+nnoremap <2-LeftMouse> <c-]>
 " More text-object
 for g:char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%', '`' ]
     execute 'xnoremap i' . g:char . ' :<C-u>normal! T' . g:char . 'vt' . g:char . '<CR>'
