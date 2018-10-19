@@ -277,7 +277,7 @@ endfor
 
 augroup filetype_php
   " formatter, folding, reindex ctags
-  autocmd FileType php noremap <leader>wf :!php-cs-fixer fix "%" --rules=@PSR1,@PSR2,no_unused_imports<cr><cr>
+  autocmd FileType php noremap <leader>wf :ALEFix<cr>
   autocmd FileType php set foldmethod=indent foldlevel=20
   " Regenerate ctags
   " - when tags.lock is older than 2 min, start fresh
@@ -445,10 +445,10 @@ let g:ale_fixers = {
 let g:ale_php_langserver_use_global = 1
 let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
 let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
-let g:ale_php_cs_fixer_options='--rules=@PSR1,@PSR2,no_unused_imports'
-let g:ale_php_phpmd_ruleset='~/.config/code-rules/phpmd.xml'
-let g:ale_php_phpcbf_standard='psr2'
-" let g:ale_lint_delay = 1000
+let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
+let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
+let g:ale_php_phpcbf_standard = 'psr2'
+let g:ale_completion_enabled = 0
 let g:ale_sign_warning = '──'
 let g:ale_sign_error = '══'
 nmap ]a <Plug>(ale_next_wrap)
