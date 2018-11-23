@@ -404,6 +404,18 @@ command! -bang -nargs=* Ag
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
+
+" Ag without respecting gitignore
+let s:ag_options = ' --skip-vcs-ignores '
+command! -bang -nargs=* Agg
+      \ call fzf#vim#ag(
+      \   <q-args>,
+      \   s:ag_options,
+      \  <bang>0 ? fzf#vim#with_preview('up:60%')
+      \        : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0
+      \ )
+
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
