@@ -45,6 +45,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # preview
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+source $HOME/dotfiles/fzf-helpers/keybindings.plugin.zsh
 
 # Modify PATH
 export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$HOME/.gem/ruby/2.3.0/bin:/usr/local/opt/apr/bin:$HOME/.cargo/bin:$PATH
