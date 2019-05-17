@@ -450,15 +450,17 @@ let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
 " Ale {{{
 " Manually install those dependency first
 let g:ale_linters = {
-\   'php': ['phpcs', 'phpmd', 'langserver'],
+\   'php': ['phpcs', 'phpmd'],
 \   'vim': ['vint'],
 \   'sh': ['shellcheck'],
+\   'javascript': ['eslint', 'xo'],
 \}
 let g:ale_fixers = {
 \   'php': ['php_cs_fixer', 'phpcbf'],
 \   'vim': ['remove_trailing_lines', 'trim_whitespace'],
 \   'sh': ['shfmt'],
 \   'json': ['fixjson'],
+\   'javascript': ['eslint', 'xo'],
 \}
 let g:ale_php_langserver_use_global = 1
 let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
