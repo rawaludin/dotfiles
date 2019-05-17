@@ -470,6 +470,11 @@ let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
 let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
 let g:ale_php_phpcbf_standard = 'psr2'
 let g:ale_completion_enabled = 0
+let g:ale_javascript_eslint_options = '--no-eslintrc'
+" disable native neovim phpcomplete, needed to make g:ale_completion_enabled
+" work. see https://github.com/neovim/neovim/issues/8999
+" autocmd BufNewFile,BufRead *.php set omnifunc=
+let g:ale_sign_column_always = 1
 let g:ale_sign_warning = '──'
 let g:ale_sign_error = '══'
 nmap ]a <Plug>(ale_next_wrap)
