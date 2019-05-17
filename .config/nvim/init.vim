@@ -76,6 +76,7 @@ Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline wit
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace'
+let g:php_namespace_sort_after_insert = 1
 augroup PhpUseStatement
   " Press `<space>u` while on the class being used in normal mode to insert `use` statement
   autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
@@ -288,9 +289,9 @@ augroup filetype_php
   " - when tags.lock is older than 2 min, start fresh
   " - regenerate only if tags.lock not exist
   " - when starting job to regenerate, create tags.lock file
-  let generate_ctags = 'find . -name tags.lock -mmin +2 -exec rm {} tags \; 
-        \ && [ ! -f tags.lock ] && touch tags.lock 
-        \ && ctags -R --languages=php --php-kinds=cfit 
+  let generate_ctags = 'find . -name tags.lock -mmin +2 -exec rm {} tags \;
+        \ && [ ! -f tags.lock ] && touch tags.lock
+        \ && ctags -R --languages=php --php-kinds=cfit
         \ && rm -rf tags.lock'
   autocmd BufWritePost *.php :call jobstart(generate_ctags)
 augroup END
