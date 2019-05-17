@@ -69,6 +69,7 @@ Plug 'tpope/vim-commentary' " comment by gc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
+Plug 'tpope/vim-abolish' " coercion (snake_case to camelCaset, etc) & replace word variant
 Plug 'vimwiki/vimwiki' " personal note taker
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
