@@ -15,8 +15,7 @@ endif
 call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
-Plug 'ap/vim-buftabline'
-Plug 'edkolev/tmuxline.vim'
+" Plug 'edkolev/tmuxline.vim'
 " Tmuxline {{{
 let g:tmuxline_preset = {
       \'a'               : '#S',
@@ -35,8 +34,18 @@ let g:tmuxline_separators = {
     \ 'right_alt' : '|',
     \ 'space' : ' '}
 " }}}
+" Plug 'robertmeta/nofrils' " +flux
+" Plug 'owickstrom/vim-colors-paramount' " +flux
+" Plug 'vim-scripts/simple-dark' " +flux
 Plug 'morhetz/gruvbox'
 let g:gruvbox_contrast_dark='hard'
+Plug 'vim-airline/vim-airline'
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tmuxline#enabled = 0
+let g:airline#extensions#whitespace#enabled = 1
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#hunks#enabled = 0
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -46,20 +55,13 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " f
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
-Plug 'kylef/apiblueprint.vim' " syntax highlight for API Blueprint doc
-Plug 'mattn/emmet-vim' " faster html tag generation
+" Plug 'mattn/emmet-vim' " faster html tag generation
 " Emmet {{{
 " Auto complete by c-y, (control y comma)
-let g:user_emmet_install_global = 0
-augroup InstallEmmet
-  autocmd FileType html,css,php,js,jsx EmmetInstall
-augroup END
-" }}}
-
-" Plug 'terryma/vim-multiple-cursors'
-" Multiple cursor {{{
-" When press ESC from insert mode on multiple cursor, back to multiple cursor, not regular vim
-let g:multi_cursor_exit_from_insert_mode = 0
+" let g:user_emmet_install_global = 0
+" augroup InstallEmmet
+"   autocmd FileType html,css,php,js,jsx EmmetInstall
+" augroup END
 " }}}
 " make FocusGained and FocusLost work again in Tmux, this event used for autosave
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -70,7 +72,6 @@ Plug 'tpope/vim-surround' " faster surround
 Plug 'vimwiki/vimwiki' " personal note taker
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
-Plug 'tommcdo/vim-exchange' " text exchange operator with cx
 Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
 
 " ----- Working with PHP ----------------------------------------------
@@ -86,7 +87,8 @@ augroup PhpUseStatement
 augroup END
 
 " ----- Working with Go ----------------------------------------------
-Plug 'fatih/vim-go'
+" Plug 'fatih/vim-go'
+" let g:go_version_warning = 0
 
 " ----- Working with Git ----------------------------------------------
 Plug 'mhinz/vim-signify'
@@ -208,7 +210,7 @@ function! s:statusline_expr()
 
   return '%F %<'.l:mod.l:ro.l:ft.l:fug.l:ale.l:whitespace_tab_warning.l:whitespace_trailing.l:sep.l:pos.'%*'.l:pct
 endfunction
-let &statusline = s:statusline_expr()
+" let &statusline = s:statusline_expr()
 
 " }}}
 
@@ -258,7 +260,7 @@ inoremap <silent> <ScrollWheelDown> <ESC><ScrollWheelDown>
 nnoremap Q @q
 " redraw syntax by <space>l
 nnoremap <leader>l :diffupdate<cr>:syntax sync fromstart<cr>:Strip<cr>:w<cr>
-" select last pasted block by gp
+" select last pasted block by gp, use native gv for last selected text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " Use arrow to resize pane
 nnoremap <Left> :vertical resize +2<CR>
@@ -377,26 +379,6 @@ endfunction
 command! Strip call <SID>StripTrailingWhitespaces()
 " }}}
 
-function! HighlightRepeats() range
-  let lineCounts = {}
-  let lineNum = a:firstline
-  while lineNum <= a:lastline
-    let lineText = getline(lineNum)
-    if lineText != ""
-      let lineCounts[lineText] = (has_key(lineCounts, lineText) ? lineCounts[lineText] : 0) + 1
-    endif
-    let lineNum = lineNum + 1
-  endwhile
-  exe 'syn clear Repeat'
-  for lineText in keys(lineCounts)
-    if lineCounts[lineText] >= 2
-      exe 'syn match Repeat "^' . escape(lineText, '".\^$*[]') . '$"'
-    endif
-  endfor
-endfunction
-
-command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()
-
 " FZF {{{
 " fuzzy open file in current project with <space>p
 nnoremap <silent> <leader>p :Files<CR>
@@ -417,24 +399,24 @@ let g:fzf_action = {
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
 " Pass an empty option dictionary if the screen is narrow
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, &columns > 80 ? fzf#vim#with_preview() : {}, <bang>0)
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
+" command! -bang -nargs=? -complete=dir Files
+"   \ call fzf#vim#files(<q-args>, &columns > 100 ? fzf#vim#with_preview() : {}, <bang>0)
+" command! -bang -nargs=* Ag
+"   \ call fzf#vim#ag(<q-args>,
+"   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+"   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+"   \                 <bang>0)
 
 " Ag without respecting gitignore
-let s:ag_options = ' --skip-vcs-ignores '
-command! -bang -nargs=* Agg
-      \ call fzf#vim#ag(
-      \   <q-args>,
-      \   s:ag_options,
-      \  <bang>0 ? fzf#vim#with_preview('up:60%')
-      \        : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0
-      \ )
+" let s:ag_options = ' --skip-vcs-ignores '
+" command! -bang -nargs=* Agg
+"       \ call fzf#vim#ag(
+"       \   <q-args>,
+"       \   s:ag_options,
+"       \  <bang>0 ? fzf#vim#with_preview('up:60%')
+"       \        : fzf#vim#with_preview('right:50%:hidden', '?'),
+"       \   <bang>0
+"       \ )
 
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
@@ -506,4 +488,3 @@ nmap <silent> <leader>g :TagbarToggle<CR>
 
 set background=dark
 colorscheme gruvbox
-iabbrev @@ rahmat.awaludin@gmail.com
