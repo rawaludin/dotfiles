@@ -452,7 +452,7 @@ let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
 " Ale {{{
 " Manually install those dependency first
 let g:ale_linters = {
-\   'php': ['phpcs', 'phpmd'],
+\   'php': ['phpcs', 'phpmd', 'psalm'],
 \   'vim': ['vint'],
 \   'sh': ['shellcheck'],
 \   'javascript': ['eslint', 'xo'],
@@ -480,6 +480,8 @@ let g:ale_sign_warning = '──'
 let g:ale_sign_error = '══'
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
+nmap ]r <Plug>(ale_next_error)
+nmap [r <Plug>(ale_previous_error)
 " }}}
 
 " dirvish {{{
