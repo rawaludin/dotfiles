@@ -25,4 +25,7 @@ nnoremap <silent> <leader>q :b#<CR>
 " theme
 colorscheme gruvbox8
 set background=dark
+set number relativenumber
+set clipboard+=unnamedplus
+
 
