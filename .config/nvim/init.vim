@@ -282,9 +282,11 @@ for g:char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%'
     execute 'onoremap a' . g:char . ' :normal va' . g:char . '<CR>'
 endfor
 
+augroup ale
+  autocmd FileType php,javascript noremap <leader>wf :ALEFix<cr>
+augroup END
 augroup filetype_php
   " formatter, folding, reindex ctags
-  autocmd FileType php noremap <leader>wf :ALEFix<cr>
   autocmd FileType php set foldmethod=indent foldlevel=20
   " Regenerate ctags
   " - when tags.lock is older than 2 min, start fresh
