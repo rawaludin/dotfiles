@@ -17,7 +17,8 @@ brew tap "universal-ctags/universal-ctags"
 
 brew install \
   composer \
-  fd \
+  fzf \
+  f \
   highlight \
   icdiff \
   kubernetes-cli \
@@ -50,7 +51,7 @@ brew install \
   wget \
   gnu-sed --with-default-names
 
-brew cask install \ 
+brew cask install \
   appcleaner \
   bartender \
   bettertouchtool \
@@ -68,11 +69,13 @@ brew cask install \
   postman \
   sequel-pro \
   sourcetree \
-  spotifree \
-  spotify \
   steam \
   sublime-text \
   transmission \
   upwork \
   vimr \
-  vlc
+  vlc \
+  alacritty
+
+brew tap homebrew/cask-fonts
+brew cask install font-hasklig
