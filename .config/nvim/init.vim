@@ -34,9 +34,6 @@ let g:tmuxline_separators = {
     \ 'right_alt' : '|',
     \ 'space' : ' '}
 " }}}
-" Plug 'robertmeta/nofrils' " +flux
-" Plug 'owickstrom/vim-colors-paramount' " +flux
-" Plug 'vim-scripts/simple-dark' " +flux
 Plug 'morhetz/gruvbox'
 let g:gruvbox_contrast_dark='hard'
 Plug 'vim-airline/vim-airline'
