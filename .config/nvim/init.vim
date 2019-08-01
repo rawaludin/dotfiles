@@ -450,27 +450,28 @@ let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
 
 " Ale {{{
 " Manually install those dependency first
+" \   'php': ['phpcs', 'phpmd', 'psalm'],
 let g:ale_linters = {
-\   'php': ['phpcs', 'phpmd', 'psalm'],
+\   'php': ['phpcs'],
 \   'vim': ['vint'],
 \   'sh': ['shellcheck'],
-\   'javascript': ['eslint', 'xo'],
+\   'javascript': ['eslint'],
 \}
 let g:ale_fixers = {
 \   'php': ['php_cs_fixer', 'phpcbf'],
 \   'vim': ['remove_trailing_lines', 'trim_whitespace'],
 \   'sh': ['shfmt'],
 \   'json': ['fixjson'],
-\   'javascript': ['eslint', 'xo'],
+\   'javascript': ['eslint'],
 \}
-let g:ale_php_langserver_use_global = 1
-let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
-let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
+" let g:ale_php_langserver_use_global = 1
+" let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
+" let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
 let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
 let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
 let g:ale_php_phpcbf_standard = 'psr2'
 let g:ale_completion_enabled = 0
-let g:ale_javascript_eslint_options = '--no-eslintrc'
+" let g:ale_javascript_eslint_options = '--no-eslintrc'
 " disable native neovim phpcomplete, needed to make g:ale_completion_enabled
 " work. see https://github.com/neovim/neovim/issues/8999
 " autocmd BufNewFile,BufRead *.php set omnifunc=
