@@ -49,6 +49,7 @@ brew install \
   urlview \
   watch \
   wget \
+  zsh \
   gnu-sed --with-default-names
 
 brew cask install \
@@ -72,10 +73,13 @@ brew cask install \
   steam \
   sublime-text \
   transmission \
-  upwork \
   vimr \
-  vlc \
-  alacritty
+  font-hasklig \ 
+  kitty
 
 brew tap homebrew/cask-fonts
-brew cask install font-hasklig kitty
+
+zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
+
+sudo sh -c "echo $(which zsh) >> /etc/shells"
+chsh -s $(which zsh)
