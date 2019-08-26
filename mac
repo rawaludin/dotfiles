@@ -15,16 +15,23 @@ fi
 brew tap "homebrew/cask"
 brew tap "universal-ctags/universal-ctags"
 
+# neovim
+brew install \
+  fzf \
+  fd \
+  universal-ctags \
+  neovim
+
+# alias ctags="`brew --prefix`/bin/ctags"
+
 brew install \
   composer \
-  fzf \
   f \
   highlight \
   icdiff \
   kubernetes-cli \
   mariadb \
   mycli \
-  neovim \
   nginx \
   node \
   ntfs-3g \
@@ -45,7 +52,6 @@ brew install \
   tldr \
   tmux \
   tree \
-  universal-ctags \
   urlview \
   watch \
   wget \
