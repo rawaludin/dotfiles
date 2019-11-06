@@ -399,36 +399,7 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
-" Pass an empty option dictionary if the screen is narrow
-" command! -bang -nargs=? -complete=dir Files
-"   \ call fzf#vim#files(<q-args>, &columns > 100 ? fzf#vim#with_preview() : {}, <bang>0)
-" command! -bang -nargs=* Ag
-"   \ call fzf#vim#ag(<q-args>,
-"   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-"   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-"   \                 <bang>0)
-
-" Ag without respecting gitignore
-" let s:ag_options = ' --skip-vcs-ignores '
-" command! -bang -nargs=* Agg
-"       \ call fzf#vim#ag(
-"       \   <q-args>,
-"       \   s:ag_options,
-"       \  <bang>0 ? fzf#vim#with_preview('up:60%')
-"       \        : fzf#vim#with_preview('right:50%:hidden', '?'),
-"       \   <bang>0
-"       \ )
-
-if has('nvim')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
-endif
-" :Rg similiar to :Ag
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,4'
 " }}}
 
 " EasyAlign {{{
