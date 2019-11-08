@@ -403,7 +403,7 @@ function! FloatingFZF()
 endfunction
 
 " fuzzy open file in current project with <space>p
-nnoremap <silent> <leader>p :Files<CR>
+nnoremap <silent> <leader>p :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
 " List recent opened file <space>h
 nnoremap <silent> <leader>h :History<CR>
 " Jump to opened file (buffer) with <space><Enter>
