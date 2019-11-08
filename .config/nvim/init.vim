@@ -405,7 +405,7 @@ endfunction
 " fuzzy open file in current project with <space>p
 nnoremap <silent> <leader>p :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
 " List recent opened file <space>h
-nnoremap <silent> <leader>h :History<CR>
+nnoremap <silent> <leader>h :History:<CR>
 " Jump to opened file (buffer) with <space><Enter>
 nnoremap <silent> <leader><Enter> :Buffers<CR>
 " Jump to method or variable/attribute in current file <space>r
