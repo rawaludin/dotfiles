@@ -48,10 +48,7 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 source $HOME/dotfiles/fzf-helpers/keybindings.plugin.zsh
 
 # Modify PATH
-export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$HOME/.gem/ruby/2.3.0/bin:/usr/local/opt/apr/bin:$HOME/.cargo/bin:$PATH
-# Golang
-export PATH=$HOME/go/bin:$PATH
-# Golang
+export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$(brew --prefix)/bin:$HOME/go/bin:$PATH
 # Set the default editor
 export EDITOR="nvim"
 # ^x^e to edit current command in editor
@@ -61,3 +58,5 @@ bindkey "^X^E" edit-command-line
 
 # Install https://github.com/kaelzhang/shell-safe-rm manually
 #
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
