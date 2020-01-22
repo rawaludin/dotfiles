@@ -383,6 +383,7 @@ command! Strip call <SID>StripTrailingWhitespaces()
 " }}}
 
 " FZF {{{
+" Terminal buffer options for fzf
 function! FloatingFZF()
   let buf = nvim_create_buf(v:false, v:true)
   call setbufvar(buf, '&signcolumn', 'no')
