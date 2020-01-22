@@ -295,6 +295,8 @@ augroup filetype_php
         \ && rm -rf tags.lock'
   autocmd BufWritePost *.php :call jobstart(generate_ctags)
 augroup END
+" open tag in vertical split
+map <C-s><C-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 " }}}
 
 " Buffer & Tab Management {{{
