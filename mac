@@ -89,3 +89,5 @@ zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HO
 
 sudo sh -c "echo $(which zsh) >> /etc/shells"
 chsh -s $(which zsh)
+
+# ln -s ~/Dropbox/vimwiki vimwiki
