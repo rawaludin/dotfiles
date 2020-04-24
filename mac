@@ -91,3 +91,5 @@ sudo sh -c "echo $(which zsh) >> /etc/shells"
 chsh -s $(which zsh)
 
 # ln -s ~/Dropbox/vimwiki vimwiki
+# ln -s ~/.gitignore .gitignore
+# git config --global core.excludesfile ~/.gitignore
