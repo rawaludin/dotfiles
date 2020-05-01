@@ -445,14 +445,15 @@ let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
 " }}}
 
 " Ale {{{
-" Manually install those dependency first
-" \   'php': ['phpcs', 'phpmd', 'psalm'],
+" https://github.com/squizlabs/PHP_CodeSniffer#installation
+" https://github.com/FriendsOfPHP/PHP-CS-Fixer#installation
 let g:ale_linters = {
-\   'php': ['phpcs'],
+\   'php': ['phpcs', 'php'],
 \   'vim': ['vint'],
 \   'sh': ['shellcheck'],
 \   'javascript': ['eslint'],
 \}
+
 let g:ale_fixers = {
 \   'php': ['php_cs_fixer', 'phpcbf'],
 \   'vim': ['remove_trailing_lines', 'trim_whitespace'],
@@ -463,6 +464,7 @@ let g:ale_fixers = {
 " let g:ale_php_langserver_use_global = 1
 " let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
 " let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
+let g:ale_php_phpcs_standard ='psr2'
 let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
 let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
 let g:ale_php_phpcbf_standard = 'psr2'
