@@ -421,6 +421,8 @@ let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
+" disable preview
+let g:fzf_preview_window = ''
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
 let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,4'
