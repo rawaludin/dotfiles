@@ -47,6 +47,8 @@ brew cask install \
   postman \
   sequel-pro \
   sourcetree \
+  notion \
+  tableplus \
   font-hasklig
 
 brew tap homebrew/cask-fonts
