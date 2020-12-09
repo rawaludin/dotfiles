@@ -22,38 +22,17 @@ brew install \
   universal-ctags \
   neovim
 
-# alias ctags="`brew --prefix`/bin/ctags"
-
 brew install \
   composer \
   f \
-  highlight \
-  icdiff \
-  kubernetes-cli \
-  mariadb \
-  mycli \
-  nginx \
-  node \
-  ntfs-3g \
   php \
   php-code-sniffer \
-  python \
-  ranger \
   reattach-to-user-namespace \
-  redis \
   ripgrep \
-  shellcheck \
-  shfmt \
-  speedtest-cli \
-  sqlite \
-  task \
   the_silver_searcher \
-  tig \
   tldr \
   tmux \
-  tree \
   urlview \
-  watch \
   wget \
   zsh \
   gnu-sed --with-default-names
@@ -61,35 +40,24 @@ brew install \
 brew cask install \
   appcleaner \
   bartender \
-  bettertouchtool \
   dash \
-  docker \
-  dropbox \
   fantastical \
   firefox \
-  gpg-suite \
   iterm2 \
-  karabiner-elements \
-  mounty \
-  mtmr \
-  osxfuse \
   postman \
   sequel-pro \
   sourcetree \
-  steam \
-  sublime-text \
-  transmission \
-  vimr \
-  font-hasklig \ 
-  kitty
+  font-hasklig
 
 brew tap homebrew/cask-fonts
 
-zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
 
 sudo sh -c "echo $(which zsh) >> /etc/shells"
 chsh -s $(which zsh)
 
-# ln -s ~/Dropbox/vimwiki vimwiki
-# ln -s ~/.gitignore .gitignore
-# git config --global core.excludesfile ~/.gitignore
+# install zim, override dotfiles
+# zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
+# prompt pure, font hasklight, theme gruvbox
+# activate icloud, download vimwiki
+# ln -s ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/vimwiki ~/vimwiki
+# iterm
