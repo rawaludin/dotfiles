@@ -7,24 +7,19 @@
 # echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
 
 if ! command -v brew >/dev/null; then
-  echo "Installing Homebrew ..."
-  curl -fsS \
-    'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
+   echo "Installing Homebrew ..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-brew tap "homebrew/cask"
 brew tap "universal-ctags/universal-ctags"
-
-# neovim
-brew install \
-  fzf \
-  fd \
-  universal-ctags \
-  neovim
+brew install --HEAD universal-ctags
 
 brew install \
   composer \
-  f \
+  fd \
+  fzf \
+  gnu-sed \
+  neovim \
   php \
   php-code-sniffer \
   reattach-to-user-namespace \
@@ -34,32 +29,78 @@ brew install \
   tmux \
   urlview \
   wget \
-  zsh \
-  gnu-sed --with-default-names
+  zsh
+
+brew tap homebrew/cask
+brew tap homebrew/cask-fonts
 
 brew cask install \
   appcleaner \
-  bartender \
-  dash \
   fantastical \
   firefox \
+  font-hasklig \
   iterm2 \
-  postman \
-  sequel-pro \
-  sourcetree \
+  loom \
+  moom \
   notion \
+  paw \
+  pock \
+  postman \
+  slack \
+  sourcetree \
+  spotify \
   tableplus \
-  font-hasklig
-
-brew tap homebrew/cask-fonts
-
+  zoom
 
 sudo sh -c "echo $(which zsh) >> /etc/shells"
 chsh -s $(which zsh)
 
 # install zim, override dotfiles
-# zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
+zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
+
+# copy dotfiles
+rm -rf ~/.config
+ln -s ~/dotfiles/.config ~/.config
+ln -s ~/dotfiles/.alias.sh ~/.alias.sh
+ln -s ~/dotfiles/.editrc ~/.editrc
+ln -s ~/dotfiles/.function.sh ~/.function.sh
+ln -s ~/dotfiles/.gitconfig ~/.gitconfig
+ln -s ~/dotfiles/.gitignore ~/.gitignore
+ln -s ~/dotfiles/.inputrc ~/.inputrc
+ln -s ~/dotfiles/.tmux-theme.conf ~/.tmux-theme.conf
+ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+ln -s ~/dotfiles/.zimrc ~/.zimrc
+ln -s ~/dotfiles/.zlogin ~/.zlogin
+ln -s ~/dotfiles/.zshrc ~/.zshrc
+ln -s ~/dotfiles/.tmux ~/.tmux
+
 # prompt pure, font hasklight, theme gruvbox
 # activate icloud, download vimwiki
 # ln -s ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/vimwiki ~/vimwiki
+
 # iterm
+# keyboard colemak, capslock => control, repeat fast
+# trackpad gestures
+# accessibilty > pointer control > trackpad options > enable dragging: three finger drag
+# todo:
+# php7
+# phpplugin for lumen
+# mysql57
+# alfred3
+# https://cachefly.alfredapp.com/Alfred_3.8.6_972.dmg
+# dash4
+# appstore: spark, things, unarchiver, ka-block, jsonpeep, lungo
+# license: moom, fantastical, tableplus, paw, dash
+# login: spotify, spark, fantastical, paw, slack, things
+# copy ssh key from old mac, add ssh key to mac keychain
+# iterm: general > closing > x confirm, keys > hotkey command`, general > selection > app in terminal may access clipboard
+# iterm > general > window > disable "native full screen windows"
+# moom shortcut full screen space
+# settings > keyboard > shortcuts > input sources > disable "select next input source"
+# fantastical > general > mini window keyboard shortcut > ctrl option space
+# settings > keyboard > shortcuts > spotlight > disable "show spotlight search"
+# alfred > general > alfred hotkey command space
+# config pock
+# safari enable extensions
+# display > resolution > scaled > size #2
