@@ -57,8 +57,6 @@ chsh -s $(which zsh)
 
 # install zim, override dotfiles
 zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
-
-# copy dotfiles
 rm -rf ~/.config
 ln -s ~/dotfiles/.config ~/.config
 ln -s ~/dotfiles/.alias.sh ~/.alias.sh
@@ -74,6 +72,7 @@ ln -s ~/dotfiles/.zimrc ~/.zimrc
 ln -s ~/dotfiles/.zlogin ~/.zlogin
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.tmux ~/.tmux
+zsh ~/.zim/zimfw.zsh install
 
 # prompt pure, font hasklight, theme gruvbox
 # activate icloud, download vimwiki
