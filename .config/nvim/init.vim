@@ -43,26 +43,16 @@ let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#hunks#enabled = 0
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+Plug 'kyazdani42/nvim-web-devicons'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
-Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
-Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
+Plug 'justinmk/vim-sneak' " Jump to any location specified by two character s<char><char>
 Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
-" Plug 'mattn/emmet-vim' " faster html tag generation
-" Emmet {{{
-" Auto complete by c-y, (control y comma)
-" let g:user_emmet_install_global = 0
-" augroup InstallEmmet
-"   autocmd FileType html,css,php,js,jsx EmmetInstall
-" augroup END
-" }}}
-" make FocusGained and FocusLost work again in Tmux, this event used for autosave
-Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'tpope/vim-commentary' " comment by gc
+Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
+Plug 'tpope/vim-commentary' " comment by gcc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
@@ -71,6 +61,12 @@ Plug 'vimwiki/vimwiki' " personal note taker
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
 Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace'
@@ -80,14 +76,7 @@ augroup PhpUseStatement
   autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
   " Press `<space>e` to expand to fully quailified class name
   autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
-  " put end semicolon
-  autocmd FileType php inoremap <c-e> <esc>A;<esc>
-  autocmd FileType php noremap <c-e> A;<esc>
 augroup END
-
-" ----- Working with Go ----------------------------------------------
-" Plug 'fatih/vim-go'
-" let g:go_version_warning = 0
 
 " ----- Working with Git ----------------------------------------------
 Plug 'mhinz/vim-signify'
@@ -100,6 +89,10 @@ Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
 " ----- Other text editing features -----------------------------------
 Plug 'majutsushi/tagbar' " view ctags on sidebar
+Plug 'ludovicchabant/vim-gutentags'
+if executable('rg')
+  let g:gutentags_file_list_command = 'rg --files'
+endif
 
 call plug#end()
 " }}}
@@ -126,10 +119,10 @@ set backupdir=/tmp//,.
 set directory=/tmp//,.
 set undodir=/tmp//,.
 " use rg for grep
-if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
+" if executable('rg')
+"     set grepprg=rg\ --vimgrep\ --no-heading
+"     set grepformat=%f:%l:%c:%m,%f:%l:%m
+" endif
 let g:did_install_default_menus = 1
 let g:did_install_syntax_menu = 1 " save 50ms startup time
 " }}}
@@ -284,7 +277,7 @@ augroup ale
 augroup END
 augroup filetype_php
   " formatter, folding, reindex ctags
-  autocmd FileType php set foldmethod=indent foldlevel=20
+  " autocmd FileType php set foldmethod=indent foldlevel=20
   " Regenerate ctags
   " - when tags.lock is older than 2 min, start fresh
   " - regenerate only if tags.lock not exist
@@ -382,51 +375,20 @@ endfunction
 command! Strip call <SID>StripTrailingWhitespaces()
 " }}}
 
-" FZF {{{
-" Terminal buffer options for fzf
-function! FloatingFZF()
-  let buf = nvim_create_buf(v:false, v:true)
-  call setbufvar(buf, '&signcolumn', 'no')
- 
-  let height = float2nr(10)
-  let width = float2nr(80)
-  let horizontal = float2nr((&columns - width) / 2)
-  let vertical = 1
- 
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': vertical,
-        \ 'col': horizontal,
-        \ 'width': width,
-        \ 'height': height,
-        \ 'style': 'minimal'
-        \ }
- 
-  call nvim_open_win(buf, v:true, opts)
-endfunction
-
 " fuzzy open file in current project with <space>p
-nnoremap <silent> <leader>p :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
+nnoremap <silent> <leader>p :Telescope find_files<CR>
 " List recent opened file <space>h
-nnoremap <silent> <leader>h :History:<CR>
+nnoremap <silent> <leader>h :Telescope oldfiles<CR>
 " Jump to opened file (buffer) with <space><Enter>
-nnoremap <silent> <leader><Enter> :Buffers<CR>
+nnoremap <silent> <leader><Enter> :Telescope buffers<CR>
 " Jump to method or variable/attribute in current file <space>r
-nnoremap <silent> <leader>r :BTags<CR>
-" nmap <silent> <leader>r :call LanguageClient#textDocument_documentSymbol()<CR>
+nnoremap <silent> <leader>r :Telescope lsp_document_symbols<CR>
 " Jumt to lines in current buffer and search for string <space>/
-nnoremap <silent> <leader>/ :BLines<CR>
-" Change binding for split
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-" disable preview
-let g:fzf_preview_window = ''
+nnoremap <silent> <leader>/ :Telescope current_buffer_fuzzy_find<CR>
+command! Rg :Telescope live_grep
+command! Tags :Telescope tags
 " [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
-let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,4'
-let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+" let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
 " }}}
 
 " EasyAlign {{{
@@ -499,3 +461,41 @@ nmap <silent> <leader>g :TagbarToggle<CR>
 
 set background=dark
 colorscheme gruvbox
+
+lua << EOF
+require'lspconfig'.phpactor.setup{}
+local nvim_lsp = require('lspconfig')
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  --Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+
+end
+EOF
