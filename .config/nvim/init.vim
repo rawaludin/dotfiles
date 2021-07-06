@@ -42,31 +42,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " faster align
-" EasyAlign config {{{
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-" }}}
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character s<char><char>
-" Sneak config {{{
-let g:sneak#label = 1
-let g:sneak#use_ic_scs = 1
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
-" }}}
 Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
-" dirvish config {{{
-let g:loaded_netrwPlugin = 0
-let g:dirvish_mode = ':sort ,^.*[\/],'
-command! -nargs=? -complete=dir Explore | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
-command! -nargs=? -complete=dir Sexplore belowright split | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
-command! -nargs=? -complete=dir Vexplore leftabove vsplit | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
-" }}}
 Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
 Plug 'tpope/vim-commentary' " comment by gcc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
@@ -76,34 +54,6 @@ Plug 'tpope/vim-abolish' " coercion (snake_case to camelCaset, etc) & replace wo
 Plug 'vimwiki/vimwiki' " personal note taker
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
-" Ale config {{{
-let g:ale_linters = {
-\   'php': ['phpcs', 'php'],
-\   'vim': ['vint'],
-\   'sh': ['shellcheck'],
-\   'javascript': ['eslint'],
-\}
-
-let g:ale_fixers = {
-\   'php': ['php_cs_fixer', 'phpcbf'],
-\   'vim': ['remove_trailing_lines', 'trim_whitespace'],
-\   'sh': ['shfmt'],
-\   'json': ['fixjson'],
-\   'javascript': ['eslint'],
-\}
-let g:ale_php_phpcs_standard ='psr2'
-let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
-let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
-let g:ale_php_phpcbf_standard = 'psr2'
-let g:ale_completion_enabled = 0
-let g:ale_sign_column_always = 1
-let g:ale_sign_warning = '──'
-let g:ale_sign_error = '══'
-nmap ]a <Plug>(ale_next_wrap)
-nmap [a <Plug>(ale_previous_wrap)
-nmap ]r <Plug>(ale_next_error)
-nmap [r <Plug>(ale_previous_error)
-" }}}
 Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
@@ -112,50 +62,7 @@ Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-" Telescope config {{{
-" fuzzy open file in current project with <space>p
-nnoremap <silent> <leader>p :Telescope find_files<CR>
-" List recent opened file <space>h
-nnoremap <silent> <leader>h :Telescope oldfiles<CR>
-" Jump to opened file (buffer) with <space><Enter>
-nnoremap <silent> <leader><Enter> :Telescope buffers<CR>
-" Jump to method or variable/attribute in current file <space>r
-nnoremap <silent> <leader>r :Telescope lsp_document_symbols<CR>
-" Jumt to lines in current buffer and search for string <space>/
-nnoremap <silent> <leader>/ :Telescope current_buffer_fuzzy_find<CR>
-command! Rg :Telescope live_grep
-command! Tags :Telescope tags
-" }}}
 Plug 'hrsh7th/nvim-compe'
-" compe config {{{
-set completeopt=menuone,noselect
-let g:compe = {}
-let g:compe.enabled = v:true
-let g:compe.autocomplete = v:true
-let g:compe.debug = v:false
-let g:compe.min_length = 1
-let g:compe.preselect = 'enable'
-let g:compe.throttle_time = 80
-let g:compe.source_timeout = 200
-let g:compe.resolve_timeout = 800
-let g:compe.incomplete_delay = 400
-let g:compe.max_abbr_width = 100
-let g:compe.max_kind_width = 100
-let g:compe.max_menu_width = 100
-let g:compe.documentation = v:true
-
-let g:compe.source = {}
-let g:compe.source.path = v:true
-let g:compe.source.buffer = v:true
-let g:compe.source.calc = v:true
-let g:compe.source.nvim_lsp = v:true
-let g:compe.source.nvim_lua = v:true
-let g:compe.source.vsnip = v:true
-let g:compe.source.ultisnips = v:true
-let g:compe.source.luasnip = v:true
-let g:compe.source.emoji = v:true
-let g:compe.source.treesitter = v:true
-" }}}
 
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace'
@@ -171,7 +78,6 @@ Plug 'tpope/vim-rhubarb' " github extension for fugitive
 
 " ----- Other text editing features -----------------------------------
 Plug 'majutsushi/tagbar' " view ctags on sidebar
-" Open/close tagbar with <space>g
 nmap <silent> <leader>g :TagbarToggle<CR>
 Plug 'ludovicchabant/vim-gutentags'
 if executable('rg')
@@ -180,7 +86,6 @@ endif
 
 call plug#end()
 " }}}
-
 " General {{{
 set autoread " detect latest change outside vim
 set autowriteall " save buffer when switch to other buffer
@@ -205,7 +110,6 @@ set undodir=/tmp//,.
 let g:did_install_default_menus = 1
 let g:did_install_syntax_menu = 1 " save 50ms startup time
 " }}}
-
 " UI {{{
 set colorcolumn=81,121 " column guide at 81 and 121 char
 set number relativenumber " for easier execute macro
@@ -214,8 +118,9 @@ if (has('termguicolors')) " support true color (enable this when tmux support tr
   let &t_8b = '\<Esc>[48;2;%lu;%lu;%lum'
   set termguicolors
 endif
+set background=dark
+colorscheme gruvbox
 "}}}
-
 " Autocommand {{{
 augroup AutoWriteOnLostFocus
   autocmd FocusLost * silent! wa " autosave when focus is lost, not save unsaved buffer
@@ -249,7 +154,6 @@ augroup PhpUseStatement
   autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
 augroup END
 " }}}
-
 " Mapping {{{
 
 " Set leader key to space
@@ -311,7 +215,6 @@ augroup filetype_php
   autocmd FileType php set foldmethod=indent foldlevel=20
 augroup END
 " }}}
-
 " Buffer & Tab Management {{{
 
 " Copy current buffer path relative to root of VIM session to system clipboard
@@ -378,7 +281,99 @@ augroup SetLastTab
   autocmd TabLeave * let g:lasttab = tabpagenr()
 augroup END
 " }}}
+" Telescope config {{{
+" fuzzy open file in current project with <space>p
+nnoremap <silent> <leader>p :Telescope find_files<CR>
+" List recent opened file <space>h
+nnoremap <silent> <leader>h :Telescope oldfiles<CR>
+" Jump to opened file (buffer) with <space><Enter>
+nnoremap <silent> <leader><Enter> :Telescope buffers<CR>
+" Jump to method or variable/attribute in current file <space>r
+nnoremap <silent> <leader>r :Telescope lsp_document_symbols<CR>
+" Jumt to lines in current buffer and search for string <space>/
+nnoremap <silent> <leader>/ :Telescope current_buffer_fuzzy_find<CR>
+command! Rg :Telescope live_grep
+command! Tags :Telescope tags
+" }}}
+" EasyAlign config {{{
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
+" Ale config {{{
+let g:ale_linters = {
+\   'php': ['phpcs', 'php'],
+\   'vim': ['vint'],
+\   'sh': ['shellcheck'],
+\   'javascript': ['eslint'],
+\}
 
+let g:ale_fixers = {
+\   'php': ['php_cs_fixer', 'phpcbf'],
+\   'vim': ['remove_trailing_lines', 'trim_whitespace'],
+\   'sh': ['shfmt'],
+\   'json': ['fixjson'],
+\   'javascript': ['eslint'],
+\}
+let g:ale_php_phpcs_standard ='psr2'
+let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
+let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
+let g:ale_php_phpcbf_standard = 'psr2'
+let g:ale_completion_enabled = 0
+let g:ale_sign_column_always = 1
+let g:ale_sign_warning = '──'
+let g:ale_sign_error = '══'
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
+nmap ]r <Plug>(ale_next_error)
+nmap [r <Plug>(ale_previous_error)
+" }}}
+" dirvish config {{{
+let g:loaded_netrwPlugin = 0
+let g:dirvish_mode = ':sort ,^.*[\/],'
+command! -nargs=? -complete=dir Explore | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
+command! -nargs=? -complete=dir Sexplore belowright split | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
+command! -nargs=? -complete=dir Vexplore leftabove vsplit | exe 'silent Dirvish '.(empty('<args>')?'%':'<args>')
+" }}}
+" Sneak config {{{
+let g:sneak#label = 1
+let g:sneak#use_ic_scs = 1
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
+" }}}
+" compe config {{{
+set completeopt=menuone,noselect
+let g:compe = {}
+let g:compe.enabled = v:true
+let g:compe.autocomplete = v:true
+let g:compe.debug = v:false
+let g:compe.min_length = 1
+let g:compe.preselect = 'enable'
+let g:compe.throttle_time = 80
+let g:compe.source_timeout = 200
+let g:compe.resolve_timeout = 800
+let g:compe.incomplete_delay = 400
+let g:compe.max_abbr_width = 100
+let g:compe.max_kind_width = 100
+let g:compe.max_menu_width = 100
+let g:compe.documentation = v:true
+
+let g:compe.source = {}
+let g:compe.source.path = v:true
+let g:compe.source.buffer = v:true
+let g:compe.source.calc = v:true
+let g:compe.source.nvim_lsp = v:true
+let g:compe.source.nvim_lua = v:true
+let g:compe.source.vsnip = v:true
+let g:compe.source.ultisnips = v:true
+let g:compe.source.luasnip = v:true
+let g:compe.source.emoji = v:true
+let g:compe.source.treesitter = v:true
+" }}}
 " LSP {{{
 lua << EOF
 local nvim_lsp = require('lspconfig')
@@ -432,6 +427,3 @@ saga.init_lsp_saga {
 }
 EOF
 " }}}
-
-set background=dark
-colorscheme gruvbox
