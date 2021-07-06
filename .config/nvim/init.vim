@@ -77,8 +77,6 @@ Plug 'vimwiki/vimwiki' " personal note taker
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 Plug 'w0rp/ale' " linter
 " Ale config {{{
-" https://github.com/squizlabs/PHP_CodeSniffer#installation
-" https://github.com/FriendsOfPHP/PHP-CS-Fixer#installation
 let g:ale_linters = {
 \   'php': ['phpcs', 'php'],
 \   'vim': ['vint'],
@@ -93,18 +91,11 @@ let g:ale_fixers = {
 \   'json': ['fixjson'],
 \   'javascript': ['eslint'],
 \}
-" let g:ale_php_langserver_use_global = 1
-" let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
-" let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
 let g:ale_php_phpcs_standard ='psr2'
 let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
 let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
 let g:ale_php_phpcbf_standard = 'psr2'
 let g:ale_completion_enabled = 0
-" let g:ale_javascript_eslint_options = '--no-eslintrc'
-" disable native neovim phpcomplete, needed to make g:ale_completion_enabled
-" work. see https://github.com/neovim/neovim/issues/8999
-" autocmd BufNewFile,BufRead *.php set omnifunc=
 let g:ale_sign_column_always = 1
 let g:ale_sign_warning = '──'
 let g:ale_sign_error = '══'
