@@ -45,7 +45,6 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " f
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character s<char><char>
 Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
-Plug 'tmux-plugins/vim-tmux-focus-events' " make FocusGained and FocusLost work again in Tmux, this event used for autosave
 Plug 'tpope/vim-commentary' " comment by gcc
 Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
