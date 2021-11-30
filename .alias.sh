@@ -19,6 +19,7 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 
 # Laravel
 alias art="php artisan"
+alias serve="php -S localhost:8000 -t public"
 
 # Neovim
 alias e="nvim"
