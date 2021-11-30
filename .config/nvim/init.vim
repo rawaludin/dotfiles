@@ -400,7 +400,7 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
-let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,4'
+let $FZF_DEFAULT_OPTS .= ' --layout=reverse'
 " }}}
 
 " EasyAlign {{{
