@@ -103,7 +103,6 @@ brew services start mysql@5.7
 # In MemcachedConnector.php line 69:
 #   Class 'Memcached' not found
 # alfred3
-# https://cachefly.alfredapp.com/Alfred_3.8.6_972.dmg
 # dash4
 # appstore: spark, things, unarchiver, ka-block, jsonpeep, lungo
 # license: moom, fantastical, tableplus, paw, dash
