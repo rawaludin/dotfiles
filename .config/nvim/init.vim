@@ -383,7 +383,7 @@ command! Strip call <SID>StripTrailingWhitespaces()
 " }}}
 
 " fuzzy open file in current project with <space>p
-nnoremap <silent> <leader>p :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
+nnoremap <silent> <leader>p :Files<CR>
 " List recent opened file <space>h
 nnoremap <silent> <leader>h :History:<CR>
 " Jump to opened file (buffer) with <space><Enter>
@@ -398,8 +398,6 @@ let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
-" disable preview
-let g:fzf_preview_window = ''
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R --language=php --php-kinds=cfit'
 let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,4'
