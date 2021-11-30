@@ -6,21 +6,24 @@
 # git config --global credential.helper store
 # echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
 
+# on M1, run the terminal as rosetta
+
 if ! command -v brew >/dev/null; then
    echo "Installing Homebrew ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-brew tap "universal-ctags/universal-ctags"
+brew tap "universal-ctags/universal-crags"
 brew install --HEAD universal-ctags
 
+# TBD: tambah cara install php7.3 via brew tap custom
+
 brew install \
+  mysql@5.7 \
   composer \
   fd \
-  fzf \
   gnu-sed \
   neovim \
-  php \
   php-code-sniffer \
   reattach-to-user-namespace \
   ripgrep \
@@ -28,13 +31,14 @@ brew install \
   tldr \
   tmux \
   urlview \
+  tree \
   wget \
-  zsh
+  redis
 
 brew tap homebrew/cask
 brew tap homebrew/cask-fonts
 
-brew cask install \
+brew install --cask \
   appcleaner \
   fantastical \
   firefox \
@@ -44,19 +48,13 @@ brew cask install \
   moom \
   notion \
   paw \
-  pock \
-  postman \
   slack \
   sourcetree \
-  spotify \
   tableplus \
   zoom
 
-sudo sh -c "echo $(which zsh) >> /etc/shells"
-chsh -s $(which zsh)
-
 # install zim, override dotfiles
-zsh -c 'git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim; exit'
+curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
 rm -rf ~/.config
 ln -s ~/dotfiles/.config ~/.config
 ln -s ~/dotfiles/.alias.sh ~/.alias.sh
@@ -68,17 +66,30 @@ ln -s ~/dotfiles/.inputrc ~/.inputrc
 ln -s ~/dotfiles/.tmux-theme.conf ~/.tmux-theme.conf
 ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/dotfiles/.vimrc ~/.vimrc
-ln -s ~/dotfiles/.zimrc ~/.zimrc
-ln -s ~/dotfiles/.zlogin ~/.zlogin
-ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.tmux ~/.tmux
-zsh ~/.zim/zimfw.zsh install
 
 # tpm
-git clone https://github.com/tmux-plugins/tpm ~/.tmux-plugins/tpm 
+git clone https://github.com/tmux-plugins/tpm ~/.tmux-plugins/tpm
 ~/.tmux-plugins/tpm/bin/install_plugins
 
-# prompt pure, font hasklight, theme gruvbox
+# brew
+# /usr/local/opt/php@7.3/bin/pecl install memcached
+# 
+# native mac (bigsur with php7.3)
+# cd /tmp
+# curl -s -O https://pear.php.net/install-pear-nozlib.phar
+# sudo php install-pear-nozlib.phar -d /usr/local/lib/php -b /usr/local/bin
+# pecl update-channels
+# pecl upgrade
+# pecl install memcached
+
+# mysql
+mysql.server start
+mysqladmin -u root password 'secret'
+mysql.server stop
+brew services start mysql@5.7
+
+# prompt nativepure, font hasklight, theme gruvbox
 # activate icloud, download vimwiki
 # ln -s ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/vimwiki ~/vimwiki
 
@@ -87,15 +98,16 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux-plugins/tpm
 # trackpad gestures
 # accessibilty > pointer control > trackpad options > enable dragging: three finger drag
 # todo:
-# php7
 # phpplugin for lumen
-# mysql57
+# php memcache
+# In MemcachedConnector.php line 69:
+#   Class 'Memcached' not found
 # alfred3
 # https://cachefly.alfredapp.com/Alfred_3.8.6_972.dmg
 # dash4
 # appstore: spark, things, unarchiver, ka-block, jsonpeep, lungo
 # license: moom, fantastical, tableplus, paw, dash
-# login: spotify, spark, fantastical, paw, slack, things
+# login: park, fantastical, paw, slack, things
 # copy ssh key from old mac, add ssh key to mac keychain
 # iterm: general > closing > x confirm, keys > hotkey command`, general > selection > app in terminal may access clipboard
 # iterm > general > window > disable "native full screen windows"
@@ -104,6 +116,25 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux-plugins/tpm
 # fantastical > general > mini window keyboard shortcut > ctrl option space
 # settings > keyboard > shortcuts > spotlight > disable "show spotlight search"
 # alfred > general > alfred hotkey command space
-# config pock
 # safari enable extensions
 # display > resolution > scaled > size #2
+
+# append to .zshrc
+
+# export LANG=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
+
+# Load alias, function, etc
+# source "${ZDOTDIR:-$HOME}/.alias.sh"
+# source "${ZDOTDIR:-$HOME}/.function.sh"
+
+# z quick jump
+# . ~/dotfiles/bin/z.sh
+
+# Modify PATH
+# export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$(brew --prefix)/bin:$HOME/go/bin:/usr/local/opt/php@7.3/bin:/usr/local/opt/php@7.3/sbin:/usr/local/opt/mysql@5.7/bin:$PATH
+
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# append to .zprofile (prevent too many open files on running phpunit)
+# ulimit -n 4096
