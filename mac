@@ -84,9 +84,11 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux-plugins/tpm
 # pecl install memcached
 
 # mysql
-mysql.server start
-mysqladmin -u root password 'secret'
-mysql.server stop
+
+echo 'export PATH="/opt/homebrew/opt/mysql@5.7/bin:$PATH"' >> ~/.zshrc
+/opt/homebrew/opt/mysql@5.7/bin/mysql.server start
+/opt/homebrew/opt/mysql@5.7/bin/mysqladmin -u root password 'secret'
+/opt/homebrew/opt/mysql@5.7/bin/mysql.server stop
 brew services start mysql@5.7
 
 # prompt nativepure, font hasklight, theme gruvbox
