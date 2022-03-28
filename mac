@@ -6,8 +6,6 @@
 # git config --global credential.helper store
 # echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
 
-# on M1, run the terminal as rosetta
-
 if ! command -v brew >/dev/null; then
    echo "Installing Homebrew ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
