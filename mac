@@ -11,9 +11,11 @@
 if ! command -v brew >/dev/null; then
    echo "Installing Homebrew ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-brew tap "universal-ctags/universal-crags"
+brew tap "universal-ctags/universal-ctags"
 brew install --HEAD universal-ctags
 
 # TBD: tambah cara install php7.3 via brew tap custom
@@ -120,22 +122,22 @@ brew services start mysql@5.7
 
 # append to .zshrc
 
-# export LANG=en_US.UTF-8
-# export LC_ALL=en_US.UTF-8
+echo 'export LANG=en_US.UTF-8' >> $HOME/.zshrc
+echo 'export LC_ALL=en_US.UTF-8' >> $HOME/.zshrc
 
 # Load alias, function, etc
-# source "${ZDOTDIR:-$HOME}/.alias.sh"
-# source "${ZDOTDIR:-$HOME}/.function.sh"
+echo 'Source "${ZDOTDIR:-$HOME}/.alias.sh"' >> $HOME/.zshrc
+echo 'source "${ZDOTDIR:-$HOME}/.function.sh"' >> $HOME/.zshrc
 
 # z quick jump
-# . ~/dotfiles/bin/z.sh
+echo '. ~/dotfiles/bin/z.sh' >> $HOME/.zshrc
 
 # Modify PATH
-# export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$(brew --prefix)/bin:$HOME/go/bin:/usr/local/opt/php@7.3/bin:/usr/local/opt/php@7.3/sbin:/usr/local/opt/mysql@5.7/bin:$PATH
+echo 'export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$(brew --prefix)/bin:$HOME/go/bin:/usr/local/opt/php@7.3/bin:/usr/local/opt/php@7.3/sbin:/usr/local/opt/mysql@5.7/bin:$PATH' >> $HOME/.zshrc
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # uncomment from generated zim zshrc
 # zstyle ':zim:git' aliases-prefix 'g'
 
 # append to .zprofile (prevent too many open files on running phpunit)
-# ulimit -n 4096
+echo 'ulimit -n 4096' >> $HOME/.zprofile
