@@ -134,6 +134,8 @@ brew services start mysql@5.7
 # export PATH=$HOME/dotfiles/bin:$HOME/.composer/vendor/bin:$(brew --prefix)/bin:$HOME/go/bin:/usr/local/opt/php@7.3/bin:/usr/local/opt/php@7.3/sbin:/usr/local/opt/mysql@5.7/bin:$PATH
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# uncomment from generated zim zshrc
+# zstyle ':zim:git' aliases-prefix 'g'
 
 # append to .zprofile (prevent too many open files on running phpunit)
 # ulimit -n 4096
