@@ -20,12 +20,9 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 # Laravel
 alias art="php artisan"
 alias serve="php -S localhost:8000 -t public"
-
-# Neovim
 alias e="nvim"
-
-# phpunit
 alias tc="./vendor/bin/phpunit"
 alias t="./vendor/bin/phpunit --no-coverage"
 alias ts="./vendor/bin/phpunit --no-coverage --stop-on-error --stop-on-fail"
 alias ctags="`brew --prefix`/bin/ctags"
+alias stree='/Applications/SourceTree.app/Contents/Resources/stree' 
