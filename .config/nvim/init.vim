@@ -72,6 +72,9 @@ let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}
 Plug 'w0rp/ale' " linter
 Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
 
+" ----- Working with NodeJS -------------------------------------------
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace'
 let g:php_namespace_sort_after_insert = 1
@@ -469,6 +472,11 @@ command! -nargs=? -complete=dir Vexplore leftabove vsplit | exe 'silent Dirvish 
 " Tagbar {{{
 " Open/close tagbar with <space>g
 nmap <silent> <leader>g :TagbarToggle<CR>
+" }}}
+
+" COC {{{
+" Use <cr> to confirm completion
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 " }}}
 
 set background=dark
