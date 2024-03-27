@@ -39,6 +39,11 @@
         [:u :right_arrow ["vim_mode" 1]]
         [:!Wg :page_down ["vim_mode" 1]] ; C-d
         [:!Wi :page_up ["vim_mode" 1]] ; C-u
+        [:x :delete_forward ["vim_mode" 1]]
+        [:w :!Oright_arrow ["vim_mode" 1]]
+        [:b :!Oleft_arrow ["vim_mode" 1]]
+        [:0 :!Qleft_arrow ["vim_mode" 1]]
+        [:!S4 :!Qright_arrow ["vim_mode" 1]]
       ]
   }
 ]}
