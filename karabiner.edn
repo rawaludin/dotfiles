@@ -1,8 +1,8 @@
 {:profiles
  {:Default {:default true
-            :sim     50 ; default 50
-            :delay   100 ; default 500
-            :alone   100 ; default 1000
+            :sim     100 ; default 50
+            :delay   200 ; default 500
+            :alone   200 ; default 1000
             :held    100 ; default 500
   }}
  :simlayers {
