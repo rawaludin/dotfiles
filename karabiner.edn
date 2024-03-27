@@ -8,6 +8,7 @@
   :open_bracket-mode {:key :open_bracket}
   :close_bracket-mode {:key :close_bracket}
  }
+ :applications {:safari ["com.apple.Safari"]}
  :main [
   {:des "Caps Lock -> Escape (alone) | Ctrl (simple)"
       :rules [
@@ -51,6 +52,12 @@
         [:!S4 :!Qright_arrow ["vim_normal_mode" 1]] ; $
         [{:t :t} :home ["vim_normal_mode" 1]] ; gg (buggy)
         [:!St :end ["vim_normal_mode" 1]] ; G (buggy)
+      ]
+  }
+  {:des "MX"
+      :rules [
+        [{:pkey :button4} :!Qopen_bracket :safari]
+        [{:pkey :button5} :!Qclose_bracket :safari]
       ]
   }
  ]
