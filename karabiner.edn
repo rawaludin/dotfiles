@@ -1,0 +1,44 @@
+{
+ :simlayers {
+  :open_bracket-mode {:key :open_bracket}
+  :close_bracket-mode {:key :close_bracket}
+ }
+ :main [
+  {:des "Caps Lock -> Escape (alone) | Ctrl (simple)"
+      :rules [
+        [:##caps_lock :right_control nil {:alone [:escape]}]
+      ]
+  }
+  {:des "Normal Shift (Hold) | Round Brackets by Shift (Press)"
+      :rules [
+        [:##left_shift :left_shift nil {:alone [:!S9]}]
+        [:##right_shift :right_shift nil {:alone [:!S0]}]
+      ]
+  }
+  {:des "Open Bracket (Hold) + Close Bracket -> Open Curly Bracket"
+       :rules [
+         [:close_bracket :!Sopen_bracket :open_bracket-mode]
+       ]
+  }
+  {:des "Close Bracket (Hold) + Open Bracket -> Close Curly Bracket"
+       :rules [
+         [:open_bracket :!Sclose_bracket :close_bracket-mode]
+       ]
+  }
+  {:des "Left Control (Press) -> Toggle Vim Normal/Insert"
+       :rules [
+         [:##left_control :left_control ["vim_mode" 0] {:alone ["osascript -e 'display notification \"Press [⌃] to switch on/off\" with title \"-- Vimish Navigation [On] --\"'" ["vim_mode" 1]] }  ]
+         [:##left_control :left_control ["vim_mode" 1] {:alone ["osascript -e 'display notification \"Press [⌃] to switch on/off\" with title \"-- Vimish Navigation [Off] --\"'" ["vim_mode" 0]] }  ]
+       ]
+  }
+  {:des "h/j/k/l -> ← ↓ ↑ → (Colemak)"
+      :rules [
+        [:h :left_arrow ["vim_mode" 1]]
+        [:y :down_arrow ["vim_mode" 1]]
+        [:n :up_arrow ["vim_mode" 1]]
+        [:u :right_arrow ["vim_mode" 1]]
+        [:!Wg :page_down ["vim_mode" 1]] ; C-d
+        [:!Wi :page_up ["vim_mode" 1]] ; C-u
+      ]
+  }
+]}
