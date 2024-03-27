@@ -1,4 +1,9 @@
-{
+{:profiles
+ {:Default {:default true
+            :sim     50
+            :delay   50
+            :alone   100
+            :held    50}}
  :simlayers {
   :open_bracket-mode {:key :open_bracket}
   :close_bracket-mode {:key :close_bracket}
@@ -27,23 +32,26 @@
   }
   {:des "Left Control (Press) -> Toggle Vim Normal/Insert"
        :rules [
-         [:##left_control :left_control ["vim_mode" 0] {:alone ["osascript -e 'display notification \"Press [⌃] to switch on/off\" with title \"-- Vimish Navigation [On] --\"'" ["vim_mode" 1]] }  ]
-         [:##left_control :left_control ["vim_mode" 1] {:alone ["osascript -e 'display notification \"Press [⌃] to switch on/off\" with title \"-- Vimish Navigation [Off] --\"'" ["vim_mode" 0]] }  ]
+         [:##left_control :left_control ["vim_normal_mode" 0] {:alone ["osascript -e 'display notification \"Press [⌃] to switch on/off\" with title \"-- Vimish Navigation [On] --\"'" ["vim_normal_mode" 1]] }  ]
+         [:##left_control :left_control ["vim_normal_mode" 1] {:alone ["osascript -e 'display notification \"Press [⌃] to switch on/off\" with title \"-- Vimish Navigation [Off] --\"'" ["vim_normal_mode" 0]] }  ]
        ]
   }
   {:des "h/j/k/l -> ← ↓ ↑ → (Colemak)"
       :rules [
-        [:h :left_arrow ["vim_mode" 1]]
-        [:y :down_arrow ["vim_mode" 1]]
-        [:n :up_arrow ["vim_mode" 1]]
-        [:u :right_arrow ["vim_mode" 1]]
-        [:!Wg :page_down ["vim_mode" 1]] ; C-d
-        [:!Wi :page_up ["vim_mode" 1]] ; C-u
-        [:x :delete_forward ["vim_mode" 1]]
-        [:w :!Oright_arrow ["vim_mode" 1]]
-        [:b :!Oleft_arrow ["vim_mode" 1]]
-        [:0 :!Qleft_arrow ["vim_mode" 1]]
-        [:!S4 :!Qright_arrow ["vim_mode" 1]]
+        [:h :left_arrow ["vim_normal_mode" 1]]
+        [:y :down_arrow ["vim_normal_mode" 1]] ; j
+        [:n :up_arrow ["vim_normal_mode" 1]] ; k
+        [:u :right_arrow ["vim_normal_mode" 1]] ; l
+        [:!Wg :page_down ["vim_normal_mode" 1]] ; C-d
+        [:!Wi :page_up ["vim_normal_mode" 1]] ; C-u
+        [:x :delete_forward ["vim_normal_mode" 1]]
+        [:w :!Oright_arrow ["vim_normal_mode" 1]]
+        [:b :!Oleft_arrow ["vim_normal_mode" 1]]
+        [:0 :!Qleft_arrow ["vim_normal_mode" 1]]
+        [:!S4 :!Qright_arrow ["vim_normal_mode" 1]] ; $
+        [{:t :t} :home ["vim_normal_mode" 1]] ; gg (buggy)
+        [:!St :end ["vim_normal_mode" 1]] ; G (buggy)
       ]
   }
-]}
+ ]
+}
