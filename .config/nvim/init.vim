@@ -52,7 +52,7 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " f
 Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
-" Plug 'mattn/emmet-vim' " faster html tag generation
+Plug 'mattn/emmet-vim' " faster html tag generation
 " Emmet {{{
 " Auto complete by c-y, (control y comma)
 " let g:user_emmet_install_global = 0
@@ -60,6 +60,7 @@ Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
 "   autocmd FileType html,css,php,js,jsx EmmetInstall
 " augroup END
 " }}}
+Plug 'ap/vim-css-color'
 " make FocusGained and FocusLost work again in Tmux, this event used for autosave
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-commentary' " comment by gc
