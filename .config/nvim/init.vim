@@ -36,6 +36,8 @@ let g:tmuxline_separators = {
 " }}}
 Plug 'morhetz/gruvbox'
 let g:gruvbox_contrast_dark='hard'
+" let g:gruvbox_sign_column='orange'
+" let g:gruvbox_color_column='orange'
 Plug 'vim-airline/vim-airline'
 let g:airline#extensions#tabline#enabled = 0
 let g:airline#extensions#tmuxline#enabled = 0
@@ -76,6 +78,26 @@ Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline wit
 " ----- Working with NodeJS -------------------------------------------
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" ----- Working with ReactJS -------------------------------------------
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'jparise/vim-graphql'
+autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+let g:coc_global_extensions = [
+  \ 'coc-tsserver'
+  \ ]
+Plug 'neoclide/coc-eslint'
+Plug 'neoclide/coc-prettier'
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
 " ----- Working with PHP ----------------------------------------------
 Plug 'arnaud-lb/vim-php-namespace'
 let g:php_namespace_sort_after_insert = 1
