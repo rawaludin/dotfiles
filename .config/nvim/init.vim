@@ -15,7 +15,7 @@ endif
 call plug#begin('~/.config/nvim/plugged')
 
 " ----- Making Vim look good ------------------------------------------
-" Plug 'edkolev/tmuxline.vim'
+Plug 'edkolev/tmuxline.vim'
 " Tmuxline {{{
 let g:tmuxline_preset = {
       \'a'               : '#S',
@@ -38,7 +38,9 @@ Plug 'morhetz/gruvbox'
 let g:gruvbox_contrast_dark='hard'
 " let g:gruvbox_sign_column='orange'
 " let g:gruvbox_color_column='orange'
+Plug 'oxfist/night-owl.nvim'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 0
 let g:airline#extensions#tmuxline#enabled = 0
 let g:airline#extensions#whitespace#enabled = 1
@@ -503,4 +505,5 @@ inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 " }}}
 
 set background=dark
-colorscheme gruvbox
+colorscheme night-owl
+let g:airline_theme='night_owl'
