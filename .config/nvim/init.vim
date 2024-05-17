@@ -41,12 +41,13 @@ let g:gruvbox_contrast_dark='hard'
 Plug 'oxfist/night-owl.nvim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline#extensions#tabline#enabled = 0
-let g:airline#extensions#tmuxline#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#hunks#enabled = 0
+let g:airline#extensions#hunks#enabled = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline_powerline_fonts = 1
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
@@ -129,6 +130,7 @@ Plug 'tpope/vim-rhubarb' " github extension for fugitive
 " ----- Other text editing features -----------------------------------
 Plug 'majutsushi/tagbar' " view ctags on sidebar
 
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 " }}}
 
