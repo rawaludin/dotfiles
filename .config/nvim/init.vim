@@ -34,17 +34,12 @@ let g:tmuxline_separators = {
     \ 'right_alt' : '|',
     \ 'space' : ' '}
 " }}}
-Plug 'morhetz/gruvbox'
-let g:gruvbox_contrast_dark='hard'
-" let g:gruvbox_sign_column='orange'
-" let g:gruvbox_color_column='orange'
 Plug 'oxfist/night-owl.nvim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#whitespace#enabled = 1
-let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#hunks#enabled = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline_powerline_fonts = 1
@@ -74,9 +69,6 @@ Plug 'tpope/vim-eunuch' " Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-repeat' " Make repeat work on plugin custom command
 Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-abolish' " coercion (snake_case to camelCaset, etc) & replace word variant
-Plug 'vimwiki/vimwiki' " personal note taker
-let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
-Plug 'w0rp/ale' " linter
 Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
 
 " ----- Working with NodeJS -------------------------------------------
@@ -114,10 +106,6 @@ augroup PhpUseStatement
   autocmd FileType php inoremap <c-e> <esc>A;<esc>
   autocmd FileType php noremap <c-e> A;<esc>
 augroup END
-
-" ----- Working with Go ----------------------------------------------
-" Plug 'fatih/vim-go'
-" let g:go_version_warning = 0
 
 " ----- Working with Git ----------------------------------------------
 Plug 'mhinz/vim-signify'
@@ -174,75 +162,6 @@ if (has('termguicolors'))
   let &t_8b = '\<Esc>[48;2;%lu;%lu;%lum'
   set termguicolors
 endif
-
-function! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-
-    return l:counts.total == 0 ? '' : printf(
-    \   ' [%dW %dE]',
-    \   l:all_non_errors,
-    \   l:all_errors
-    \)
-endfunction
-
-" recalculate the tab warning flag when idle and after writing
-autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
-
-" return '[&et]' if &et is set wrong
-" return '[mixed-indenting]' if spaces and tabs are used to indent
-" return an empty string if everything is fine
-function! StatuslineTabWarning()
-    if !exists('b:statusline_tab_warning')
-        let l:tabs = search('^\t', 'nw') != 0
-        let l:spaces = search('^ ', 'nw') != 0
-
-        if l:tabs && l:spaces
-            let b:statusline_tab_warning =  '[mixed-indenting]'
-        elseif (l:spaces && !&expandtab) || (l:tabs && &expandtab)
-            let b:statusline_tab_warning = '[&et]'
-        else
-            let b:statusline_tab_warning = ''
-        endif
-    endif
-    return b:statusline_tab_warning
-endfunction
-
-" recalculate the trailing whitespace warning when idle, and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
-
-" return '[\s]' if trailing white space is detected
-" return '' otherwise
-function! StatuslineTrailingSpaceWarning()
-    if !exists('b:statusline_trailing_space_warning')
-        if search('\s\+$', 'nw') != 0
-            let b:statusline_trailing_space_warning = '[\s]'
-        else
-            let b:statusline_trailing_space_warning = ''
-        endif
-    endif
-    return b:statusline_trailing_space_warning
-endfunction
-
-function! s:statusline_expr()
-  let l:mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  let l:ro  = "%{&readonly ? '[RO] ' : ''}"
-  let l:ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
-  let l:fug = "%{exists('g:loaded_fugitive') ? '('.fugitive#head().')' : ''}"
-  let l:sep = ' %= '
-  let l:pos = ' %-12(%l : %c%V%) '
-  let l:pct = ' %P '
-  let l:ale = '%{LinterStatus()}'
-  let l:whitespace_tab_warning = '%{StatuslineTabWarning()}'
-  let l:whitespace_trailing = '%{StatuslineTrailingSpaceWarning()}'
-
-  return '%F %<'.l:mod.l:ro.l:ft.l:fug.l:ale.l:whitespace_tab_warning.l:whitespace_trailing.l:sep.l:pos.'%*'.l:pct
-endfunction
-" let &statusline = s:statusline_expr()
-
-" }}}
 
 " Autocommand {{{
 augroup AutoWriteOnLostFocus
@@ -310,9 +229,6 @@ for g:char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '%'
     execute 'onoremap a' . g:char . ' :normal va' . g:char . '<CR>'
 endfor
 
-augroup ale
-  autocmd FileType php,javascript noremap <leader>wf :ALEFix<cr>
-augroup END
 augroup filetype_php
   " formatter, folding, reindex ctags
   autocmd FileType php set foldmethod=indent foldlevel=20
@@ -449,44 +365,6 @@ nmap F <Plug>Sneak_F
 nmap t <Plug>Sneak_t
 nmap T <Plug>Sneak_T
 let g:sneak#target_labels = ';sftunqwgjhmblkyd/SFGHLTUNRMQZ?0123456789'
-" }}}
-
-" Ale {{{
-" https://github.com/squizlabs/PHP_CodeSniffer#installation
-" https://github.com/FriendsOfPHP/PHP-CS-Fixer#installation
-let g:ale_linters = {
-\   'php': ['phpcs', 'php'],
-\   'vim': ['vint'],
-\   'sh': ['shellcheck'],
-\   'javascript': ['eslint'],
-\}
-
-let g:ale_fixers = {
-\   'php': ['php_cs_fixer', 'phpcbf'],
-\   'vim': ['remove_trailing_lines', 'trim_whitespace'],
-\   'sh': ['shfmt'],
-\   'json': ['fixjson'],
-\   'javascript': ['eslint'],
-\}
-" let g:ale_php_langserver_use_global = 1
-" let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
-" let g:ale_php_phpcs_standard ='~/.config/code-rules/phpcs.xml'
-let g:ale_php_phpcs_standard ='psr2'
-let g:ale_php_cs_fixer_options = '--rules=@PSR1,@PSR2,no_unused_imports'
-let g:ale_php_phpmd_ruleset = '~/.config/code-rules/phpmd.xml'
-let g:ale_php_phpcbf_standard = 'psr2'
-let g:ale_completion_enabled = 0
-" let g:ale_javascript_eslint_options = '--no-eslintrc'
-" disable native neovim phpcomplete, needed to make g:ale_completion_enabled
-" work. see https://github.com/neovim/neovim/issues/8999
-" autocmd BufNewFile,BufRead *.php set omnifunc=
-let g:ale_sign_column_always = 1
-let g:ale_sign_warning = '──'
-let g:ale_sign_error = '══'
-nmap ]a <Plug>(ale_next_wrap)
-nmap [a <Plug>(ale_previous_wrap)
-nmap ]r <Plug>(ale_next_error)
-nmap [r <Plug>(ale_previous_error)
 " }}}
 
 " dirvish {{{
