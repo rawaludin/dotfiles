@@ -48,6 +48,7 @@ let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#hunks#enabled = 1
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline_powerline_fonts = 1
+let g:airline_skip_empty_sections = 1
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
