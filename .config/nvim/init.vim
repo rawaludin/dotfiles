@@ -71,17 +71,11 @@ Plug 'tpope/vim-surround' " faster surround
 Plug 'tpope/vim-abolish' " coercion (snake_case to camelCaset, etc) & replace word variant
 Plug 'AndrewRadev/splitjoin.vim' " split to multiline with gS join multiline with gJ
 
-" ----- Working with NodeJS -------------------------------------------
+" ----- Working with JS -------------------------------------------
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" ----- Working with ReactJS -------------------------------------------
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
+Plug 'sheerun/vim-polyglot'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jparise/vim-graphql'
-autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
-autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 let g:coc_global_extensions = [
   \ 'coc-eslint',
   \ 'coc-fzf-preview',
@@ -186,6 +180,7 @@ augroup END
 augroup VimrcSyncFromstart
   " The PC is fast enough, do syntax highlight syncing from start
   autocmd BufEnter * :syntax sync fromstart
+  autocmd BufLeave * :syntax sync clear
 augroup END
 
 augroup VimrcRememberCursorPosition
