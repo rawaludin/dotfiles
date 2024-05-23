@@ -22,18 +22,10 @@ let g:tmuxline_preset = {
       \'win'             : ['#W'],
       \'cwin'            : ['#W#{?window_zoomed_flag, *Z,}'],
       \'y'               : ['%a, %b %d'],
-      \'z'               : '%R #(bat)',
+      \'z'               : '%R #(battery-info)',
       \'options'         : {
         \'status-justify'  : 'left'}
       \}
-" simple
-let g:tmuxline_separators = {
-    \ 'left' : '',
-    \ 'left_alt': '|',
-    \ 'right' : '',
-    \ 'right_alt' : '|',
-    \ 'space' : ' '}
-" }}}
 Plug 'oxfist/night-owl.nvim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
