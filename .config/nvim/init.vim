@@ -46,6 +46,7 @@ Plug 'junegunn/vim-slash' " Enhancing in-buffer search experience
 Plug 'justinmk/vim-sneak' " Jump to any location specified by two character
 Plug 'justinmk/vim-dirvish' " Disable netrw, use dirvish instead
 Plug 'mattn/emmet-vim' " faster html tag generation
+Plug 'petertriho/nvim-scrollbar'
 " Emmet {{{
 " Auto complete by c-y, (control y comma)
 " let g:user_emmet_install_global = 0
@@ -495,6 +496,12 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.
 " }}}
+
+" lua << EOF
+"
+" EOF
+
+lua require("scrollbar").setup()
 
 set background=dark
 colorscheme night-owl
