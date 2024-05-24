@@ -6,9 +6,9 @@ print_battery_percentage() {
   percent=`pmset -g batt | awk 'NR==2 { gsub(/;/,""); print $3 }'`
   charging=`pmset -g batt | awk 'NR==2 { gsub(/;/,""); print $4 }'`
   if [ "$charging" == "charging" ] || [ "$charging" == "charged" ]; then 
-    echo $percent "[C]"
+    echo " " $percent "[C]"
   else
-    echo $percent
+    echo " " $percent
   fi
 
 }

@@ -22,7 +22,7 @@ let g:tmuxline_preset = {
       \'win'             : ['#W'],
       \'cwin'            : ['#W#{?window_zoomed_flag, *Z,}'],
       \'y'               : ['%a, %b %d'],
-      \'z'               : '%R #(battery-info)',
+      \'z'               : '%R#(battery-info)',
       \'options'         : {
         \'status-justify'  : 'left'}
       \}
