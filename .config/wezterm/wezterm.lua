@@ -1,6 +1,6 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
-config.color_scheme = "Night Owl (Gogh)"
+config.color_scheme = "Tokyo Night (Gogh)"
 config.font = wezterm.font({ family = "VictorMono Nerd Font Mono", weight = "Bold" })
 config.font_size = 18
 -- Slightly transparent and blurred background
