@@ -8,17 +8,140 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
+-- Buffer & Tab Management
+
+-- Copy current buffer path relative to root of VIM session to system clipboard
+vim.api.nvim_set_keymap(
+	"n",
+	"<Leader>yp",
+	[[<Cmd>let @*=expand("%")<CR><Cmd>echo "Copied file path to clipboard"<CR>]],
+	{ noremap = true, silent = true }
+)
+
+-- Copy current filename to system clipboard
+vim.api.nvim_set_keymap(
+	"n",
+	"<Leader>yf",
+	[[<Cmd>let @*=expand("%:t")<CR><Cmd>echo "Copied file name to clipboard"<CR>]],
+	{ noremap = true, silent = true }
+)
+
+-- Copy current buffer path without filename to system clipboard
+vim.api.nvim_set_keymap(
+	"n",
+	"<Leader>yd",
+	[[<Cmd>let @*=expand("%:h")<CR><Cmd>echo "Copied file directory to clipboard"<CR>]],
+	{ noremap = true, silent = true }
+)
+
+-- Undo close buffer by <Ctrl><shift>t
+vim.api.nvim_set_keymap("n", "<C-T>", ":e #<CR>", { noremap = true, silent = true, desc = "Undo close buffer" })
+
+-- New empty buffer by space+n
+vim.api.nvim_set_keymap("n", "<Leader>n", ":enew<CR>", { noremap = true, silent = true, desc = "New empty buffer" })
+
+-- Jump to buffer mapping
+vim.api.nvim_set_keymap("n", "[w", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+vim.api.nvim_set_keymap("n", "]w", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+vim.api.nvim_set_keymap("n", "{w", ":bfirst<CR>", { noremap = true, silent = true, desc = "First buffer" })
+vim.api.nvim_set_keymap("n", "}w", ":blast<CR>", { noremap = true, silent = true, desc = "Last buffer" })
+
+-- Jump to tab mapping
+vim.api.nvim_set_keymap("n", "[t", ":tabprevious<CR>", { noremap = true, silent = true, desc = "Previous tab" })
+vim.api.nvim_set_keymap("n", "]t", ":tabnext<CR>", { noremap = true, silent = true, desc = "Next tab" })
+vim.api.nvim_set_keymap("n", "{t", ":tabfirst<CR>", { noremap = true, silent = true, desc = "First tab" })
+vim.api.nvim_set_keymap("n", "}t", ":tablast<CR>", { noremap = true, silent = true, desc = "Last tab" })
+
+-- Jump to quickfix mapping
+vim.api.nvim_set_keymap("n", "[q", ":cprevious<CR>", { noremap = true, silent = true, desc = "Previous quickfix" })
+vim.api.nvim_set_keymap("n", "]q", ":cnext<CR>", { noremap = true, silent = true, desc = "Next quickfix" })
+
+-- Jump to location-list mapping
+vim.api.nvim_set_keymap("n", "[l", ":lprevious<CR>", { noremap = true, silent = true, desc = "Previous location-list" })
+vim.api.nvim_set_keymap("n", "]l", ":lnext<CR>", { noremap = true, silent = true, desc = "Next location-list" })
+
+-- Toggle background
+vim.api.nvim_set_keymap(
+	"n",
+	"<leader>tb",
+	[[:set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>]],
+	{ noremap = true, silent = true, desc = "[T]oggle [B]ackground" }
+)
+
+-- Delete buffer <space>d
+vim.api.nvim_set_keymap("n", "<Leader>d", ":bd<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
+
+-- Close all buffers <space>D
+vim.api.nvim_set_keymap(
+	"n",
+	"<Leader>D",
+	":bufdo bd<CR>",
+	{ noremap = true, silent = true, desc = "Delete all buffer" }
+)
+
+-- Close all buffers but current
+local function close_all_buffers_but_current()
+	local curr = vim.fn.bufnr("%")
+	local last = vim.fn.bufnr("$")
+	if curr > 1 then
+		vim.cmd("silent! execute '1,'.(curr-1).'bd'")
+	end
+	if curr < last then
+		vim.cmd("silent! execute '" .. (curr + 1) .. "','" .. last .. "bd'")
+	end
+end
+
+vim.api.nvim_create_user_command("BO", close_all_buffers_but_current, { desc = "Close all buffer except current" })
+
+-- Jump to last tab <space>Tab
+vim.g.lasttab = 1
+vim.api.nvim_set_keymap(
+	"n",
+	"<Leader><Tab>",
+	[[<Cmd>exe "tabn ".g:lasttab<CR>]],
+	{ noremap = true, silent = true, desc = "Jump to previous [tab]" }
+)
+
+-- Track the last tab
+vim.api.nvim_create_augroup("SetLastTab", {})
+vim.api.nvim_create_autocmd("TabLeave", {
+	group = "SetLastTab",
+	callback = function()
+		vim.g.lasttab = vim.fn.tabpagenr()
+	end,
+})
+
 -- Jump to previous active buffer
 vim.keymap.set("n", "<leader>p", "<cmd>b#<CR>", { desc = "Jump to [P]revious buffer" })
 
 -- Q to replay, qq to record macro
-vim.api.nvim_set_keymap("n", "Q", "@q", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "Q", "@q", { noremap = true, silent = true, desc = "Record macro" })
 
 -- Map arrow keys to resize windows
-vim.api.nvim_set_keymap("n", "<Left>", ":vertical resize +2<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<Right>", ":vertical resize -2<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<Up>", ":resize -2<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<Down>", ":resize +2<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap(
+	"n",
+	"<Left>",
+	":vertical resize +2<CR>",
+	{ noremap = true, silent = true, desc = "Grow vertical window" }
+)
+vim.api.nvim_set_keymap(
+	"n",
+	"<Right>",
+	":vertical resize -2<CR>",
+	{ noremap = true, silent = true, desc = "Shrink vertical window" }
+)
+vim.api.nvim_set_keymap(
+	"n",
+	"<Up>",
+	":resize -2<CR>",
+	{ noremap = true, silent = true, desc = "Shrink horizontal window" }
+)
+vim.api.nvim_set_keymap(
+	"n",
+	"<Down>",
+	":resize +2<CR>",
+	{ noremap = true, silent = true, desc = "Grow horizontal window" }
+)
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
