@@ -11,6 +11,15 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 -- Jump to previous active buffer
 vim.keymap.set("n", "<leader>p", "<cmd>b#<CR>", { desc = "Jump to [P]revious buffer" })
 
+-- Q to replay, qq to record macro
+vim.api.nvim_set_keymap("n", "Q", "@q", { noremap = true, silent = true })
+
+-- Map arrow keys to resize windows
+vim.api.nvim_set_keymap("n", "<Left>", ":vertical resize +2<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Right>", ":vertical resize -2<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Up>", ":resize -2<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Down>", ":resize +2<CR>", { noremap = true, silent = true })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -45,6 +54,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
+	end,
+})
+
+-- Save any unsaved buffer on focus lost
+vim.api.nvim_create_autocmd("FocusLost", {
+	group = vim.api.nvim_create_augroup("AutoWriteOnLostFocus", { clear = true }),
+	pattern = "*",
+	callback = function()
+		-- Silent write command
+		vim.cmd("silent! wa")
 	end,
 })
 
