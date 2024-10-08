@@ -37,4 +37,5 @@ return {
   --     vim.g.airline_skip_empty_sections = 1
   --   end,
   -- },
+  'wellle/context.vim',
 }
