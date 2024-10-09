@@ -30,12 +30,6 @@ vim.api.nvim_set_keymap('n', '<C-T>', ':e #<CR>', { noremap = true, silent = tru
 -- New empty buffer by space+n
 vim.api.nvim_set_keymap('n', '<Leader>n', ':enew<CR>', { noremap = true, silent = true, desc = 'New empty buffer' })
 
--- Jump to buffer mapping
-vim.api.nvim_set_keymap('n', '[w', ':bprevious<CR>', { noremap = true, silent = true, desc = 'Previous buffer' })
-vim.api.nvim_set_keymap('n', ']w', ':bnext<CR>', { noremap = true, silent = true, desc = 'Next buffer' })
-vim.api.nvim_set_keymap('n', '{w', ':bfirst<CR>', { noremap = true, silent = true, desc = 'First buffer' })
-vim.api.nvim_set_keymap('n', '}w', ':blast<CR>', { noremap = true, silent = true, desc = 'Last buffer' })
-
 -- Jump to tab mapping
 vim.api.nvim_set_keymap('n', '[t', ':tabprevious<CR>', { noremap = true, silent = true, desc = 'Previous tab' })
 vim.api.nvim_set_keymap('n', ']t', ':tabnext<CR>', { noremap = true, silent = true, desc = 'Next tab' })
@@ -50,33 +44,11 @@ vim.api.nvim_set_keymap('n', ']q', ':cnext<CR>', { noremap = true, silent = true
 vim.api.nvim_set_keymap('n', '[l', ':lprevious<CR>', { noremap = true, silent = true, desc = 'Previous location-list' })
 vim.api.nvim_set_keymap('n', ']l', ':lnext<CR>', { noremap = true, silent = true, desc = 'Next location-list' })
 
--- Toggle background
-vim.api.nvim_set_keymap(
-  'n',
-  '<leader>tb',
-  [[:set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>]],
-  { noremap = true, silent = true, desc = '[T]oggle [B]ackground' }
-)
-
 -- Delete buffer <space>d
 vim.api.nvim_set_keymap('n', '<Leader>d', ':bd<CR>', { noremap = true, silent = true, desc = 'Delete buffer' })
 
 -- Close all buffers <space>D
 vim.api.nvim_set_keymap('n', '<Leader>D', ':bufdo bd<CR>', { noremap = true, silent = true, desc = 'Delete all buffer' })
-
--- Close all buffers but current
-local function close_all_buffers_but_current()
-  local curr = vim.fn.bufnr '%'
-  local last = vim.fn.bufnr '$'
-  if curr > 1 then
-    vim.cmd "silent! execute '1,'.(curr-1).'bd'"
-  end
-  if curr < last then
-    vim.cmd("silent! execute '" .. (curr + 1) .. "','" .. last .. "bd'")
-  end
-end
-
-vim.api.nvim_create_user_command('BO', close_all_buffers_but_current, { desc = 'Close all buffer except current' })
 
 -- Jump to last tab <space>Tab
 vim.g.lasttab = 1
@@ -147,6 +119,36 @@ vim.api.nvim_create_autocmd('FocusLost', {
   callback = function()
     -- Silent write command
     vim.cmd 'silent! wa'
+  end,
+})
+
+-- close some filetypes with <q>
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('close_with_q', { clear = true }),
+  pattern = {
+    'PlenaryTestPopup',
+    'grug-far',
+    'help',
+    'lspinfo',
+    'notify',
+    'qf',
+    'spectre_panel',
+    'startuptime',
+    'tsplayground',
+    'neotest-output',
+    'checkhealth',
+    'neotest-summary',
+    'neotest-output-panel',
+    'dbout',
+    'gitsigns-blame',
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set('n', 'q', '<cmd>close<cr>', {
+      buffer = event.buf,
+      silent = true,
+      desc = 'Quit buffer',
+    })
   end,
 })
 
