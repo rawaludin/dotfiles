@@ -5,11 +5,13 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- quit
+vim.keymap.set('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit All' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Buffer & Tab Management
-
 -- Copy current buffer path relative to root of VIM session to system clipboard
 vim.api.nvim_set_keymap('n', '<Leader>yp', [[<Cmd>let @*=expand("%")<CR><Cmd>echo "Copied file path to clipboard"<CR>]], { noremap = true, silent = true })
 
