@@ -1,6 +1,7 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 config.color_scheme = 'tokyonight_night'
+config.enable_tab_bar = false -- Using tmux instead
 config.font = wezterm.font { family = 'VictorMono Nerd Font Mono', weight = 'Bold' }
 -- TODO: make font size 15 on mac air, 18 on mac mini
 config.font_size = 15
