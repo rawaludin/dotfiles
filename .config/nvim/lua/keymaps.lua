@@ -13,7 +13,7 @@ vim.keymap.set({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Sav
 
 -- run code
 -- TODO:make it dynamic per programming language
-vim.keymap.set({ 'i', 'x', 'n', 's' }, '<leader>cr', '<cmd>RustRun<cr>', { desc = '[C]ode [R]un (Rust)' })
+vim.keymap.set({ 'i', 'x', 'n', 's' }, '<leader>cr', '<cmd>w<cr><esc><cmd>RustRun<cr>', { desc = '[C]ode [R]un (Rust)' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
