@@ -9,7 +9,7 @@ config.line_height = 1.2
 -- Slightly transparent and blurred background
 -- config.window_background_opacity = 0.9
 -- config.macos_window_background_blur = 30
-config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
+config.window_decorations = 'RESIZE'
 config.window_frame = {
   font = wezterm.font { family = 'VictorMono Nerd Font Mono', weight = 'Bold' },
   font_size = 12,
