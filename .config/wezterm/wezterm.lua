@@ -14,6 +14,15 @@ config.window_frame = {
   font = wezterm.font { family = 'VictorMono Nerd Font Mono', weight = 'Bold' },
   font_size = 12,
 }
+
+-- Set custom padding (top, right, bottom, left)
+config.window_padding = {
+  left = 6,
+  right = 2,
+  top = 2,
+  bottom = 0, -- Reduced bottom padding
+}
+
 wezterm.on('update-status', function(window)
   -- Grab the utf8 character for the "powerline" left facing
   -- solid arrow.
