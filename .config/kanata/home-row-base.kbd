@@ -1,0 +1,40 @@
+;; home row-mods
+
+;; un-mapped keys behave as normally
+(defcfg
+  process-unmapped-keys yes
+)
+
+;; define the keys to remap
+(defsrc
+ f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+ caps a s d f j k l ;
+ lsft rsft
+)
+
+;; define values for tap time and hold time
+(defvar
+  tap-time 150
+  hold-time 200
+)
+
+;; alias definitions
+(defalias
+  escctrl (tap-hold $tap-time $hold-time esc lctl)
+  a (tap-hold $tap-time $hold-time a lalt)
+  s (tap-hold $tap-time $hold-time s lmet)
+  d (tap-hold $tap-time $hold-time d lctrl)
+  f (tap-hold $tap-time $hold-time f lsft)
+  j (tap-hold $tap-time $hold-time j rsft)
+  k (tap-hold $tap-time $hold-time k lctrl)
+  l (tap-hold $tap-time $hold-time l rmet)
+  ; (tap-hold $tap-time $hold-time ; ralt)
+  lsft (tap-hold-press $tap-time $hold-time S-9 lsft)
+  rsft (tap-hold-press $tap-time $hold-time S-0 rsft)
+)
+
+(deflayer base
+  brdn brup f3   f4 f5 f6 prev pp   next mute vold volu
+  @escctrl @a @s @d @f @j @k @l @;
+  @lsft @rsft
+)
