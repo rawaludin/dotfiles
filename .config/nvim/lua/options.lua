@@ -24,6 +24,9 @@ vim.opt.autowriteall = true
 -- Expand tabs into spaces
 vim.opt.expandtab = true
 
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
