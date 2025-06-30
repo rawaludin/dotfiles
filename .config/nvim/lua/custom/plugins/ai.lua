@@ -9,6 +9,13 @@ return {
     -- version = false, -- set this if you want to always pull the latest change
     opts = {
       hints = { enabled = false },
+      claude = {
+        endpoint = 'https://api.anthropic.com',
+        -- model = 'claude-3-haiku-20240307',
+        model = 'claude-3-5-sonnet-20240620',
+        temperature = 0,
+        max_tokens = 4096,
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = 'make',
