@@ -5,7 +5,7 @@ return {
       require('avante_lib').load()
     end,
     event = 'VeryLazy',
-    -- lazy = false,
+    lazy = false,
     -- version = false, -- set this if you want to always pull the latest change
     opts = {
       hints = { enabled = false },
@@ -41,6 +41,7 @@ return {
       {
         -- Make sure to set this up properly if you have lazy=true
         'MeanderingProgrammer/render-markdown.nvim',
+        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
         opts = {
           file_types = { 'markdown', 'Avante' },
         },

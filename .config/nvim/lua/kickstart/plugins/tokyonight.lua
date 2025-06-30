@@ -5,6 +5,18 @@ return {
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'folke/tokyonight.nvim',
+    opts = {
+      -- transparent = false,
+      -- dim_inactive = true,
+      style = 'moon',
+      -- day_brightness = 0.1,
+      -- styles = {
+      -- keywords = { italic = true },
+      -- comments = { italic = true },
+      -- functions = { italic = true },
+      -- variables = { italic = true, bold = true },
+      -- },
+    },
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
