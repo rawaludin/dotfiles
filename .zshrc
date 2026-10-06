@@ -53,7 +53,7 @@ WORDCHARS=${WORDCHARS//[\/]}
 #
 
 # Set a custom prefix for the generated aliases. The default prefix is 'G'.
-zstyle ':zim:git' aliases-prefix 'g'
+zstyle ':zim:git' aliases-prefix 'G'
 
 #
 # input
@@ -167,3 +167,32 @@ source "${ZDOTDIR:-$HOME}/.secret.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="$HOME/.local/bin:$PATH"
+
+# Start or reattach to a tmux session for interactive SSH logins.
+if [[ -o interactive && -n "$SSH_CONNECTION" && -z "$TMUX" && -t 1 ]] && command -v tmux >/dev/null 2>&1; then
+  exec tmux new-session -A -s ssh
+fi
+
+# deepseek as claude model
+# export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+# export ANTHROPIC_AUTH_TOKEN=sk-your-deepseek-api-key
+# export ANTHROPIC_MODEL=deepseek-v4-pro[1m]
+# export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]
+# export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro[1m]
+# export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash
+# export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash
+# export CLAUDE_CODE_EFFORT_LEVEL=max
+# export CLAUDE_CODE_AUTO_COMPACT_WINDOW=786432
+
+# opencode
+export PATH=/Users/rahmatawaludin/.opencode/bin:$PATH
+
+
+# Java, for Maestro (E2E tests). Installed 2026-09-29.
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH=$PATH:$HOME/.maestro/bin
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/rahmatawaludin/.local/bin:$PATH"
