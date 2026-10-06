@@ -3,9 +3,26 @@ local config = wezterm.config_builder()
 config.color_scheme = 'tokyonight_night'
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
-config.font = wezterm.font { family = 'VictorMono Nerd Font', weight = 'Bold' }
+-- Scheherazade New / Amiri are explicit fallbacks so Arabic glyphs render
+-- with proper shaping instead of falling back to Courier New (which lacks
+-- ligatures/positional forms). Installed via `brew install --cask
+-- font-scheherazade-new font-amiri`.
+config.font = wezterm.font_with_fallback {
+  { family = 'VictorMono Nerd Font', weight = 'Bold' },
+  { family = 'Scheherazade New' },
+  { family = 'Amiri' },
+}
 -- config.font = wezterm.font { family = 'DroidSansM Nerd Font' }
 config.cursor_blink_rate = 0
+
+-- RTL/bidi support so Arabic (and other RTL) text displays correctly.
+-- Superseded the old `experimental_bidi` flag from
+-- https://github.com/wezterm/wezterm/issues/784 — this build already ships
+-- the stable `bidi_enabled`/`bidi_direction` options.
+-- AutoLeftToRight: paragraphs default to LTR (fits an LTR shell/prompt) but
+-- flip to RTL automatically when a line's first strong character is Arabic.
+config.bidi_enabled = true
+config.bidi_direction = 'AutoLeftToRight'
 -- TODO: make font size 15 on mac air, 18 on mac mini
 config.font_size = 15
 config.line_height = 1.2
