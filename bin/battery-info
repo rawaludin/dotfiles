@@ -2,15 +2,16 @@
 # Get osx battery level
 
 print_battery_percentage() {
-  # percentage displayed in the 3rd field of the 2nd row
-  percent=`pmset -g batt | awk 'NR==2 { gsub(/;/,""); print $3 }'`
-  charging=`pmset -g batt | awk 'NR==2 { gsub(/;/,""); print $4 }'`
-  if [ "$charging" == "charging" ] || [ "$charging" == "charged" ]; then 
-    echo " "$percent "[C]"
+  # Ambil baris baterai: prioritaskan InternalBattery, fallback ke baris pertama yg ada %
+  # (kalau ada UPS seperti Smart-UPS_1000, format kolomnya beda jadi $3 bukan persen lagi)
+  line=`pmset -g batt | grep -E '[0-9]+%' | grep -m1 'InternalBattery' || pmset -g batt | grep -m1 -E '[0-9]+%'`
+  percent=`echo "$line" | grep -o '[0-9]\+%' | head -1`
+  # Deteksi charging via "; charging" / "; charged" supaya "not charging" (UPS) tidak ketipu
+  if echo "$line" | grep -qE ';\s*charg(ed|ing)\b'; then
+    echo " "$percent" [C]"
   else
     echo " "$percent
   fi
-
 }
 
 main() {
